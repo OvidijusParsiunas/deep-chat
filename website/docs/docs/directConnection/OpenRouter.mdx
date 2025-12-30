@@ -12,7 +12,7 @@ Properties used to connect to [OpenRouter](https://openrouter.ai/).
 
 ### `openRouter` {#openRouter}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
@@ -36,7 +36,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to OpenRouter's [`chat completion`](https://openrouter.ai/docs/api-reference/chat-completion) API. <br />
+Connect to OpenRouter's [Chat Completion API](https://openrouter.ai/docs/api-reference/chat-completion). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the model to be used by the API (e.g., "openai/gpt-3.5-turbo"). <br />
 `max_tokens` limits the maximum number of tokens in the generated response (1 to model's context length). <br />
 `temperature` controls the randomness of responses (0.0-2.0). Higher values produce more creative outputs. <br />

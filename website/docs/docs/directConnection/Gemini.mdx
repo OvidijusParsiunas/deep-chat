@@ -12,7 +12,7 @@ Properties used to connect to [Google AI Gemini](https://ai.google.dev/).
 
 ### `gemini` {#gemini}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `maxOutputTokens?: number`, <br />
@@ -25,7 +25,7 @@ Properties used to connect to [Google AI Gemini](https://ai.google.dev/).
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: GeminiTool[]`](#GeminiTool) <br />
   \}
-- Default: _\{model: "gemini-2.0-flash"\}_
+- Default: _\{model: "gemini-2.5-flash"\}_
 
 import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -38,7 +38,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Google AI's [`generateContent`](https://ai.google.dev/api/rest/v1beta/models/generateContent) API. <br />
+Connect to Google AI's [generateContent API](https://ai.google.dev/api/rest/v1beta/models/generateContent). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the Gemini model to be used by the API. Check [available models](https://ai.google.dev/models/gemini) for more. <br />
 `system_prompt` is used to provide behavioral context and instructions to the model. <br />
 `maxOutputTokens` limits the maximum number of tokens in the generated response. <br />

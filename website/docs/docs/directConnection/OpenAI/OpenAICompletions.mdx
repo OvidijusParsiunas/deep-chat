@@ -1,0 +1,349 @@
+---
+sidebar_position: 2
+---
+
+# Completions
+
+import openAILogo from '/img/openAILogo.png';
+
+# <img src={openAILogo} className="adaptive-logo-filter" width="40" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title">OpenAI Completions</span>
+
+Properties used to connect to OpenAI's legacy [Chat Completions API](https://platform.openai.com/docs/api-reference/chat).
+
+### `completions` {#completions}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `modalities?: ['text', 'audio']`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `audio?: {format: string, voice: string}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`ChatFunctions`](#chat-functions) <br />
+  \}
+- Default: _\{model: "gpt-4o"\}_
+
+Connect to OpenAI's legacy [Completions API](https://platform.openai.com/docs/api-reference/chat). You can set this property to _true_ or configure it using an object: <br />
+`system_prompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
+`model` is the name of the model to be used by the API. Check [/v1/chat/completions](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
+`max_tokens` the maximum number of tokens to generate in the chat. Check [tokenizer](https://platform.openai.com/tokenizer) for more info. <br />
+`temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
+`top_p` is an alternative to sampling with temperature, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens
+comprising the top 10% probability mass are considered. <br />
+`modalities` and `audio` are required to generate responses in audio format. Info [here](https://platform.openai.com/docs/guides/audio?example=audio-in#add-audio-to-your-existing-application) and see [`autoPlay`](/docs/speech#AudioResponse). <br />
+[`ChatFunctions`](#chat-functions) encompasses properties used for [function calling](https://platform.openai.com/docs/guides/function-calling). <br />
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+#### Basic Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          completions: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          completions: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "completions": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "completions": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Files Example
+
+You can send image and audio files in your conversation. Make sure you are using the correct model for each by checking [model modalities](https://platform.openai.com/docs/models/compare).
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          key: 'placeholder key',
+          completions: {model: 'gpt-4.1'},
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        openAI: {
+          completions: {model: 'gpt-4.1'},
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "completions": {"model": "gpt-4.1"}
+  }}'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "openAI": {
+      "key": "placeholder key",
+      "completions": {"model": "gpt-4.1"}
+  }}'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending files we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+:::note
+[`microphone`](/docs/files#microphone) is not supported for audio chat, instead we recommend using the [`realtime`](/docs/directConnection/OpenAI/OpenAIRealtime) sts API.
+:::
+
+<LineBreak></LineBreak>
+
+## Functions {#Functions}
+
+Examples for OpenAI's [Function Calling](https://platform.openai.com/docs/guides/function-calling) features:
+
+### `Chat Functions` {#chat-functions}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools: Tools`](#Tools), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_choice?:` `"auto"` | `{type: "function", function: {name: string}}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler: FunctionHandler`](#FunctionHandler) <br />
+  \}
+
+Configure the completions API to call your functions via the [OpenAI Function calling API](https://platform.openai.com/docs/guides/function-calling). <br />
+This is particularly useful if you want the model to analyze user's requests, check whether a function should be called, extract the relevant information
+from their text and return it all in a standardized response for you to act on. <br />
+`tools` defines the functions that the model can signal to call based on the user's text. <br />
+`tool_choice` controls which (if any) function should be called. <br />
+`function_handler` is the actual function that is called with the model's instructions.
+
+<ContainersKeyToggleChatFunction service="openAI"></ContainersKeyToggleChatFunction>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  openAI: {
+    completions: {
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        },
+      ],
+      function_handler: (functionsDetails) => {
+        return functionsDetails.map((functionDetails) => {
+          return {
+            response: getCurrentWeather(functionDetails.arguments),
+          };
+        });
+      },
+    },
+    key: 'placeholder-key',
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// using JavaScript for a simplified example
+
+chatElementRef.directConnection = {
+  openAI: {
+    completions: {
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'get_current_weather',
+            description: 'Get the current weather in a given location',
+            parameters: {
+              type: 'object',
+              properties: {
+                location: {
+                  type: 'string',
+                  description: 'The city and state, e.g. San Francisco, CA',
+                },
+                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+              },
+              required: ['location'],
+            },
+          },
+        },
+      ],
+      function_handler: (functionsDetails) => {
+        return functionsDetails.map((functionDetails) => {
+          return {
+            response: getCurrentWeather(functionDetails.arguments),
+          };
+        });
+      },
+    },
+    key: 'placeholder-key',
+  },
+};
+
+function getCurrentWeather(location) {
+  location = location.toLowerCase();
+  if (location.includes('tokyo')) {
+    return JSON.stringify({location, temperature: '10', unit: 'celsius'});
+  } else if (location.includes('san francisco')) {
+    return JSON.stringify({location, temperature: '72', unit: 'fahrenheit'});
+  } else {
+    return JSON.stringify({location, temperature: '22', unit: 'celsius'});
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### `Tools` {#Tools}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function" | "object"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `function:` \{`name: string`, `description?: string`, [`parameters: JSONSchema`](https://json-schema.org/learn/miscellaneous-examples)\} <br />
+  \}[]
+
+An array describing tools that the model may call. <br />
+`name` is the name of a function. <br />
+`description` is used by the model to understand what the function does and when it should be called. <br />
+`parameters` are arguments that the function accepts defined in a [JSON Schema](https://json-schema.org/learn/miscellaneous-examples) (see example above). <br />
+Checkout the following [guide](https://platform.openai.com/docs/guides/function-calling) for more about function calling.
+
+:::tip
+If your function accepts arguments - the `type` property should be set to _"function"_, otherwise use the following object `{"type": "object", "properties": {}}`.
+:::
+
+<LineBreak></LineBreak>
+
+#### `FunctionHandler` {#FunctionHandler}
+
+- Type: ([`functionsDetails: FunctionsDetails`](/docs/directConnection#FunctionsDetails)) => `{response: string}[]` | `{text: string}`
+
+The actual function that the component will call if the model wants a response from [tools](#Tools) functions. <br />
+[`functionsDetails`](/docs/directConnection#FunctionsDetails) contains information about what [tool](#Tools) functions should be called. <br />
+This function should either return an array of JSONs containing a `response` property for each [tool](#Tools) function (in the same order as in
+[`functionsDetails`](/docs/directConnection#FunctionsDetails)) which will feed it back into the model to finalise a response, or return a JSON containing
+`text` which will immediately display it in the chat and not send any details to the model.
+
+<LineBreak></LineBreak>

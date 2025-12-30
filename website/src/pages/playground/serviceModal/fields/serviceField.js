@@ -4,6 +4,7 @@ import PlaygroundSelect from '../../playgroundSelect';
 import assemblyAILogo from '/img/assemblyAILogo.png';
 import openRouterLogo from '/img/openRouterLogo.png';
 import perplexityLogo from '/img/perplexityLogo.png';
+import openWebUILogo from '/img/openWebUILogo.png';
 import togetherLogo from '/img/togetherLogo.webp';
 import bigModelLogo from '/img/bigModelLogo.png';
 import deepSeekLogo from '/img/deepSeekLogo.png';
@@ -241,6 +242,17 @@ const services = {
       />
     ),
   },
+  openWebUI: {
+    value: 'openWebUI',
+    text: 'Open WebUI',
+    icon: (
+      <img
+        src={openWebUILogo}
+        className="playground-service-modal-service-icon"
+        style={{marginTop: '-1px', transform: 'scale(1.3)'}}
+      />
+    ),
+  },
   perplexity: {
     value: 'perplexity',
     text: 'Perplexity',
@@ -317,6 +329,7 @@ const SERVICE_TO_LINK = {
   ollama: 'https://ollama.com/',
   openAI: 'https://openai.com/blog/openai-api',
   openRouter: 'https://openrouter.ai/',
+  openWebUI: 'https://openwebui.com/',
   perplexity: 'https://www.perplexity.ai/',
   qwen: 'https://www.alibabacloud.com/product/dashscope',
   stabilityAI: 'https://stability.ai/',

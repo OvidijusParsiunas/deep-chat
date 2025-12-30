@@ -16,6 +16,7 @@ Properties used to connect to [OpenAI](https://openai.com/blog/openai-api).
   &nbsp;&nbsp;&nbsp;&nbsp; [`chat?: Chat`](#Chat), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`assistant?: Assistant`](#Assistant), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`realtime?: OpenAIRealtime`](/docs/directConnection/OpenAI/OpenAIRealtime), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`completions?: Completions`](/docs/directConnection/OpenAI/OpenAICompletions#completions), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`images?: Images`](#Images), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`textToSpeech?: TextToSpeech`](#TextToSpeech), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`speechToText?: SpeechToText`](#SpeechToText) <br />
@@ -38,25 +39,38 @@ import Tabs from '@theme/Tabs';
 ### `Chat` {#Chat}
 
 - Type: `true` | \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `instructions?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `background?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_output_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `reasoning?: {effort?: string, summary?: string}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `safety_identifier?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `service_tier?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `store?: boolean`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `modalities?:` `['text', 'audio']`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `audio?:` \{`format: string`, `voice: string`\}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `truncation?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `conversation?: boolean | string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `conversationLoadLimit?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`ChatFunctions`](#chat-functions) <br />
   \}
 - Default: _\{model: "gpt-4o"\}_
 
-Connect to OpenAI's [`chat`](https://platform.openai.com/docs/api-reference/chat) API. You can set this property to _true_ or configure it using an object: <br />
-`system_prompt` is used to set the [_"system"_](https://platform.openai.com/docs/api-reference/chat/create) message for the conversation context. <br />
-`model` is the name of the model to be used by the API. Check [/v1/chat/completions](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
-`max_tokens` the maximum number of tokens to generate in the chat. Check [tokenizer](https://platform.openai.com/tokenizer) for more info. <br />
+Connect to OpenAI's new [Responses API](https://platform.openai.com/docs/api-reference/responses). You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the model to be used by the API. Check [/v1/responses](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
+`instructions` guides the model on desired responses (equivalent to system message). <br />
+`background` indicates whether to run the response generation in the background. <br />
+`max_output_tokens` is the maximum number of output tokens for a response. <br />
+`reasoning` enables reasoning mode with optional effort level and summary configuration. <br />
+`safety_identifier` is an identifier for safety monitoring. <br />
+`service_tier` specifies the service tier to use. <br />
+`store` indicates whether to store the conversation. <br />
 `temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
-`top_p` is an alternative to sampling with temperature, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens
+`top_p` is an alternative to sampling with temperature, where the model considers the results of the tokens with top probability mass. So 0.1 means only the tokens
 comprising the top 10% probability mass are considered. <br />
-`modalities` and `audio` are required to generate responses in audio format. Info [here](https://platform.openai.com/docs/guides/audio?example=audio-in#add-audio-to-your-existing-application) and see [`autoPlay`](/docs/speech#AudioResponse). <br />
+`truncation` defines how to handle context length limits. <br />
+`conversation` enables conversation mode. Set to _true_ to create a new conversation or provide a conversation id string to continue an existing one. <br />
+`conversationLoadLimit` limits the number of previous messages loaded when using conversation mode (default: _50_). <br />
 [`ChatFunctions`](#chat-functions) encompasses properties used for [function calling](https://platform.openai.com/docs/guides/function-calling). <br />
 
 #### Basic Example
@@ -68,7 +82,7 @@ comprising the top 10% probability mass are considered. <br />
       directConnection={{
         openAI: {
           key: 'placeholder key',
-          chat: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
+          chat: {instructions: 'Assist me with anything you can', max_output_tokens: 2000},
         },
       }}
     ></DeepChatBrowser>
@@ -78,7 +92,7 @@ comprising the top 10% probability mass are considered. <br />
       style={{borderRadius: '8px'}}
       directConnection={{
         openAI: {
-          chat: {max_tokens: 2000, system_prompt: 'Assist me with anything you can'},
+          chat: {instructions: 'Assist me with anything you can', max_output_tokens: 2000},
         },
       }}
     ></DeepChatBrowser>
@@ -93,7 +107,7 @@ comprising the top 10% probability mass are considered. <br />
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "chat": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
+      "chat": {"instructions": "Assist me with anything you can", "max_output_tokens": 2000}
     }
   }'
 ></deep-chat>
@@ -109,7 +123,7 @@ comprising the top 10% probability mass are considered. <br />
   directConnection='{
     "openAI": {
       "key": "placeholder key",
-      "chat": {"max_tokens": 2000, "system_prompt": "Assist me with anything you can"}
+      "chat": {"max_output_tokens": 2000, "instructions": "Assist me with anything you can"}
     }
   }'
   style="border-radius: 8px"
@@ -123,6 +137,11 @@ comprising the top 10% probability mass are considered. <br />
 
 :::info
 Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+:::info
+When using `conversation`, the returned [MessageContent](/docs/messages#MessageContent) contains a hidden property called `_sessionId` which
+is the conversation id that can be used to continue the conversation on a new session.
 :::
 
 <LineBreak></LineBreak>
@@ -222,7 +241,7 @@ When sending files we advise you to set [`maxMessages`](/docs/connect#requestBod
   &nbsp;&nbsp;&nbsp;&nbsp; `custom_base_url?: string` <br />
   \}
 
-Connect to your OpenAI [`assistant`](https://platform.openai.com/docs/assistants/overview).
+Connect to your OpenAI [Assistant](https://platform.openai.com/docs/assistants/overview).
 When set to `true` or the `assistant_id` is not defined, Deep Chat will automatically create a new assistant when the user sends the first message. <br />
 `assistant_id` is the id of your assistant. <br />
 `thread_id` allows you to communicate in the context of an already existing conversation/[thread](https://platform.openai.com/docs/api-reference/threads). <br />
@@ -290,7 +309,7 @@ When set to `true` or the `assistant_id` is not defined, Deep Chat will automati
 
 :::info
 Returned [MessageContent](/docs/messages#MessageContent) contains a hidden property called `_sessionId` which
-stores the thread id and allows conversation to continue on a new session.
+which is a thread id that can be used to continue the conversation on a new session.
 :::
 
 <LineBreak></LineBreak>
@@ -511,7 +530,7 @@ technically not a tool but a way to indicate that image files will be sent direc
 - Type: `true` | [`Dall-e-2`](#dall-e-2) | [`Dall-e-3`](#dall-e-3)
 - Default: _Dall-e-2_
 
-Connect to OpenAI's [`Images`](https://platform.openai.com/docs/api-reference/images) API.
+Connect to OpenAI's [Images API](https://platform.openai.com/docs/api-reference/images).
 Set this property to _true_ or use either of the [`Dall-e-2`](#dall-e-2) or [`Dall-e-3`](#dall-e-3) objects. <br />
 
 You can automatically call any of the following three APIs by combining different inputs:
@@ -623,7 +642,7 @@ You can automatically call any of the following three APIs by combining differen
   \}
 - Default: _\{model: "tts-1", voice: "alloy", speed: 1\}_
 
-Connect to OpenAI's [`Text To Speech`](https://platform.openai.com/docs/guides/text-to-speech) API.
+Connect to OpenAI's [Text To Speech API](https://platform.openai.com/docs/guides/text-to-speech).
 You can set this property to _true_ or [configure](https://platform.openai.com/docs/api-reference/audio/createSpeech) it using an object: <br />
 `model` defines the target model used by the API. Check [/v1/audio/speech](https://platform.openai.com/docs/models/model-endpoint-compatibility) for more. <br />
 `voice` is the name of the voice used in the generated audio. <br />
@@ -701,7 +720,7 @@ You can set this property to _true_ or [configure](https://platform.openai.com/d
   \}
 - Default: _\{model: "whisper-1", type: "transcription"\}_
 
-Connect to OpenAI's [`Speech To Text`](https://platform.openai.com/docs/guides/speech-to-text) API.
+Connect to OpenAI's [Speech To Text API](https://platform.openai.com/docs/guides/speech-to-text).
 You can set this property to _true_ or [configure](https://platform.openai.com/docs/api-reference/audio/createTranscription) it using an object: <br />
 `model` is the name of the model to use. _"whisper-1"_ is currently the only one available. <br />
 `temperature` is used for sampling; between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused. <br />
@@ -783,7 +802,7 @@ Examples for OpenAI's [Function Calling](https://platform.openai.com/docs/guides
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler: FunctionHandler`](#FunctionHandler) <br />
   \}
 
-Configure the chat to call your functions via the [OpenAI Function calling API](https://platform.openai.com/docs/guides/function-calling). <br />
+Configure the responses API to call your functions via the [OpenAI Function calling API](https://platform.openai.com/docs/guides/function-calling). <br />
 This is particularly useful if you want the model to analyze user's requests, check whether a function should be called, extract the relevant information
 from their text and return it all in a standardized response for you to act on. <br />
 `tools` defines the functions that the model can signal to call based on the user's text. <br />

@@ -12,7 +12,7 @@ Properties used to connect to [MiniMax](https://www.minimax.io/).
 
 ### `miniMax` {#miniMax}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
@@ -34,7 +34,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to MiniMax's [`ChatCompletion v2`](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek) API. <br />
+Connect to MiniMax's [ChatCompletion v2 API](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the MiniMax model to be used by the API. Check [available models](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model) for more. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />

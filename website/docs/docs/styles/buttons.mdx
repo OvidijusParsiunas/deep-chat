@@ -40,7 +40,7 @@ Array defining object configs for custom buttons. <br />
     style={{borderRadius: '8px'}}
     customButtons={[
       {
-        position: 'inside-left',
+        position: 'inside-start',
         onClick: (state) => (state === 'active' ? 'default' : 'active'),
         styles: {
           button: {
@@ -98,7 +98,7 @@ Array defining object configs for custom buttons. <br />
 <deep-chat
   customButtons='[
     {
-      "position": "inside-left",
+      "position": "inside-start",
       "styles": {
         "button": {
           "default": {
@@ -185,7 +185,7 @@ The `loading`, `stop` and `disabled` styles will automatically inherit your `sub
           },
         },
       },
-      position: 'outside-right',
+      position: 'outside-end',
     }}
     demo={true}
   ></DeepChatBrowser>
@@ -213,7 +213,7 @@ The `loading`, `stop` and `disabled` styles will automatically inherit your `sub
       }
     },
     "alwaysEnabled": true,
-    "position": "outside-right"
+    "position": "outside-end"
   }'
 ></deep-chat>
 ```
@@ -242,7 +242,7 @@ The `loading`, `stop` and `disabled` styles will automatically inherit your `sub
       }
     },
     "alwaysEnabled": true,
-    "position": "outside-right"
+    "position": "outside-end"
   }'
   style="border-radius: 8px"
   demo="true"
@@ -942,7 +942,7 @@ Styling preferences for a button inside the chat view. <br />
             click: {backgroundColor: '#c4dbff'},
           },
         },
-        position: 'outside-left',
+        position: 'outside-start',
       },
     }}
   ></DeepChatBrowser>
@@ -962,7 +962,7 @@ Styling preferences for a button inside the chat view. <br />
           "click": {"backgroundColor": "#c4dbff"}
         }
       },
-      "position": "outside-left"
+      "position": "outside-start"
     }
   }'
 ></deep-chat>
@@ -984,7 +984,7 @@ Styling preferences for a button inside the chat view. <br />
           "click": {"backgroundColor": "#c4dbff"}
         }
       },
-      "position": "outside-left"
+      "position": "outside-start"
     }
   }'
   style="border-radius: 8px"
@@ -1212,7 +1212,7 @@ If the `content` string is used for an [`svg`](#ButtonStyles):
 
 ### `ButtonPosition` {#ButtonPosition}
 
-- Type: `"inside-left"` | `"inside-right"` | `"outside-left"` | `"outside-right"` | `"dropup-menu"`
+- Type: `"inside-start"` | `"inside-end"` | `"outside-start"` | `"outside-end"` | `"dropup-menu"`
 
 Position for a button either _inside_ the [text input container](/docs/styles#textInput), _outside_ it (either _left_ or _right_) or inside the [`dropup menu`](/docs/styles#dropupStyles).
 
@@ -1225,8 +1225,8 @@ Position for a button either _inside_ the [text input container](/docs/styles#te
     gifs={{button: {position: 'dropup-menu'}}}
     audio={{button: {position: 'dropup-menu'}}}
     camera={{button: {position: 'dropup-menu'}}}
-    mixedFiles={{button: {position: 'inside-left'}}}
-    microphone={{button: {position: 'outside-right'}}}
+    mixedFiles={{button: {position: 'inside-start'}}}
+    microphone={{button: {position: 'outside-end'}}}
   ></DeepChatBrowser>
 </ComponentContainer>
 
@@ -1238,8 +1238,8 @@ Position for a button either _inside_ the [text input container](/docs/styles#te
   gifs='{"button": {"position": "dropup-menu"}}'
   audio='{"button": {"position": "dropup-menu"}}'
   camera='{"button": {"position": "dropup-menu"}}'
-  mixedFiles='{"button": {"position": "inside-left"}}'
-  microphone='{"button": {"position": "outside-right"}}'
+  mixedFiles='{"button": {"position": "inside-start"}}'
+  microphone='{"button": {"position": "outside-end"}}'
 ></deep-chat>
 ```
 
@@ -1255,8 +1255,8 @@ Position for a button either _inside_ the [text input container](/docs/styles#te
   gifs='{"button": {"position": "dropup-menu"}}'
   audio='{"button": {"position": "dropup-menu"}}'
   camera='{"button": {"position": "dropup-menu"}}'
-  mixedFiles='{"button": {"position": "inside-left"}}'
-  microphone='{"button": {"position": "outside-right"}}'
+  mixedFiles='{"button": {"position": "inside-start"}}'
+  microphone='{"button": {"position": "outside-end"}}'
 ></deep-chat>
 ```
 
@@ -1481,6 +1481,3 @@ Custom styling for the microphone button. <br />
 :::tip
 You can use the [`CSSFilterConverter`](https://cssfilterconverter.com/) tool to generate filter values for the icon color.
 :::
-
-<LineBreak></LineBreak>
-````

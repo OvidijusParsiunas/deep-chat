@@ -54,14 +54,34 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     }
   };
 
+  const isNoServiceType = (service) => {
+    return (
+      service === 'custom' ||
+      service === 'webModel' ||
+      service === 'openWebUI' ||
+      service === 'cohere' ||
+      service === 'claude' ||
+      service === 'gemini' ||
+      service === 'kimi' ||
+      service === 'mistral' ||
+      service === 'openRouter' ||
+      service === 'qwen' ||
+      service === 'deepSeek' ||
+      service === 'miniMax' ||
+      service === 'perplexity' ||
+      service === 'ollama'
+    );
+  };
+
   const changeService = (newService, newActiveType) => {
     setActiveService(newService);
     const availableTypes = Object.keys(SERVICE_MODAL_FORM_CONFIG[newService]);
-    setAvailableTypes(availableTypes);
     const type = newActiveType || availableTypes[0];
+    setAvailableTypes(availableTypes);
     setActiveType(type);
-    if (newService === 'custom' || newService === 'webModel') {
-      setRequiredValue(chatComponent.connect[newService]?.url || '');
+    if (isNoServiceType(newService)) {
+      const requiredValueKey = newService === 'custom' || newService === 'webModel' ? 'url' : 'key';
+      setRequiredValue(chatComponent.connect[newService]?.[requiredValueKey] || '');
       setOptionalParameters(SERVICE_MODAL_FORM_CONFIG[newService]);
     } else {
       setRequiredValue(chatComponent.connect[newService]?.key || '');
@@ -78,7 +98,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     const type = changeFirstLetter(newType, false);
     setActiveType(type);
     setOptionalParameters(
-      activeService === 'custom' || activeService === 'webModel'
+      isNoServiceType(activeService)
         ? SERVICE_MODAL_FORM_CONFIG[activeService]
         : SERVICE_MODAL_FORM_CONFIG[activeService][type]
     );
@@ -124,10 +144,9 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
   function constructConnect(optionalParamsEl, activeService, activeType) {
     if (activeService === 'demo') return {demo: true};
     const optionalParamsValues = optionalParamsEl ? extractOptionalParameterValues(optionalParamsEl) : [];
-    const optionalParams =
-      activeService === 'custom' || activeService === 'webModel'
-        ? SERVICE_MODAL_FORM_CONFIG[activeService]
-        : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
+    const optionalParams = isNoServiceType(activeService)
+      ? SERVICE_MODAL_FORM_CONFIG[activeService]
+      : SERVICE_MODAL_FORM_CONFIG[activeService][activeType];
     const connect = buildConnect(optionalParams, optionalParamsValues);
     const requiredParameter = REQUIRED_PARAMETERS[activeService]?.[activeType];
     if (requiredParameter) {
@@ -136,10 +155,9 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     }
     if (activeService === 'webModel') return {webModel: connect};
     return {
-      [activeService]:
-        activeService === 'custom'
-          ? {url: requiredValueRef.current?.value || '', ...connect}
-          : {key: requiredValueRef.current?.value || '', [activeType]: Object.keys(connect).length > 0 ? connect : true},
+      [activeService]: isNoServiceType(activeService)
+        ? {[activeService === 'custom' ? 'url' : 'key']: requiredValueRef.current?.value || '', ...connect}
+        : {key: requiredValueRef.current?.value || '', [activeType]: Object.keys(connect).length > 0 ? connect : true},
     };
   }
 
@@ -166,7 +184,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
         <b className="playground-modal-title">Service Settings</b>
         <div className="playgroud-service-modal-form">
           <Service activeService={activeService} changeService={changeService} modalRef={modalRef} />
-          {activeService !== 'demo' && activeService !== 'custom' && activeService !== 'webModel' && (
+          {activeService !== 'demo' && !isNoServiceType(activeService) && activeType && (
             <ServiceType
               availableTypes={availableTypes}
               activeService={activeService}
@@ -176,17 +194,20 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               modalRef={modalRef}
             />
           )}
-          {activeService !== 'demo' && activeService !== 'custom' && activeService !== 'webModel' && (
-            <Required
-              ref={requiredValueRef}
-              requiredValue={requiredValue}
-              setValue={changeRequiredValue.bind(this, setRequiredValue)}
-              title="API Key:"
-              view={view}
-              changeCode={changeCode}
-              link={SERVICE_TYPE_TO_API_KEY_LINK[activeService]}
-            />
-          )}
+          {activeService !== 'demo' &&
+            activeService !== 'custom' &&
+            activeService !== 'webModel' &&
+            activeService !== 'ollama' && (
+              <Required
+                ref={requiredValueRef}
+                requiredValue={requiredValue}
+                setValue={changeRequiredValue.bind(this, setRequiredValue)}
+                title="API Key:"
+                view={view}
+                changeCode={changeCode}
+                link={SERVICE_TYPE_TO_API_KEY_LINK[activeService]}
+              />
+            )}
           {activeService === 'custom' && (
             <Required
               ref={requiredValueRef}
@@ -217,7 +238,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               ref={optionalParamsRef}
               optionalParameters={optionalParameters}
               connect={
-                activeService === 'custom' || activeService === 'webModel'
+                isNoServiceType(activeService)
                   ? chatComponent.connect[activeService]
                   : chatComponent.connect[activeService]?.[activeType]
               }
@@ -225,7 +246,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
               websocket={websocket}
               pseudoNames={PSEUDO_NAMES}
               links={
-                activeService === 'custom' || activeService === 'webModel'
+                isNoServiceType(activeService)
                   ? OPTIONAL_PARAM_TO_LINK[activeService]
                   : OPTIONAL_PARAM_TO_LINK[activeService]?.[activeType]
               }
@@ -459,51 +480,43 @@ const SERVICE_MODAL_FORM_CONFIG = {
     },
   },
   claude: {
-    chat: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-      top_k: 'number',
-      stop_sequences: 'constructable object',
-      system_prompt: 'string',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-    },
+    model: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    top_k: 'number',
+    stop_sequences: 'constructable object',
+    system_prompt: 'string',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
   },
   cohere: {
-    chat: {
-      model: 'string',
-      temperature: 'number',
-      prompt_truncation: ['AUTO', 'OFF'],
-    },
+    model: 'string',
+    temperature: 'number',
+    prompt_truncation: ['AUTO', 'OFF'],
   },
   deepSeek: {
-    chat: {
-      model: 'string',
-      temperature: 'number',
-      max_tokens: 'number',
-      top_p: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      stop: 'constructable object',
-      system_prompt: 'string',
-    },
+    model: 'string',
+    temperature: 'number',
+    max_tokens: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    stop: 'constructable object',
+    system_prompt: 'string',
   },
   gemini: {
-    chat: {
-      model: 'string',
-      system_prompt: 'string',
-      maxOutputTokens: 'number',
-      temperature: 'number',
-      topP: 'number',
-      topK: 'number',
-      stopSequences: 'constructable object',
-      responseMimeType: 'string',
-      responseSchema: 'constructable object',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-    },
+    model: 'string',
+    system_prompt: 'string',
+    maxOutputTokens: 'number',
+    temperature: 'number',
+    topP: 'number',
+    topK: 'number',
+    stopSequences: 'constructable object',
+    responseMimeType: 'string',
+    responseSchema: 'constructable object',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
   },
   groq: {
     chat: {
@@ -587,63 +600,59 @@ const SERVICE_MODAL_FORM_CONFIG = {
     imageClassification: {model: 'string'},
   },
   kimi: {
-    chat: {
-      model: 'string',
-      temperature: 'number',
-      max_tokens: 'number',
-      top_p: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      stop: 'constructable object',
-      system_prompt: 'string',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-    },
+    model: 'string',
+    temperature: 'number',
+    max_tokens: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    stop: 'constructable object',
+    system_prompt: 'string',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
   },
   miniMax: {
-    chat: {
-      model: 'string',
-      system_prompt: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      stop: 'constructable object',
-    },
+    model: 'string',
+    system_prompt: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    stop: 'constructable object',
   },
   mistral: {
-    chat: {
-      model: 'string',
-      system_prompt: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-      random_seed: 'number',
-      n: 'number',
-      safe_mode: ['true', 'false'],
-      reasoning_mode: 'string',
-      presence_penalty: 'number',
-      frequency_penalty: 'number',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-    },
+    model: 'string',
+    system_prompt: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    random_seed: 'number',
+    n: 'number',
+    safe_mode: ['true', 'false'],
+    reasoning_mode: 'string',
+    presence_penalty: 'number',
+    frequency_penalty: 'number',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
   },
   ollama: {
-    chat: {
-      model: 'string',
-      system: 'string',
-      think: ['true', 'false'],
-      keep_alive: ['true', 'false'],
-      options: {
-        temperature: 'number',
-        top_k: 'number',
-        top_p: 'number',
-        min_p: 'number',
-      },
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
+    model: 'string',
+    system: 'string',
+    think: ['true', 'false'],
+    keep_alive: ['true', 'false'],
+    options: {
+      temperature: 'number',
+      top_k: 'number',
+      top_p: 'number',
+      min_p: 'number',
     },
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
+  },
+  openWebUI: {
+    model: 'string',
+    system_prompt: 'string',
   },
   openAI: {
     chat: {
@@ -691,50 +700,44 @@ const SERVICE_MODAL_FORM_CONFIG = {
     },
   },
   openRouter: {
-    chat: {
-      model: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      system_prompt: 'string',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-      allowAudio: ['true', 'false'],
-    },
+    model: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    system_prompt: 'string',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
+    allowAudio: ['true', 'false'],
   },
   perplexity: {
-    chat: {
-      model: 'string',
-      system_prompt: 'string',
-      max_tokens: 'number',
-      temperature: 'number',
-      top_p: 'number',
-      top_k: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      stop: 'constructable object',
-      search_mode: ['web', 'academic'],
-      reasoning_effort: ['low', 'medium', 'high'],
-      search_domain_filter: 'constructable object',
-      disable_search: ['true', 'false'],
-      enable_search_classifier: ['true', 'false'],
-    },
+    model: 'string',
+    system_prompt: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    top_k: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    stop: 'constructable object',
+    search_mode: ['web', 'academic'],
+    reasoning_effort: ['low', 'medium', 'high'],
+    search_domain_filter: 'constructable object',
+    disable_search: ['true', 'false'],
+    enable_search_classifier: ['true', 'false'],
   },
   qwen: {
-    chat: {
-      model: 'string',
-      temperature: 'number',
-      max_tokens: 'number',
-      top_p: 'number',
-      frequency_penalty: 'number',
-      presence_penalty: 'number',
-      stop: 'constructable object',
-      system_prompt: 'string',
-      allowImages: ['true', 'false'],
-      allowCamera: ['true', 'false'],
-    },
+    model: 'string',
+    temperature: 'number',
+    max_tokens: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+    stop: 'constructable object',
+    system_prompt: 'string',
+    allowImages: ['true', 'false'],
+    allowCamera: ['true', 'false'],
   },
   stabilityAI: {
     textToImage: {
@@ -841,6 +844,7 @@ const SERVICE_TYPE_TO_API_KEY_LINK = {
   miniMax: 'https://www.minimax.io/',
   mistral: 'https://console.mistral.ai/',
   ollama: '',
+  openWebUI: 'https://docs.openwebui.com/getting-started/api-endpoints/',
   openAI: 'https://platform.openai.com/account/api-keys',
   openRouter: 'https://openrouter.ai/keys',
   perplexity: 'https://www.perplexity.ai/settings/api',
@@ -915,51 +919,43 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
   },
   claude: {
-    chat: {
-      model: 'https://docs.anthropic.com/en/docs/about-claude/models',
-      max_tokens: 'https://docs.anthropic.com/en/api/messages',
-      temperature: 'https://docs.anthropic.com/en/api/messages',
-      top_p: 'https://docs.anthropic.com/en/api/messages',
-      top_k: 'https://docs.anthropic.com/en/api/messages',
-      stop_sequences: 'https://docs.anthropic.com/en/api/messages',
-      system_prompt: 'https://docs.anthropic.com/en/api/messages',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
+    model: 'https://docs.anthropic.com/en/docs/about-claude/models',
+    max_tokens: 'https://docs.anthropic.com/en/api/messages',
+    temperature: 'https://docs.anthropic.com/en/api/messages',
+    top_p: 'https://docs.anthropic.com/en/api/messages',
+    top_k: 'https://docs.anthropic.com/en/api/messages',
+    stop_sequences: 'https://docs.anthropic.com/en/api/messages',
+    system_prompt: 'https://docs.anthropic.com/en/api/messages',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   cohere: {
-    chat: {
-      model: 'https://docs.cohere.com/reference/chat',
-      temperature: 'https://docs.cohere.com/reference/chat',
-      prompt_truncation: 'https://docs.cohere.com/reference/chat',
-    },
+    model: 'https://docs.cohere.com/reference/chat',
+    temperature: 'https://docs.cohere.com/reference/chat',
+    prompt_truncation: 'https://docs.cohere.com/reference/chat',
   },
   deepSeek: {
-    chat: {
-      model: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      temperature: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      max_tokens: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      top_p: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      frequency_penalty: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      presence_penalty: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      stop: 'https://api-docs.deepseek.com/api/create-chat-completion',
-      system_prompt: 'https://api-docs.deepseek.com/api/create-chat-completion',
-    },
+    model: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    temperature: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    max_tokens: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    top_p: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    frequency_penalty: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    presence_penalty: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    stop: 'https://api-docs.deepseek.com/api/create-chat-completion',
+    system_prompt: 'https://api-docs.deepseek.com/api/create-chat-completion',
   },
   gemini: {
-    chat: {
-      model: 'https://ai.google.dev/models/gemini',
-      system_prompt: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      maxOutputTokens: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      temperature: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      topP: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      topK: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      stopSequences: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      responseMimeType: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      responseSchema: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
+    model: 'https://ai.google.dev/models/gemini',
+    system_prompt: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    maxOutputTokens: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    temperature: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    topP: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    topK: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    stopSequences: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    responseMimeType: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    responseSchema: 'https://ai.google.dev/api/rest/v1beta/models/generateContent',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   groq: {
     chat: {
@@ -1049,69 +1045,65 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
   },
   kimi: {
-    chat: {
-      model: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      temperature: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      max_tokens: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      top_p: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      frequency_penalty: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      presence_penalty: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      stop: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      system_prompt: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
+    model: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    temperature: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    max_tokens: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    top_p: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    frequency_penalty: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    presence_penalty: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    stop: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    system_prompt: 'https://platform.moonshot.ai/docs/api/chat#chat-completion',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   miniMax: {
-    chat: {
-      model: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model',
-      system_prompt:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      max_tokens:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      temperature:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      top_p:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      frequency_penalty:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      presence_penalty:
-        'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-      stop: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    },
+    model: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model',
+    system_prompt:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    max_tokens:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    temperature:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    top_p:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    frequency_penalty:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    presence_penalty:
+      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    stop: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
   },
   mistral: {
-    chat: {
-      model: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      system_prompt: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      max_tokens: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      temperature: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      top_p: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      random_seed: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      n: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      safe_mode: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      reasoning_mode: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      presence_penalty: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      frequency_penalty: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
+    model: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    system_prompt: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    max_tokens: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    temperature: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    top_p: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    random_seed: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    n: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    safe_mode: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    reasoning_mode: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    presence_penalty: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    frequency_penalty: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   ollama: {
-    chat: {
-      model: 'https://ollama.com/library',
-      system: 'https://ollama.com/',
-      think: 'https://ollama.com/',
-      keep_alive: 'https://ollama.com/',
-      options: {
-        temperature: 'https://ollama.com/',
-        top_k: 'https://ollama.com/',
-        top_p: 'https://ollama.com/',
-        min_p: 'https://ollama.com/',
-      },
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
+    model: 'https://ollama.com/library',
+    system: 'https://ollama.com/',
+    think: 'https://ollama.com/',
+    keep_alive: 'https://ollama.com/',
+    options: {
+      temperature: 'https://ollama.com/',
+      top_k: 'https://ollama.com/',
+      top_p: 'https://ollama.com/',
+      min_p: 'https://ollama.com/',
     },
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
+  },
+  openWebUI: {
+    model: 'https://deepchat.dev/docs/directConnection/OpenWebUI#openWebUI',
+    system_prompt: 'https://deepchat.dev/docs/directConnection/OpenWebUI#openWebUI',
   },
   openAI: {
     chat: {
@@ -1161,50 +1153,44 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
   },
   openRouter: {
-    chat: {
-      model: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      max_tokens: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      temperature: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      top_p: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      frequency_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      presence_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      system_prompt: 'https://openrouter.ai/docs/api-reference/chat-completion',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-      allowAudio: 'https://deepchat.dev/docs/files#audio',
-    },
+    model: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    max_tokens: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    temperature: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    top_p: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    frequency_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    presence_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    system_prompt: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
+    allowAudio: 'https://deepchat.dev/docs/files#audio',
   },
   perplexity: {
-    chat: {
-      model: 'https://docs.perplexity.ai/api-reference/chat-completions-posts',
-      system_prompt: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      max_tokens: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      temperature: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      top_p: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      top_k: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      frequency_penalty: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      presence_penalty: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      stop: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      search_mode: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      reasoning_effort: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      search_domain_filter: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      disable_search: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-      enable_search_classifier: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
-    },
+    model: 'https://docs.perplexity.ai/api-reference/chat-completions-posts',
+    system_prompt: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    max_tokens: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    temperature: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    top_p: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    top_k: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    frequency_penalty: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    presence_penalty: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    stop: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    search_mode: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    reasoning_effort: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    search_domain_filter: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    disable_search: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
+    enable_search_classifier: 'https://docs.perplexity.ai/api-reference/chat-completions-post',
   },
   qwen: {
-    chat: {
-      model: 'https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api',
-      temperature: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      max_tokens: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      top_p: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      frequency_penalty: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      presence_penalty: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      stop: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      system_prompt: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
-      allowImages: 'https://deepchat.dev/docs/files#images',
-      allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
+    model: 'https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api',
+    temperature: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    max_tokens: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    top_p: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    frequency_penalty: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    presence_penalty: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    stop: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    system_prompt: 'https://www.alibabacloud.com/help/en/model-studio/developer-reference/qwen-api-details',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   stabilityAI: {
     textToImage: {

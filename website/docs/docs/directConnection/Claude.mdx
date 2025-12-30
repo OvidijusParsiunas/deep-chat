@@ -12,7 +12,7 @@ Properties used to connect to [Claude](https://www.anthropic.com/claude).
 
 ### `claude` {#claude}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
@@ -25,7 +25,7 @@ Properties used to connect to [Claude](https://www.anthropic.com/claude).
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`mcp_servers?: ClaudeMCPServer[]`](#ClaudeMCPServer) <br />
   \}
-- Default: _\{model: "claude-3-5-sonnet-20241022", max_tokens: 4096\}_
+- Default: _\{model: "claude-sonnet-4-5-20250929", max_tokens: 4096\}_
 
 import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -38,8 +38,8 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Claude's [`messages`](https://docs.anthropic.com/en/api/messages) API. <br />
-`model` is the Claude model to use (e.g., "claude-3-5-sonnet-20241022", "claude-3-haiku-20240307"). <br />
+Connect to Claude's [Messages API](https://docs.anthropic.com/en/api/messages). You can set this property to _true_ or configure it using an object:<br />
+`model` is the Claude model to use (e.g., "claude-sonnet-4-5-20250929", "claude-3-haiku-20240307"). <br />
 `max_tokens` is the maximum number of tokens to generate. <br />
 `temperature` controls randomness (0.0-1.0). Higher values produce more creative outputs. <br />
 `top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
@@ -212,13 +212,20 @@ Claude supports [tool calling](https://docs.anthropic.com/en/docs/tool-use) func
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `type: "object"`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `properties: object`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `required?: string[]` <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \}, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `defer_loading?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `allowed_callers?: string[]` <br />
   \}
 
 Array describing tools that the model may call. <br />
 `name` is the name of the tool function. <br />
 `description` explains what the tool does and when it should be used. <br />
 `input_schema` defines the parameters the tool accepts in JSON Schema format. <br />
+[Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use): <br />
+`defer_loading` does not load the tool in the initial context so it can be discovered dynamically. <br />
+`type` defines the tool type. <br />
+`allowed_callers` are programmtic execution tools that can call this tool. <br />
 
 ### `ClaudeMCPServer` {#ClaudeMCPServer}
 

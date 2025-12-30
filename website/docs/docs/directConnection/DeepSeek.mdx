@@ -12,7 +12,7 @@ Properties used to connect to [DeepSeek AI](https://www.deepseek.com/).
 
 ### `deepSeek` {#deepSeek}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
@@ -34,7 +34,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to DeepSeek's [`chat completion`](https://api-docs.deepseek.com/api/create-chat-completion) API. <br />
+Connect to DeepSeek's [Chat Completion API](https://api-docs.deepseek.com/api/create-chat-completion). You can set this property to _true_ or configure it using an object: <br />
 `model` is the DeepSeek model to use ("deepseek-chat" or "deepseek-reasoner"). <br />
 `temperature` controls randomness (0.0-2.0). Higher values produce more creative outputs. <br />
 `max_tokens` limits the maximum number of tokens in the response (1-8192). <br />

@@ -12,7 +12,7 @@ Properties used to connect to [Cohere](https://docs.cohere.com/docs).
 
 ### `cohere` {#cohere}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `prompt_truncation?:` `"AUTO"` | `"OFF"`, <br />
@@ -31,7 +31,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Cohere's [`chat`](https://docs.cohere.com/v2/reference/chat) API. <br />
+Connect to Cohere's [Chat API](https://docs.cohere.com/v2/reference/chat). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the Cohere model to be used by the API. <br />
 `temperature` is the degree of the response randomness. <br />
 `prompt_truncation` dictates how the prompt will be constructed. Default is _"OFF"_ which uses all resources. _"AUTO"_ drops some chat history and documents to construct a prompt that fits within the model's context length limit. <br />

@@ -54,7 +54,7 @@ import Tabs from '@theme/Tabs';
 
 - Default: _\{model: "facebook/blenderbot-400M-distill", options: \{use_cache: true\}\}_
 
-Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task) API. <br />
+Connect to Hugging Face [Conversational API](https://huggingface.co/docs/api-inference/detailed_parameters#conversational-task). <br />
 `model` is the name of the model used for the task. <br />
 `min_length` is the minimum length in tokens of the output summary. <br />
 `max_length` is the maximum length in tokens of the output summary. <br />
@@ -142,7 +142,7 @@ Connect to Hugging Face [`Conversational`](https://huggingface.co/docs/api-infer
 
 - Default: _\{model: "gpt2", options: \{use_cache: true\}\}_
 
-Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task) API. <br />
+Connect to Hugging Face [Text Generation API](https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task). <br />
 `model` is the name of the model used for the task. <br />
 `top_k` defines the top tokens considered within the sample operation to create new text. <br />
 `top_p` is a float to define the tokens that are within the sample operation of text generation. Add tokens in the sample for more probable to least probable until the sum of the probabilities is greater than top \* p. <br />
@@ -230,7 +230,7 @@ Connect to Hugging Face [`Text Generation`](https://huggingface.co/docs/api-infe
 
 - Default: _\{model: "facebook/bart-large-cnn", options: \{use_cache: true\}\}_
 
-Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task) API. <br />
+Connect to Hugging Face [Summarization API](https://huggingface.co/docs/api-inference/detailed_parameters#summarization-task). <br />
 `model` is the name of the model used for the task. <br />
 `min_length` is the minimum length in tokens of the output summary. <br />
 `max_length` is the maximum length in tokens of the output summary. <br />
@@ -311,7 +311,7 @@ Connect to Hugging Face [`Summarization`](https://huggingface.co/docs/api-infere
 
 - Default: _\{model: "Helsinki-NLP/opus-tatoeba-en-ja", options: \{use_cache: true\}\}_
 
-Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inference/detailed_parameters#translation-task) API. <br />
+Connect to Hugging Face [Translation API](https://huggingface.co/docs/api-inference/detailed_parameters#translation-task). <br />
 `model` is the name of the model used for the task. <br />
 `use_cache` is used to speed up requests by using the inference API cache.
 
@@ -386,7 +386,7 @@ Connect to Hugging Face [`Translation`](https://huggingface.co/docs/api-inferenc
 
 - Default: _\{model: "bert-base-uncased", options: \{use_cache: true}\}_
 
-Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/detailed_parameters#fill-mask-task) API. <br />
+Connect to Hugging Face [Fill Mask API](https://huggingface.co/docs/api-inference/detailed_parameters#fill-mask-task). <br />
 `model` is the name of the model used for the task. <br />
 `use_cache` is used to speed up requests by using the inference API cache.
 
@@ -457,7 +457,7 @@ Connect to Hugging Face [`Fill Mask`](https://huggingface.co/docs/api-inference/
 - Type: `true` | \{`context: string`, `model?: string`\}
 - Default: _\{model: "bert-large-uncased-whole-word-masking-finetuned-squad"\}_
 
-Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task) API. <br />
+Connect to Hugging Face [Question Answer API](https://huggingface.co/docs/api-inference/detailed_parameters#question-answering-task). <br />
 `context` is a string containing details that AI can use to answer the given questions. <br />
 `model` is the name of the model used for the task. <br />
 
@@ -542,7 +542,7 @@ Connect to Hugging Face [`Question Answer`](https://huggingface.co/docs/api-infe
 - Type: `true` | \{`model?: string`\}
 - Default: _\{model: "facebook/wav2vec2-large-960h-lv60-self"\}_
 
-Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task) API. <br />
+Connect to Hugging Face [Audio Speech Recognition API](https://huggingface.co/docs/api-inference/detailed_parameters#automatic-speech-recognition-task). <br />
 `model` is the name of the model used for the task. <br />
 
 #### Example
@@ -612,7 +612,7 @@ Connect to Hugging Face [`Audio Speech Recognition`](https://huggingface.co/docs
 - Type: `true` | \{`model?: string`\}
 - Default: _\{model: "ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition"\}_
 
-Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api-inference/detailed_parameters#audio-classification-task) API. <br />
+Connect to Hugging Face [Audio Classification API](https://huggingface.co/docs/api-inference/detailed_parameters#audio-classification-task). <br />
 `model` is the name of the model used for the task. <br />
 
 #### Example
@@ -682,7 +682,7 @@ Connect to Hugging Face [`Audio Classification`](https://huggingface.co/docs/api
 - Type: `true` | \{`model?: string`\}
 - Default: _\{model: "google/vit-base-patch16-224"\}_
 
-Connect to Hugging Face [`Image Classification`](https://huggingface.co/docs/api-inference/detailed_parameters#image-classification-task) API. <br />
+Connect to Hugging Face [Image Classification API](https://huggingface.co/docs/api-inference/detailed_parameters#image-classification-task). <br />
 `model` is the name of the model used for the task. <br />
 
 #### Example

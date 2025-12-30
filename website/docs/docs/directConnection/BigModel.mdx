@@ -42,7 +42,7 @@ import Tabs from '@theme/Tabs';
   \}
 - Default: _\{model: "glm-4.5"\}_
 
-Connect to BigModel's [`chat/completions`](https://docs.bigmodel.cn/api-reference/模型-api/对话补全) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to BigModel's [Chat Completions API](https://docs.bigmodel.cn/api-reference/模型-api/对话补全). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the BigModel model to be used by the API. Check [available models](https://docs.bigmodel.cn/docs/model-list) for more. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />
@@ -203,7 +203,7 @@ When sending files we advise you to set [`maxMessages`](/docs/connect#requestBod
 - Type: `true` | \{`model?: string`\}
 - Default: _\{model: "cogview-4-250304"\}_
 
-Connect to BigModel's [`images/generations`](https://docs.bigmodel.cn/api-reference/模型-api/图像生成) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to BigModel's [Image Generation API](https://docs.bigmodel.cn/api-reference/模型-api/图像生成). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the image generation model. <br />
 
 #### Example
@@ -273,7 +273,7 @@ Connect to BigModel's [`images/generations`](https://docs.bigmodel.cn/api-refere
 - Type: `true` | \{`model?: string`, `voice?: string`\}
 - Default: _\{model: "cogtts", voice: "tongtong"\}_
 
-Connect to BigModel's [`audio/speech`](https://docs.bigmodel.cn/api-reference/模型-api/文本转语音) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to BigModel's [Audio Speech API](https://docs.bigmodel.cn/api-reference/模型-api/文本转语音). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the text-to-speech model. <br />
 `voice` specifies the voice to use for speech synthesis. <br />
 

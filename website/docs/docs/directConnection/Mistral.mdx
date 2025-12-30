@@ -12,7 +12,7 @@ Properties used to connect to [Mistral AI](https://mistral.ai/).
 
 ### `mistral` {#mistral}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
@@ -41,7 +41,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Mistral AI's [`chat completion`](https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post) API. <br />
+Connect to Mistral AI's [Chat Completion API](https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the Mistral model to be used by the API. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />

@@ -45,7 +45,7 @@ import Tabs from '@theme/Tabs';
   \}
 - Default: _\{model: "llama-3.3-70b-versatile"\}_
 
-Connect to Groq's [`chat/completions`](https://console.groq.com/docs/api-reference#chat-create) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to Groq's [Chat Completions API](https://console.groq.com/docs/api-reference#chat-create). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the Groq model to be used by the API. Check [available models](https://console.groq.com/docs/models) for more. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_completion_tokens` limits the maximum number of tokens in the generated response. <br />
@@ -217,7 +217,7 @@ When sending images we advise you to set [`maxMessages`](/docs/connect#requestBo
   \}
 - Default: _\{model: "playai-tts", voice: "Fritz-PlayAI", response_format: "mp3"\}_
 
-Connect to Groq's [`audio/speech`](https://console.groq.com/docs/api-reference#audio-speechCalled) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to Groq's [audio speech API](https://console.groq.com/docs/api-reference#audio-speechCalled). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the text-to-speech model. <br />
 `voice` specifies the voice to use for speech synthesis. <br />
 `speed` controls the playback speed of the generated audio (0.25-4.0). <br />

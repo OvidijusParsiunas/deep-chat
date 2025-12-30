@@ -182,6 +182,13 @@ export default function ContainersKeyToggleChatFunction({service = 'openAI', wit
             chat: openAIChatConfiguration,
           },
         };
+      case 'openWebUI':
+        return {
+          openWebUI: {
+            ...(withKey && {key: placeholderKey}),
+            ...openAIChatConfiguration,
+          },
+        };
       default:
         return {
           [service]: {

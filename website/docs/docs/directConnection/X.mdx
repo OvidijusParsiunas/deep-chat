@@ -1,5 +1,5 @@
 ---
-sidebar_position: 21
+sidebar_position: 22
 ---
 
 # X
@@ -40,7 +40,7 @@ import Tabs from '@theme/Tabs';
   \}
 - Default: _\{model: "grok-3-latest"\}_
 
-Connect to X's chat API. You can set this property to _true_ or configure it using an object: <br />
+Connect to X's [Chat API](https://docs.x.ai/docs/guides/chat). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the X model to be used by the API. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />
 `temperature` controls the randomness of responses. Higher values produce more creative outputs. <br />
@@ -119,7 +119,7 @@ Use [`stream`](/docs/connect#Stream) to stream the AI responses.
 - Type: `true` | \{`model?: string`,`n?: number`}
 - Default: _\{model: "grok-2-image"\}_
 
-Connect to X's image generation API. You can set this property to _true_ or configure it using an object: <br />
+Connect to X's [Images Generation API](https://docs.x.ai/docs/guides/image-generations). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the image generation model. <br />
 `n` is the number of images to generate. <br />
 

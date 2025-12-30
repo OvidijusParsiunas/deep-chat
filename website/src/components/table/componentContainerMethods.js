@@ -25,7 +25,15 @@ function click(table, resultText, setResultText, propertyName, displayResults, a
   }
 }
 
-export default function ComponentContainerMethods({children, propertyName, displayResults, args, withEvent, onClick}) {
+export default function ComponentContainerMethods({
+  children,
+  propertyName,
+  displayResults,
+  args,
+  withEvent,
+  onClick,
+  buttonText,
+}) {
   const containerRef = React.useRef(null);
   const [resultText, setResultText] = React.useState(['']);
 
@@ -44,7 +52,7 @@ export default function ComponentContainerMethods({children, propertyName, displ
             click(containerRef.current.children[0], resultText, setResultText, propertyName, displayResults, args, onClick)
           }
         >
-          Call Method
+          {buttonText || 'Call Method'}
         </button>
         {(displayResults ?? true) && <ResultText resultText={resultText} />}
       </div>

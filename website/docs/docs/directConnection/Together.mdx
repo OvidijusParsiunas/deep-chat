@@ -1,5 +1,5 @@
 ---
-sidebar_position: 20
+sidebar_position: 21
 ---
 
 # Together
@@ -42,7 +42,7 @@ import Tabs from '@theme/Tabs';
   \}
 - Default: _\{model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"\}_
 
-Connect to Together AI's [`chat/completions`](https://docs.together.ai/reference/chat-completions-1) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to Together AI's [Chat Completions API](https://docs.together.ai/reference/chat-completions-1). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the Together AI model to be used by the API. Check [available models](https://docs.together.ai/docs/inference-models) for more. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />
@@ -133,7 +133,7 @@ Use [`stream`](/docs/connect#Stream) to stream the AI responses.
   \}
 - Default: _\{model: "black-forest-labs/FLUX.1-schnell-Free"\}_
 
-Connect to Together AI's [`images/generations`](https://docs.together.ai/reference/post-images-generations) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to Together AI's [Images Generations API](https://docs.together.ai/reference/post-images-generations). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the image generation model. Check [available models](https://docs.together.ai/docs/inference-models#image-models) for more. <br />
 `width` specifies the width of the generated image in pixels. <br />
 `height` specifies the height of the generated image in pixels. <br />
@@ -213,7 +213,7 @@ Connect to Together AI's [`images/generations`](https://docs.together.ai/referen
   \}
 - Default: _\{model: "cartesia/sonic", voice: "laidback woman"\}_
 
-Connect to Together AI's [`audio/speech`](https://docs.together.ai/reference/audio-speech) API. You can set this property to _true_ or configure it using an object: <br />
+Connect to Together AI's [Audio Speech API](https://docs.together.ai/reference/audio-speech). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the text-to-speech model. <br />
 `voice` specifies the voice to use for speech synthesis. <br />
 `speed` controls the speed of the generated speech (0.25-4.0). <br />

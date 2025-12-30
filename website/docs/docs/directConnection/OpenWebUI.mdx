@@ -1,30 +1,26 @@
 ---
-sidebar_position: 11
+sidebar_position: 17
 ---
 
-# Kimi
+# Open WebUI
 
-import kimiLogo from '/img/kimiLogo.png';
+import openWebUILogo from '/img/openWebUILogo.png';
 
-# <img src={kimiLogo} className="adaptive-logo-filter" width="38" style={{float: 'left', marginRight: '2px', marginTop: '9px'}} /><span className="direct-service-title">imi</span>
+# <img src={openWebUILogo} className="adaptive-logo-filter" width="74" style={{float: 'left', marginTop: '-8px', marginLeft: '-14px'}} /><span className="direct-service-title">Open WebUI</span>
 
-Properties used to connect to [Moonshot AI Kimi](https://platform.moonshot.ai/).
+Properties used to connect to [Open WebUI](https://openwebui.com/).
 
-### `kimi` {#kimi}
+### `openWebUI` {#openWebUI}
 
 - Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: KimiTool[]`](#KimiTool), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tool_ids?: string[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `tools?: object[]`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `files?:` `{type: "file"|"collection"; id: string}[]` <br />
   \}
-- Default: _\{model: "moonshot-v1-8k"\}_
+- Default: _\{model: "llama3.2"\}_
 
 import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
@@ -37,17 +33,13 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Moonshot AI's [Chat Completion API](https://platform.moonshot.ai/docs/api/chat#chat-completion). You can set this property to _true_ or configure it using an object:<br />
-`model` is the name of the Kimi model to be used by the API. <br />
-`temperature` controls the randomness of responses (0.0-2.0). Higher values produce more creative outputs. <br />
-`max_tokens` limits the maximum number of tokens in the generated response. <br />
-`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
-`frequency_penalty` reduces repetition by penalizing frequently used tokens (-2.0 to 2.0). <br />
-`presence_penalty` reduces repetition by penalizing tokens that have appeared (-2.0 to 2.0). <br />
-`stop` defines stop sequences that will halt generation when encountered. <br />
+Connect to Open WebUI's [Chat Completions API](https://docs.openwebui.com/getting-started/api-endpoints/). You can set this property to _true_ or configure it using an object: <br />
+`model` is the name of the model to be used by the API. This should match a model available in your Open WebUI instance. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
-[`tools`](#KimiTool) defines available function declarations for the model to call. <br />
+`tool_ids` are IDs of tools configured in Open WebUI that should be available to the model. <br />
+`tools` array of function definitions that the model can call. <br />
 [`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
+`files` array of file or collection references from the Open WebUI [knowledge base](https://docs.openwebui.com/features/workspace/knowledge). <br />
 
 #### Example
 
@@ -56,10 +48,10 @@ Connect to Moonshot AI's [Chat Completion API](https://platform.moonshot.ai/docs
     <DeepChatBrowser
       style={{borderRadius: '8px'}}
       directConnection={{
-        kimi: {
+        openWebUI: {
           key: 'placeholder key',
           system_prompt: 'You are a helpful assistant.',
-          temperature: 0.7,
+          model: 'llama3.2:latest',
         },
       }}
     ></DeepChatBrowser>
@@ -68,9 +60,8 @@ Connect to Moonshot AI's [Chat Completion API](https://platform.moonshot.ai/docs
     <DeepChatBrowser
       style={{borderRadius: '8px'}}
       directConnection={{
-        kimi: {
-          system_prompt: 'You are a helpful assistant.',
-          temperature: 0.7,
+        openWebUI: {
+          model: 'llama3.2:latest',
         },
       }}
     ></DeepChatBrowser>
@@ -83,10 +74,9 @@ Connect to Moonshot AI's [Chat Completion API](https://platform.moonshot.ai/docs
 ```html
 <deep-chat
   directConnection='{
-    "kimi": {
+    "openWebUI": {
       "key": "placeholder key",
-      "system_prompt": "You are a helpful assistant.",
-      "temperature": 0.7
+      "model": "llama3.2:latest"
     }
   }'
 ></deep-chat>
@@ -100,10 +90,9 @@ Connect to Moonshot AI's [Chat Completion API](https://platform.moonshot.ai/docs
 
 <deep-chat
   directConnection='{
-    "kimi": {
+    "openWebUI": {
       "key": "placeholder key",
-      "system_prompt": "You are a helpful assistant.",
-      "temperature": 0.7
+      "model": "llama3.2:latest"
     }
   }'
   style="border-radius: 8px"
@@ -121,36 +110,33 @@ Use [`stream`](/docs/connect#Stream) to stream the AI responses.
 
 <LineBreak></LineBreak>
 
-#### Vision Example
+#### Custom URL Example
 
-Upload images alongside your text prompts for visual understanding. These capabilities are only available for vision models such as _moonshot-v1-8k-vision-preview_ or _moonshot-v1-32k-vision-preview_.
+By default, the connection uses `http://localhost:3000/api/chat/completions`. You can specify a custom URL using the [`connect`](/docs/connect) property:
 
 <ContainersKeyToggle>
   <ComponentContainer>
     <DeepChatBrowser
       style={{borderRadius: '8px'}}
       directConnection={{
-        kimi: {
+        openWebUI: {
           key: 'placeholder key',
-          model: 'moonshot-v1-8k',
         },
       }}
-      images={true}
-      camera={true}
-      textInput={{styles: {container: {width: '77%'}}}}
+      connect={{
+        url: 'https://your-openwebui-instance.com/api/chat/completions',
+      }}
     ></DeepChatBrowser>
   </ComponentContainer>
   <ComponentContainer>
     <DeepChatBrowser
       style={{borderRadius: '8px'}}
       directConnection={{
-        kimi: {
-          model: 'moonshot-v1-8k',
-        },
+        openWebUI: true,
       }}
-      images={true}
-      camera={true}
-      textInput={{styles: {container: {width: '77%'}}}}
+      connect={{
+        url: 'https://your-openwebui-instance.com/api/chat/completions',
+      }}
     ></DeepChatBrowser>
   </ComponentContainer>
 </ContainersKeyToggle>
@@ -160,14 +146,8 @@ Upload images alongside your text prompts for visual understanding. These capabi
 
 ```html
 <deep-chat
-  directConnection='{
-    "kimi": {
-      "key": "placeholder key",
-      "model": "moonshot-v1-8k"
-    }
-  }'
-  images="true"
-  camera="true"
+  directConnection='{"openWebUI": true}'
+  connect='{"url": "https://your-openwebui-instance.com/api/chat/completions"}'
 ></deep-chat>
 ```
 
@@ -179,15 +159,10 @@ Upload images alongside your text prompts for visual understanding. These capabi
 
 <deep-chat
   directConnection='{
-    "kimi": {
-      "key": "placeholder key",
-      "model": "moonshot-v1-8k"
-    }
+    "openWebUI": {"key": "placeholder key"}
   }'
-  images="true"
-  camera="true"
+  connect='{"url": "https://your-openwebui-instance.com/api/chat/completions"}'
   style="border-radius: 8px"
-  textInput='{"styles": {"container": {"width": "77%"}}}'
 ></deep-chat>
 ```
 
@@ -196,32 +171,9 @@ Upload images alongside your text prompts for visual understanding. These capabi
 
 <LineBreak></LineBreak>
 
-:::tip
-When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
-:::
-
-<LineBreak></LineBreak>
-
 ## Tool Calling
 
-Kimi supports [function calling](https://platform.moonshot.ai/docs/api/chat#chat-completion) functionality:
-
-### `KimiTool` {#KimiTool}
-
-- Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `function:` \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `parameters: object` <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
-  \}
-
-Array describing tools that the model may call. <br />
-`type` must be "function" for function tools. <br />
-`name` is the name of the tool function. <br />
-`description` explains what the tool does and when it should be used. <br />
-`parameters` defines the parameters the tool accepts in JSON Schema format. <br />
+Open WebUI supports [tool calling](https://docs.openwebui.com/features/plugin/tools/) functionality:
 
 ### `FunctionHandler` {#FunctionHandler}
 
@@ -234,7 +186,7 @@ which will feed it back into the model to finalize a response, or return a JSON 
 
 #### Example
 
-<ContainersKeyToggleChatFunction service="kimi"></ContainersKeyToggleChatFunction>
+<ContainersKeyToggleChatFunction service="openWebUI"></ContainersKeyToggleChatFunction>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
@@ -243,7 +195,7 @@ which will feed it back into the model to finalize a response, or return a JSON 
 // using JavaScript for a simplified example
 
 chatElementRef.directConnection = {
-  kimi: {
+  openWebUI: {
     tools: [
       {
         type: 'function',
@@ -271,7 +223,6 @@ chatElementRef.directConnection = {
         };
       });
     },
-    key: 'placeholder-key',
   },
 };
 ```
@@ -283,7 +234,7 @@ chatElementRef.directConnection = {
 // using JavaScript for a simplified example
 
 chatElementRef.directConnection = {
-  kimi: {
+  openWebUI: {
     tools: [
       {
         type: 'function',
@@ -311,8 +262,8 @@ chatElementRef.directConnection = {
         };
       });
     },
-    key: 'placeholder-key',
   },
+  key: 'placeholder-key',
 };
 
 function getCurrentWeather(location) {

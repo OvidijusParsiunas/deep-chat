@@ -455,12 +455,12 @@ function ComponentsLight() {
               container: {default: {bottom: '1em', right: '0.6em', borderRadius: '20px', width: '1.9em', height: '1.9em'}},
               svg: {styles: {default: {bottom: '0.4em', left: '0.35em'}}},
             },
-            position: 'inside-right',
+            position: 'inside-end',
           },
         }}
         submitButtonStyles={{
           alwaysEnabled: true,
-          position: 'outside-right',
+          position: 'outside-end',
           submit: {
             container: {
               default: {bottom: '0.9em', borderRadius: '25px', padding: '6px 5px 4px', backgroundColor: '#f3f6fc'},

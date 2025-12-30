@@ -12,6 +12,7 @@ Properties related to messages.
 
 Messages that are pre-populated when the chat loads up. Use [`loadHistory`](/docs/interceptors#loadHistory) to load messages asynchronously. <br />
 
+import ComponentContainerMethods from '@site/src/components/table/componentContainerMethods';
 import ComponentContainer from '@site/src/components/table/componentContainer';
 import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
 import LineBreak from '@site/src/components/markdown/lineBreak';
@@ -76,13 +77,22 @@ import Tabs from '@theme/Tabs';
 
 ### `browserStorage` {#browserStorage}
 
-- Type: `true` | \{ `key?: string`, `maxMessages?: number`, `clear?: () => void` \}
-- Default: _\{ key: "deep-chat-storage", maxMessages: 1000 \}_
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `key?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `maxMessages?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `textInput?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `scrollHeight?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `clear?: () => void` <br />
+  \}
+
+- Default: _\{key: "deep-chat-storage", maxMessages: 1000, textInput: false\}_
 
 Automatically store message history in the browser's local storage for future sessions.
 You can enable this by setting the value to _true_ or by defining an object with the following properties: <br />
 `key` is the storage key used to identify the stored message history in your browser. <br />
 `maxMessages` is the maximum number of messages that can be stored. <br />
+`textInput` is used to toggle whether the text input is stored. <br />
+`scrollHeight` restores the previous session's scroll height. <br />
 `clear` is a function used to clear the storage.
 
 :::info
@@ -127,10 +137,6 @@ chatElementRef.browserStorage.clear();
 
 </TabItem>
 </Tabs>
-
-:::note
-`browserStorage` does not work when [`history`](#history) is used.
-:::
 
 :::tip
 If you want the storage to be cleared on app load, use `localStorage.removeItem("key-name")` in your code.
@@ -251,8 +257,8 @@ or by defining an object with [`Avatar`](#Avatar) properties. The `default` prop
   &nbsp;&nbsp;&nbsp;&nbsp; `src?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `styles?: {` <br />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`avatar?: CustomStyle`](/docs/styles#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](/docs/styles#CustomStyle) <br />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [`container?: CustomStyle`](/docs/styles#CustomStyle), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `position?: "start" | "end"` <br />
   }\}
 
 This object is used to configure avatars that are displayed beside messages. <br />
@@ -401,7 +407,7 @@ or by defining an object with [`Name`](#Name) properties. The `default` property
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `text?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`style?: CustomStyle`](/docs/styles#CustomStyle), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `position?: "left" | "right"` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `position?: "start" | "end"` <br />
   \}
 
 This object is used to configure names that are displayed beside messages. <br />
@@ -542,6 +548,294 @@ When `toggle` is defined we recommend using [`onMessage`](/docs/messages#onMessa
 
 <LineBreak></LineBreak>
 
+### `scrollButton` {#scrollButton}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](/docs/styles#StatefulStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `smoothScroll?: boolean` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `scrollDelta?: number` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `content?: string` <br />
+  \}
+
+- Default: _\{smoothScroll: true, scrollDelta: 80\}_
+
+Display a scroll down button when the chat has scrolled up. Enable this by setting the value to _true_
+or by defining an object with the following properties: <br />
+`styles` is used to configure the button appearance. <br />
+`smoothScroll` toggles animation when scrolling down.
+`content` is a html string used to customize the button. <br />
+`scrollDelta` is the number of pixels scroll scrolled upwards before the button is displayed.
+
+#### Simple Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    scrollButton={true}
+    history={[
+      {
+        text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son.",
+        role: 'ai',
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat scrollButton="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  scrollButton='true'
+  history='[
+    {
+      "text": "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son.",
+      "role": "ai"
+    }
+  ]'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Arrow Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    scrollButton={{
+      content: `
+      <svg width="16" height="12" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 4 L12 12 L22 4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+      </svg>`,
+    }}
+    history={[
+      {
+        text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son.",
+        role: 'ai',
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// It is simpler to define longer content strings in JavaScript
+chatElementRef.scrollButton = {
+  content: `
+    <svg width="16" height="12" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 4 L12 12 L22 4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>`,
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// It is simpler to define longer content strings in JavaScript
+chatElementRef.scrollButton = {
+  content: `
+    <svg width="16" height="12" viewBox="0 0 24 12" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 4 L12 12 L22 4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>`,
+};
+
+chatElementRef.style = {borderRadius: '8px'};
+
+chatElementRef.history = [
+  {
+    text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? Barry? Adam? Can you believe this is happening? I can't. I'll pick you up. Looking sharp. Use the stairs, Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son.",
+    role: 'ai',
+  },
+];
+
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `hiddenMessages` {#hiddenMessages}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`styles?: StatefulStyles`](/docs/styles#StatefulStyles), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `onUpdate?: (content: string, number: number) => string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `clickScroll?: "first" | "last"` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `smoothScroll?: boolean` <br />
+  \}
+
+- Default: _\{smoothScroll: true\}_
+
+Display an indicator when there are new messages not visible in the chat view. Enable this by setting the value to _true_
+or by defining an object with the following properties: <br />
+`styles` is used to configure the indicator appearance. <br />
+`onUpdate` is a function used to customize the indicator that is triggered when there is a new hidden message.
+`content` is a html string and `number` is the number of hidden messages. The function expects to return a html string. <br />
+`clickScroll` determines the scroll behavior when the indicator is clicked - _"first"_ scrolls to the first hidden message, _"last"_ scrolls to the bottom. <br />
+`smoothScroll` toggles animation for scrolling down.
+
+#### Simple Example
+
+<ComponentContainerMethods
+  propertyName={'addMessage'}
+  displayResults={false}
+  buttonText="Scroll up then add message"
+  args={[{text: `New message`, role: 'ai'}]}
+>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    hiddenMessages={true}
+    history={[
+      {
+        text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready!",
+        role: 'ai',
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat hiddenMessages="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  hiddenMessages='true'
+  history='[
+    {
+      "text": "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready!",
+      "role": "ai"
+    }
+  ]'
+  style="border-radius: 8px"
+  demo="true"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Arrow Example
+
+<ComponentContainerMethods
+  propertyName={'addMessage'}
+  displayResults={false}
+  buttonText="Scroll up then add message"
+  args={[{text: `New message`, role: 'ai'}]}
+>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    demo={true}
+    hiddenMessages={{
+      styles: {
+        default: {borderRadius: '50%', width: '1.4rem', height: '1.4rem', left: 'unset', right: '10px'},
+      },
+      onUpdate: (content, number) => {
+        return `<span style="font-size: 20px; cursor: pointer;">&darr;</span>`;
+      },
+    }}
+    history={[
+      {
+        text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready!",
+        role: 'ai',
+      },
+    ]}
+  ></DeepChatBrowser>
+</ComponentContainerMethods>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```js
+// When using onUpdate - define it in JavaScript
+chatElementRef.hiddenMessages = {
+  styles: {
+    default: {borderRadius: '50%', width: '1.4rem', height: '1.4rem', left: 'unset', right: '10px'},
+  },
+  onUpdate: (content, number) => {
+    return `<span style="font-size: 20px; cursor: pointer;">&darr;</span>`;
+  },
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```js
+// When using onUpdate - define it in JavaScript
+chatElementRef.hiddenMessages = {
+  styles: {
+    default: {borderRadius: '50%', width: '1.4rem', height: '1.4rem', left: 'unset', right: '10px'},
+  },
+  onUpdate: (content, number) => {
+    return `<span style="font-size: 20px; cursor: pointer;">&darr;</span>`;
+  },
+};
+
+chatElementRef.style = {borderRadius: '8px'};
+
+chatElementRef.history = [
+  {
+    text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready!",
+    role: 'ai',
+  },
+];
+
+chatElementRef.demo = true;
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `errorMessages` {#errorMessages}
 
 - Type: \{<br />
@@ -552,7 +846,7 @@ When `toggle` is defined we recommend using [`onMessage`](/docs/messages#onMessa
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `speechToText?: string` <br />
   \}\}
 
-- Default: _\{ displayServiceErrorMessages: false, overrides: \{default: "Error, please try again." \}\}_
+- Default: _\{displayServiceErrorMessages: false, overrides: \{default: "Error, please try again."\}\}_
 
 Deep Chat automatically displays an error message when something goes wrong. This object is used to control what the message will contain. <br />
 `displayServiceErrorMessages` is used to display the full error message that has been returned from the service. <br />
@@ -607,6 +901,41 @@ is for communication with the target service and `speechToText` is when there is
   style="border-radius: 8px"
   demo='{"displayErrors": {"default": true, "service": true, "speechToText": true}}'
 ></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `maxVisibleMessages` {#maxVisibleMessages}
+
+- Type: `number`
+- Default: _4000_
+
+Maximum number of messages that can be displayed in the chat. <br />
+This is used to prevent browser memory overflow.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} maxVisibleMessages={4} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat maxVisibleMessages="4"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat maxVisibleMessages="4" demo="true" style="border-radius: 8px"></deep-chat>
 ```
 
 </TabItem>

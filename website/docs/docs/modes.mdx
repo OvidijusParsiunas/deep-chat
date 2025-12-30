@@ -179,14 +179,14 @@ It can be enabled with a boolean `true` or a `number` which is the milliseconds 
 #### Scroll Example
 
 <ComponentContainer>
-  <DeepChatBrowser style={{borderRadius: '8px'}} focusMode={{scroll: true}} demo={true}></DeepChatBrowser>
+  <DeepChatBrowser style={{borderRadius: '8px'}} focusMode={{smoothScroll: true}} demo={true}></DeepChatBrowser>
 </ComponentContainer>
 
 <Tabs>
 <TabItem value="js" label="Sample code">
 
 ```html
-<deep-chat focusMode='{"scroll": true}'></deep-chat>
+<deep-chat focusMode='{"smoothScroll": true}'></deep-chat>
 ```
 
 </TabItem>
@@ -195,7 +195,40 @@ It can be enabled with a boolean `true` or a `number` which is the milliseconds 
 ```html
 <!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
 
-<deep-chat focusMode='{"scroll": true}' demo="true" style="border-radius: 8px"></deep-chat>
+<deep-chat focusMode='{"smoothScroll": true}' demo="true" style="border-radius: 8px"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `upwardsMode` {#upwardsMode}
+
+- Type: `boolean`
+
+This mode displays messages from bottom to top.
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} upwardsMode={true} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat upwardsMode="true"></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat upwardsMode="true" demo="true" style="border-radius: 8px"></deep-chat>
 ```
 
 </TabItem>

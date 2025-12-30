@@ -1,5 +1,5 @@
 ---
-sidebar_position: 19
+sidebar_position: 20
 ---
 
 # StabilityAI
@@ -37,7 +37,7 @@ import Tabs from '@theme/Tabs';
 - Type: `true` | \{ [`StabilityAICommon`](#StabilityAICommon), `width?: number`, `height?: number` \}
 - Default: _\{engine_id: "stable-diffusion-v1-6", width: 512, height: 512\}_
 
-Connect to Stability AI's [`text-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage) API. <br />
+Connect to Stability AI's [Text To Image API](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/textToImage). <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
 `width` and `height` is used to set the image dimensions. They must be multiples of _64_ and pass the following: <br />
 For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engines: 262,144 ≤ _width \* height_ ≤ 1,048,576.<br />
@@ -122,7 +122,7 @@ For 768 engines: 589,824 ≤ _width \* height_ ≤ 1,048,576 and for other engin
   &nbsp;&nbsp;&nbsp;&nbsp; _weight: 1_ <br />
   \}
 
-Connect to Stability AI's [`image-to-image`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage) API. <br />
+Connect to Stability AI's [Image To Image API](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/imageToImage). <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
 `init_image_mode` denotes whether the `image_strength` or `step_schedule` properties control the influence of the uploaded image on the new image. <br />
 `image_strength` determines how much influence the uploaded image has on the diffusion process. A value close to _1_ will yield an image
@@ -202,7 +202,7 @@ values will result in more influence from the diffusion steps. (0 to 1)
 
 - Default: _\{engine_id: "stable-diffusion-xl-1024-v1-0", mask_source: "MASK_IMAGE_WHITE", weight: 1\}_
 
-Connect to Stability AI's [`image-to-image-masking`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking) API. <br />
+Connect to Stability AI's [Image To Image Masking API](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/masking). <br />
 `StabilityAICommon` properties can be used to set the engine Id and other image parameters. <br />
 `mask_source` is used to define where the source of the mask is from. _"MASK_IMAGE_WHITE"_ will use the white pixels of the mask image (second image) as the mask,
 where white pixels are completely replaced and black pixels are unchanged. _"MASK_IMAGE_BLACK"_ will use the black pixels of the mask image (second image) as the mask,
@@ -276,7 +276,7 @@ where fully transparent pixels are completely replaced and fully opaque pixels a
 - Type: `true` | \{`engine_id?: string`, `width?: number`, `height?: number`\}
 - Default: _\{engine_id: "esrgan-v1-x2plus"\}_
 
-Connect to Stability AI's [`image-to-image-upscale`](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage) API. <br />
+Connect to Stability AI's [Image To Image Upscale API](https://platform.stability.ai/docs/api-reference#tag/v1generation/operation/upscaleImage). <br />
 `engine_id` is the engine that will be used to process the image. <br />
 `width` and `height` are used to define the _desired_ with of the result image where only EITHER ONE of the two can be set.
 Minimum dimension number is 512. <br />

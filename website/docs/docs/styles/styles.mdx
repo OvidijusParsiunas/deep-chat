@@ -398,6 +398,43 @@ Custom details for the chat's text input. <br />
 
 <LineBreak></LineBreak>
 
+### `defaultInput` {#defaultInput}
+
+- Type: \{`text?: string`, `files?: File[] | FileList`\}
+
+Input contents displayed when the chat renders. <br />
+`text` is displayed in the text input. <br />
+`files` are displayed in the file attachment container. This can either be an array
+of [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications) objects or a [`FileList`](https://developer.mozilla.org/en-US/docs/Web/API/FileList)
+object which typically comes from a [file input](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications). <br />
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser style={{borderRadius: '8px'}} defaultInput={{text: 'Default text'}} demo={true}></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat defaultInput='{"text": "Default text"}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat defaultInput='{"text": "Default text"}' style="border-radius: 8px" demo="true"></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
 ### `auxiliaryStyle` {#auxiliaryStyle}
 
 - Type: `string`

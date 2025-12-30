@@ -1,5 +1,5 @@
 ---
-sidebar_position: 18
+sidebar_position: 19
 ---
 
 # Qwen
@@ -12,7 +12,7 @@ Properties used to connect to [Alibaba Cloud Qwen](https://www.alibabacloud.com/
 
 ### `qwen` {#qwen}
 
-- Type: \{<br />
+- Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
@@ -38,7 +38,7 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to Alibaba Cloud's [`Qwen`](https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api) API. <br />
+Connect to Alibaba Cloud's [Qwen API](https://www.alibabacloud.com/help/en/model-studio/use-qwen-by-calling-api). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the Qwen model to use (supports Qwen LMs, Qwen-VL, Qwen-Coder, Qwen-Omni, and Qwen-Math models). <br />
 `temperature` controls randomness of generated text (0.0-2.0). Higher values produce more creative outputs. <br />
 `max_tokens` sets the maximum number of tokens to generate in the response. <br />

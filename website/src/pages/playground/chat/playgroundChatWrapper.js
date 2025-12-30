@@ -158,9 +158,7 @@ function isChildElementVisible(parentElement, childElement) {
 
 function getDescription(connect) {
   const service = Object.keys(connect)[0];
-  if (service === 'custom' || service === 'webModel') {
-    return SERVICE_TO_NAME[service];
-  }
+  if (typeof SERVICE_TO_NAME[service] === 'string') return SERVICE_TO_NAME[service];
   const keys = Object.keys(connect[service]);
   return SERVICE_TO_NAME[service][keys[0] === 'key' ? keys[1] : keys[0]];
 }
@@ -183,18 +181,10 @@ const SERVICE_TO_NAME = {
     images: 'BigModel: Images',
     textToSpeech: 'BigModel: Text To Speech',
   },
-  claude: {
-    chat: 'Claude: Chat',
-  },
-  cohere: {
-    chat: 'Cohere: Chat',
-  },
-  deepSeek: {
-    chat: 'DeepSeek: Chat',
-  },
-  gemini: {
-    chat: 'Gemini: Chat',
-  },
+  claude: 'Claude',
+  cohere: 'Cohere',
+  deepSeek: 'DeepSeek',
+  gemini: 'Gemini',
   groq: {
     chat: 'Groq: Chat',
     textToSpeech: 'Groq: Text To Speech',
@@ -210,18 +200,11 @@ const SERVICE_TO_NAME = {
     audioClassification: 'Hugging Face: Audio Classification',
     imageClassification: 'Hugging Face: Image Classification',
   },
-  kimi: {
-    chat: 'Kimi: Chat',
-  },
-  miniMax: {
-    chat: 'MiniMax: Chat',
-  },
-  mistral: {
-    chat: 'Mistral: Chat',
-  },
-  ollama: {
-    chat: 'Ollama: Chat',
-  },
+  kimi: 'Kimi',
+  miniMax: 'MiniMax',
+  mistral: 'Mistral',
+  ollama: 'Ollama',
+  openWebUI: 'Open WebUI',
   openAI: {
     chat: 'OpenAI: Chat',
     assistant: 'OpenAI: Assistant',
@@ -230,15 +213,9 @@ const SERVICE_TO_NAME = {
     textToSpeech: 'OpenAI: Text To Speech',
     speechToText: 'OpenAI: Speech To Text',
   },
-  openRouter: {
-    chat: 'OpenRouter: Chat',
-  },
-  perplexity: {
-    chat: 'Perplexity: Chat',
-  },
-  qwen: {
-    chat: 'Qwen: Chat',
-  },
+  openRouter: 'OpenRouter',
+  perplexity: 'Perplexity',
+  qwen: 'Qwen',
   stabilityAI: {
     textToImage: 'StabilityAI: Text To Image',
     imageToImage: 'StabilityAI: Image To Image',

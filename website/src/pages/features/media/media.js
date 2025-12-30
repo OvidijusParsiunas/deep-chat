@@ -68,7 +68,7 @@ function RightPanel() {
           mixedFiles={true}
           dropupStyles={{
             button: {
-              position: 'outside-right',
+              position: 'outside-end',
             },
           }}
         ></DeepChatBrowser>

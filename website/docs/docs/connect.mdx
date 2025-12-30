@@ -22,8 +22,12 @@ The outgoing Deep Chat request body is encapsulated in one of the following form
   \{[`messages: MessageContent[]`](/docs/messages/#MessageContent)\} <br />
 
 - When sending messages that contain **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
-  where files are set inside an array property called _"files"_ and each text message is stored inside a _"message\{index\}"_ property with a corresponding index: <br />
+  where new files are stored inside an array property called _"files"_ and all other content is stored inside _"message\{index\}"_ properties with a corresponding index: <br />
   \{`files: File[]`, [`message1: MessageContent`](/docs/messages/#MessageContent), [`message2: MessageContent`](/docs/messages/#MessageContent)... \} <br />
+
+:::note
+Example JS to parse [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData): `formData.get("message1")`
+:::
 
 <h3>Response message</h3>
 
