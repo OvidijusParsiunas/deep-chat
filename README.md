@@ -30,7 +30,7 @@ Deep Chat version `2.4.0` brings a ton of new features into the Deep Chat ecosys
 
 - New [`scrollButton`](https://deepchat.dev/docs/messages/#scrollButton) and [`hiddenMessages`](https://deepchat.dev/docs/messages/#hiddenMessages) components used to enhance UX in long conversations!
 - [`upwardsMode`](https://deepchat.dev/docs/modes#upwardsMode) can be used to populate messages upwards.
-- [`directConnection`](https://deepchat.dev/docs/directConnection) now supports [`OpenWebUI`](https://docs.openwebui.com/).
+- [`directConnection`](https://deepchat.dev/docs/directConnection) now supports [`Open WebUI`](https://docs.openwebui.com/).
 - [`browserStoarage`](https://deepchat.dev/docs/messages/#browserStorage) can now store `inputText` and `scrollHeight` values for better session recovery experience.
 - See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.4.0) for more!
 
