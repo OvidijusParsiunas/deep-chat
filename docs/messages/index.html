@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/fonts/inter.woff2" as="font" type="font/woff2">
 <link rel="preload" href="/fonts/inter-webfont.css" as="style">
 <link rel="stylesheet" href="/fonts/inter-webfont.css" as="style"><link rel="stylesheet" href="/assets/css/styles.1727a456.css">
-<script src="/assets/js/runtime~main.d825b06a.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.85f8768d.js" defer="defer"></script>
 <script src="/assets/js/main.682b2ac7.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -249,14 +249,14 @@ This is used to prevent browser memory overflow.</p>
 <p>Shared object property types related to messages:</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="MessageContent"><code>MessageContent</code><a href="#MessageContent" class="hash-link" aria-label="Direct link to MessageContent" title="Direct link to MessageContent">​</a></h3>
 <ul>
-<li>Type: {<a href="#MessageRole"><code>role?: MessageRole</code></a>, <code>text?: string</code>, <a href="#MessageFile"><code>files?: MessageFile[]</code></a>, <a href="/docs/messages/HTML"><code>html?: string</code></a>, <code>custom?: any</code>}</li>
+<li>Type: {<a href="#MessageRole"><code>role?: MessageRole</code></a>, <code>text?: string</code>, <a href="/docs/messages/HTML"><code>html?: string</code></a>, <a href="#MessageFile"><code>files?: MessageFile[]</code></a>, <code>custom?: any</code>}</li>
 </ul>
 <p>Object format used to encapsulate a message within the chat. <br>
 <code>role</code> defines the message sender. If not set it is automatically regarded as <em>&quot;ai&quot;</em>. <br>
 <code>text</code> is string content for a textual message. It uses <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">Markdown</a> syntax to render the message accordingly which is useful for displaying code snippets,
 paragraphs and more. See this <a href="https://jonschlinkert.github.io/remarkable/demo/" target="_blank" rel="noopener noreferrer">playground</a> for reference. <br>
-<code>files</code> is an array that encapsulates details on the response files. <br>
 <code>html</code> is a string that defines the markup for <a href="/docs/messages/HTML">custom elements</a>. <br>
+<code>files</code> is an array that encapsulates details on the response files. <br>
 <code>custom</code> encapsulates any custom data. <br></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-10">Example<a href="#example-10" class="hash-link" aria-label="Direct link to Example" title="Direct link to Example">​</a></h4>
 <div class="documentation-example-container" style="min-height:400px"><div style="display:block"></div></div>
