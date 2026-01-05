@@ -1,200 +1,352 @@
-<br />
+# 🤖 DGA Qiyas Copilot
 
-![Deep Chat](https://github.com/user-attachments/assets/1e60ad6f-7825-40d7-8b1a-f7bb52e6fbff)
+Enterprise-grade AI platform with multi-cloud provider support, featuring lazy loading, modular architecture, and zero-downtime startup.
 
-<b>Deep Chat</b> is a fully customizable AI chat component that can be injected into your website with just _one line of code_. Whether you want to create a chatbot that leverages popular APIs such as ChatGPT or connect to your own custom service, this component can do it all! Explore [deepchat.dev](https://deepchat.dev/) to view all of the available features, how to use them, examples and more!
+## ✨ Key Features
 
-### :rocket: Main Features
+- **🚀 Startup First**: Application starts in < 0.5 seconds with no cloud connections during boot
+- **🔌 Multi-Cloud Support**: Seamlessly switch between Azure and Google Cloud providers
+- **🏗️ Modular Architecture**: Factory pattern with lazy loading for all cloud SDKs
+- **⚙️ Setup Mode**: First-run guides admins to configure providers via Settings UI
+- **🔐 Enterprise Authentication**: LDAP + local DB fallback with JWT tokens
+- **💬 Deep Chat Integration**: Modern chat interface with file upload support
+- **📦 One-Click Setup**: Single command to set up and run the entire application
 
-- Connect to any API
-- Avatars
-- Names
-- Send/Receive files
-- Capture photos via webcam
-- Record audio via microphone
-- Speech To Speech communication
-- Speech To Text for message input
-- Text To Speech to hear message responses
-- Support for MarkDown and custom elements to help structure text and render code
-- Introduction panel and dynamic modals to help describe functionality for your users
-- Connect to more than 20 popular AI APIs such as OpenAI or Claude directly from the browser
-- Communicate with Speech to Speech models
-- Support for all major ui frameworks/libraries
-- Host a model on the browser
-- Focus mode to display only the latest messages
-- Everything is customizable!
+## 🏛️ Architecture
 
-### :tada: Latest Updates
+### The "Big Three" Abstraction Layers
 
-Deep Chat version `2.4.0` brings a ton of new features into the Deep Chat ecosystem:
+1. **LLM Layer**: Azure OpenAI ↔ Google Vertex AI
+2. **Search Layer (RAG)**: Azure AI Search ↔ Google Vertex Search
+3. **Storage Layer**: Azure Blob Storage ↔ Google Cloud Storage
 
-- New [`scrollButton`](https://deepchat.dev/docs/messages/#scrollButton) and [`hiddenMessages`](https://deepchat.dev/docs/messages/#hiddenMessages) components used to enhance UX in long conversations!
-- [`upwardsMode`](https://deepchat.dev/docs/modes#upwardsMode) can be used to populate messages upwards.
-- [`directConnection`](https://deepchat.dev/docs/directConnection) now supports [`Open WebUI`](https://docs.openwebui.com/).
-- [`browserStoarage`](https://deepchat.dev/docs/messages/#browserStorage) can now store `inputText` and `scrollHeight` values for better session recovery experience.
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.4.0) for more!
+### Lazy Loading Strategy
 
-<p align="center">
-    <img width="960" src="https://github.com/user-attachments/assets/5b0ef318-8e76-46bd-a3fa-62281a2afc80" alt="version 2.4.0">
-</p>
+All cloud provider SDKs are imported **inside methods**, not at module level. This ensures:
+- ✅ App starts instantly even without cloud SDKs installed
+- ✅ No crashes on offline servers
+- ✅ Minimal memory footprint
+- ✅ Only load what you use
 
-`2.3.0` update:
+## 🚀 Quick Start
 
-- [`directConnection`](https://deepchat.dev/docs/directConnection) now supports more than 20 AI APIs!
-- [`htmlWrappers`](https://deepchat.dev/docs/messages/#browserStorage) can now be used to standardize custom styling for all messages.
-- You can now use custom plugins for [remarkable](https://deepchat.dev/docs/messages/styles#remarkable) such as [Katex](https://katex.org/).
-- Change the loading bubble style via the `toggle` function in [`displayLoadingBubble`](https://deepchat.dev/docs/messages/#displayLoadingBubble).
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.3.0) for more!
+### Prerequisites
 
-<p align="center">
-    <img width="960" src="https://github.com/user-attachments/assets/e4202e3d-d740-4218-aa46-769622b519a7" alt="version 2.3.0">
-</p>
+- Python 3.9 or higher
+- Node.js 18+ and npm (optional, for frontend)
+- Git
 
-`2.2.2` update:
+### Installation
 
-- [`browserStorage`](https://deepchat.dev/docs/messages/#browserStorage) allows you to store messages locally on your browser without worrying about a backend message integration.
-- Button [tooltips](https://deepchat.dev/docs/styles/buttons#Tooltip).
-- Place your streamed messages inside custom [`htmlWrappers`](https://deepchat.dev/docs/messages/HTML#htmlWrappers).
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.2.2) for more!
+```bash
+# Clone the repository
+git clone <repository-url>
+cd Qiyas-Copilot
 
-<p align="center">
-    <img width="960" src="https://github.com/user-attachments/assets/51e900ea-43c6-41ca-b255-8b7d59285b26" alt="version 2.2.2">
-</p>
-
-`2.2.0` update:
-
-- [OpenAI Realtime API](https://deepchat.dev/docs/directConnection/OpenAI/OpenAIRealtime) for Speech to Speech communication
-- [Focus mode](https://deepchat.dev/docs/modes#focusMode) to only display the latest message exchanges and provide a modern AI Chatbot experience
-- [Custom buttons](https://deepchat.dev/docs/styles/buttons#customButtons)
-- A [Response](https://deepchat.dev/docs/connect#Response) can now have multiple messages
-- Ability to connect to [Readable Stream APIs](https://deepchat.dev/docs/connect#Stream)
-- See [release notes](https://github.com/OvidijusParsiunas/deep-chat/releases/tag/2.2.0) for more!
-
-<p align="center">
-    <img width="1000" src="https://github.com/user-attachments/assets/6089a0b4-0fe6-43e9-b9ce-840a9cfda885" alt="version 2.2.0">
-</p>
-
-### :computer: Getting started
-
-```
-npm install deep-chat
+# Run the one-click setup script
+python setup_and_run.py
 ```
 
-If using React, install the following instead:
+That's it! The script will:
+1. Create a virtual environment
+2. Install all Python dependencies
+3. Build the React frontend (if npm available)
+4. Start the FastAPI server
+
+### Access the Application
+
+- **Frontend**: http://localhost:8000
+- **API Docs**: http://localhost:8000/api/docs
+- **Admin Settings**: Click "⚙️ Settings" after login
+
+### First-Time Setup
+
+1. Register a new user (first user is automatically admin)
+2. Login with your credentials
+3. You'll see "Setup Mode" - click "Open Settings"
+4. Configure at least one LLM provider:
+   - **Azure OpenAI**: Enter API key, endpoint, and deployment name
+   - **Google Vertex AI**: Enter project ID, location, and credentials JSON
+5. Click "Test Connection" to verify
+6. Click "Save Settings"
+7. Start chatting!
+
+## 📁 Project Structure
 
 ```
-npm install deep-chat-react
+qiyas-copilot/
+├── backend/
+│   ├── main.py                    # FastAPI entry point
+│   ├── core/
+│   │   ├── config.py              # Settings manager
+│   │   ├── factory.py             # Provider factory (lazy loading)
+│   │   └── database.py            # SQLite initialization
+│   ├── api/
+│   │   ├── auth_routes.py         # Authentication (LDAP + local)
+│   │   ├── admin_routes.py        # Settings management
+│   │   └── chat_routes.py         # Deep Chat integration
+│   ├── services/
+│   │   ├── interfaces/            # Abstract base classes
+│   │   └── providers/             # Azure & Google implementations
+│   └── models/                    # Database models
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx                # Main app component
+│   │   ├── components/            # React components
+│   │   └── services/api.js        # Backend API client
+│   └── package.json
+├── config/
+│   └── settings.yaml              # Configuration (all providers = null initially)
+├── requirements.txt               # Python dependencies
+├── setup_and_run.py              # One-click automation script
+└── README.md
 ```
 
-Simply add the following to your markup:
+## ⚙️ Configuration
 
-```
-<deep-chat></deep-chat>
-```
+### Settings File
 
-The exact syntax for the above will vary depending on the framework of your choice ([see here](https://deepchat.dev/examples/frameworks)).
+Edit `config/settings.yaml` to configure providers:
 
-### :zap: Connect
+```yaml
+llm:
+  active_provider: azure  # or google, or null
+  azure:
+    api_key: "your-api-key"
+    endpoint: "https://your-resource.openai.azure.com"
+    deployment: "gpt-4"
 
-![Connect](./assets/readme/connect.png)
+search:
+  active_provider: null  # Optional - for RAG
 
-Connecting to a service is simple, all you need to do is define its API details using the [`request`](https://deepchat.dev/docs/connect#request) property:
+storage:
+  active_provider: null  # Optional - for file uploads
 
-```
-<deep-chat request='{"url":"https://service.com/chat"}'/>
-```
-
-The service will need to be able to handle request and response formats used in Deep Chat. Please read the [Connect](https://deepchat.dev/docs/connect) section in documentation and check out the [server template](https://deepchat.dev/examples/servers) examples.
-
-Alternatively, if you want to connect without changing the target service, use the [`interceptor`](https://deepchat.dev/docs/interceptors) properties to augment the transferred objects or the [`handler`](https://deepchat.dev/docs/connect#Handler) function to control the request code.
-
-### :electric_plug: Direct connection
-
-![Direct connection](./assets/readme/direct-connect.png)
-
-Connect to popular AI APIs directly from the browser via the use of the [`directConnection`](https://deepchat.dev/docs/directConnection/#directConnection) property:
-
-```
-<deep-chat directConnection='{"openAI":true}'/>
-
-<deep-chat directConnection='{"openAI":{"key": "optional-key-here"}}'/>
+auth:
+  ldap:
+    enabled: false  # Set to true for LDAP
+    server: "ldap.example.com"
+  local_db_fallback: true  # Local DB auth always available
 ```
 
-Please note that this approach should be used for local/prototyping/demo purposes ONLY as it exposes the API Key to the browser. When ready to go live, please switch to using the [`connect`](https://deepchat.dev/docs/connect#connect-1) property described above along with a [proxy service](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers).
+### Environment Variables
 
-### :robot: Web model
+Override settings with environment variables (higher priority):
 
-![Web Model](https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/83936e6f-d0c1-42b7-ab61-ac75d7803660)
-
-No servers, no connections, host an LLM model entirely on your browser.
-
-Simply add the [deep-chat-web-llm](https://deepchat.dev/examples/externalModules) module and define the [webModel](https://deepchat.dev/docs/webModel) property:
-
-```
-<deep-chat webModel="true" />
+```bash
+export QIYAS_LLM_ACTIVE_PROVIDER=azure
+export QIYAS_LLM_AZURE_API_KEY=your-key
 ```
 
-### :camera: :microphone: Camera and Microphone
+## 🔐 Authentication
 
-![Capture](./assets/readme/capture.png)
+### Local Database
 
-Use Deep Chat to capture photos with your webcam and record audio with the microphone. You can enable this using the [`camera`](https://deepchat.dev/docs/files#camera) and [`microphone`](https://deepchat.dev/docs/files#microphone) properties:
+Default authentication method. Users are stored in SQLite.
 
-```
-<deep-chat camera="true" microphone="true" ...other properties />
-```
-
-### :microphone: :sound: Speech
-
-https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/e103a42e-b3a7-4449-b9db-73fed6d7876e
-
-Input text with your voice using Speech To Text capabilities and have the responses read out to you with Text To Speech. You can enable this functionality via the [`speechToText`](https://deepchat.dev/docs/speech#speechToText) and [`textToSpeech`](https://deepchat.dev/docs/speech#textToSpeech) properties.
-
-```
-<deep-chat speechToText="true" textToSpeech="true" ...other properties />
+```bash
+# Register new user
+POST /api/auth/register
+{
+  "username": "admin",
+  "password": "secure-password",
+  "email": "admin@example.com"
+}
 ```
 
-### :beginner: Examples
+### LDAP
 
-Check out live codepen examples for your [UI framework/library](https://deepchat.dev/examples/frameworks) of choice:
+Enterprise LDAP authentication with local DB fallback.
 
-| React                                                                                                                                                   | Vue 2                                                                                                                                                   | Vue 3                                                                                                                                                | Svelte                                                                                                                                                       | SvelteKit                                                                                                                                                                                               | Angular                                                                                                                                                                             | Solid                                                                                                                                                   | Next                                                                                                                                  | Nuxt                                                                                                                                                 | VanillaJS                                                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://stackblitz.com/edit/deep-chat-react?file=src%2FApp.tsx" target="_blank"><img src="./website/static/img/reactLogo.png" width="60"/></a> | <a href="https://codesandbox.io/s/deep-chat-vue2-cdqpt2?file=/src/App.vue" target="_blank"><img src="./website/static/img/vueLogo.png" width="60"/></a> | <a href="https://stackblitz.com/edit/deep-chat-vue3?file=src%2FApp.vue" target="_blank"><img src="./website/static/img/vueLogo.png" width="60"/></a> | <a href="https://stackblitz.com/edit/deep-chat-svelte?file=src%2FApp.svelte" target="_blank"><img src="./website/static/img/svelteLogo.png" width="45"/></a> | <div align="center"><a href="https://stackblitz.com/edit/deep-chat-sveltekit?file=src%2Froutes%2F%2Bpage.svelte" target="_blank" ><img src="./website/static/img/svelteLogo.png" width="45"/></a></div> | <a href="https://stackblitz.com/edit/stackblitz-starters-7gygrp?file=src%2Fapp%2Fapp.component.ts" target="_blank"><img src="./website/static/img/angularLogo.png" width="66"/></a> | <a href="https://stackblitz.com/edit/deep-chat-solid?file=src%2FApp.tsx" target="_blank"><img src="./website/static/img/solidLogo.png" width="60"/></a> | <a href="https://deepchat.dev/examples/frameworks#next" target="_blank"><img src="./website/static/img/nextLogo.png" width="60"/></a> | <a href="https://stackblitz.com/edit/nuxt-starter-vwz6pg?file=app.vue" target="_blank"><img src="./website/static/img/nuxtLogo.png" width="70"/></a> | <a href="https://codesandbox.io/s/deep-chat-vanillajs-v2ywnv?file=/index.html" target="_blank"><img src="./website/static/img/vanillaJSLogo.png" width="60"/></a> |
+1. Configure in `settings.yaml`:
+```yaml
+auth:
+  ldap:
+    enabled: true
+    server: "ldap.example.com"
+    port: 389
+    base_dn: "dc=example,dc=com"
+    user_dn_template: "uid={username},ou=users,dc=example,dc=com"
+```
 
-Setting up your own server has never been easier with the following [server templates](https://deepchat.dev/examples/servers). From creating your own service to establishing proxies for other APIs such as OpenAI, everything has been documented with clear examples to get you up and running in seconds:
+2. Users auto-created on first LDAP login
 
-| Express                                                                                                                                                                          | Nest                                                                                                                                                                         | Flask                                                                                                                                                                          | Spring                                                                                                                                                                                 | Go                                                                                                                                                                | SvelteKit                                                                                                                                                                                               | Next                                                                                                                                                                    |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/express" target="_blank"><img src="./website/static/img/expressLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/nestjs" target="_blank"><img src="./website/static/img/nestLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/python/flask" target="_blank"><img src="./website/static/img/flaskLogo.png" width="60"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/java/springboot" target="_blank"><img src="./website/static/img/springBootLogo.png" width="50"/></a> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/go" target="_blank"><img src="./website/static/img/goLogo.png" width="40"/></a> | <div align="center"><a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/sveltekit" target="_blank" ><img src="./website/static/img/svelteLogo.png" width="45"/></a></div> | <a href="https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/nextjs" target="_blank"><img src="./website/static/img/nextLogo.png" width="55"/></a> |
+## 🔧 Provider Configuration
 
-All examples are ready to be deployed on a hosting platform such as [Vercel](https://vercel.com/).
+### Azure OpenAI
 
-## :tv: Tutorials
+1. Create Azure OpenAI resource
+2. Deploy a model (e.g., gpt-4)
+3. Get API key and endpoint
+4. Configure in Settings UI
 
-Demo videos are available on [YouTube](https://www.youtube.com/@ovi-il4rg/videos):
+### Google Vertex AI
 
-<p align="center">
-    <a href="https://www.youtube.com/@ovi-il4rg/videos">
-        <img width="1000" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/29cc292b-5964-4f06-ba39-6ae3f8585944" alt="Videos">
-    </a>
-</p>
+1. Create GCP project
+2. Enable Vertex AI API
+3. Create service account with Vertex AI permissions
+4. Download JSON key
+5. Configure in Settings UI
 
-## :joystick: Playground
+### Azure AI Search
 
-Create, configure and use Deep Chat components without writing any code in the official [Playground](https://deepchat.dev/playground)!
+1. Create Azure AI Search service
+2. Create search index
+3. Get admin API key
+4. Configure in Settings UI
 
-<p align="center">
-    <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/57ab8d3f-defe-40f3-a0af-451f6159bbb2" alt="Playground">
-</p>
+### Google Vertex Search
 
-:tada: <b>Update</b> - components can now be stretched to full screen dimensions using the new <b>Expanded View</b>:
+1. Create Vertex Search data store
+2. Import documents
+3. Get service account credentials
+4. Configure in Settings UI
 
-<p align="center">
-    <img width="750" src="https://github.com/OvidijusParsiunas/deep-chat/assets/18709577/6b78907c-c4c2-44de-b4c7-d73c1e887fa8" alt="Expanded View">
-</p>
+### Azure Blob Storage
 
-## :heart: Contributions
+1. Create Storage Account
+2. Create container (e.g., "qiyas-uploads")
+3. Get connection string
+4. Configure in Settings UI
 
-Open source is built by the community for the community. All contributions to this project are welcome!<br>
-Additionally, if you have any suggestions for enhancements, ideas on how to take the project further or have discovered a bug, do not hesitate to create a new issue ticket and we will look into it as soon as possible!
+### Google Cloud Storage
+
+1. Create GCS bucket
+2. Set up service account with Storage Admin role
+3. Download JSON key
+4. Configure in Settings UI
+
+## 🧪 Testing Provider Connections
+
+Use the "Test Connection" buttons in Settings UI to verify:
+- ✅ Credentials are valid
+- ✅ Services are accessible
+- ✅ Permissions are correct
+
+Test results are shown immediately without saving configuration.
+
+## 🛠️ Development
+
+### Backend Development
+
+```bash
+# Activate virtual environment
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+# Run development server
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Frontend Development
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run dev server (with proxy to backend)
+npm run dev
+
+# Build for production
+npm run build
+```
+
+### Database Management
+
+```python
+# Initialize database
+from backend.core.database import init_db
+init_db()
+
+# Reset database (WARNING: deletes all data)
+from backend.core.database import reset_db
+reset_db()
+```
+
+## 📊 API Documentation
+
+- **Swagger UI**: http://localhost:8000/api/docs
+- **ReDoc**: http://localhost:8000/api/redoc
+
+### Key Endpoints
+
+**Authentication**
+- `POST /api/auth/login` - Login
+- `POST /api/auth/register` - Register
+- `GET /api/auth/me` - Get current user
+
+**Admin**
+- `GET /api/admin/settings` - Get settings
+- `POST /api/admin/settings` - Update settings
+- `POST /api/admin/test-connection` - Test provider
+- `GET /api/admin/provider-status` - Check provider status
+
+**Chat**
+- `POST /api/chat` - Send message (with optional files)
+- `GET /api/chat/sessions` - List sessions
+- `GET /api/chat/sessions/{id}` - Get session history
+- `DELETE /api/chat/sessions/{id}` - Delete session
+
+## 🔒 Security Best Practices
+
+1. **Change JWT Secret**: Update `auth.jwt_secret` in settings.yaml
+2. **Use HTTPS**: Deploy behind reverse proxy (nginx/Caddy)
+3. **Rotate API Keys**: Regularly rotate cloud provider credentials
+4. **Backup Database**: Schedule periodic backups of `data/qiyas.db`
+5. **Gitignore Secrets**: Never commit `config/settings.yaml` with credentials
+
+## 🐛 Troubleshooting
+
+### App won't start
+
+```bash
+# Check Python version
+python --version  # Must be 3.9+
+
+# Recreate virtual environment
+rm -rf venv
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### LLM provider errors
+
+1. Check Settings UI: Click "Test Connection"
+2. Verify API keys are correct
+3. Check cloud provider quotas/limits
+4. Ensure services are enabled in cloud console
+
+### Frontend not loading
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+### Database errors
+
+```python
+# Reset database
+from backend.core.database import reset_db
+reset_db()
+```
+
+## 📝 License
+
+MIT License
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Support
+
+For support, please open an issue in the GitHub repository.
+
+---
+
+**Built with ❤️ for Enterprise AI**
