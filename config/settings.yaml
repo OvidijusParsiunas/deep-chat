@@ -1,0 +1,67 @@
+# DGA Qiyas Copilot Configuration
+# Initial state: All providers = null (Setup Mode)
+# This ensures the application starts immediately without attempting cloud connections
+
+llm:
+  active_provider: null  # Options: azure | google | null
+  azure:
+    api_key: ""
+    endpoint: ""
+    deployment: ""
+    api_version: "2024-02-15-preview"
+  google:
+    project_id: ""
+    location: ""
+    model_name: "gemini-pro"
+    credentials_json: ""
+
+search:
+  active_provider: null  # Options: azure | google | null
+  azure:
+    service_name: ""
+    api_key: ""
+    index_name: ""
+    api_version: "2023-11-01"
+  google:
+    project_id: ""
+    location: ""
+    data_store_id: ""
+    credentials_json: ""
+
+storage:
+  active_provider: null  # Options: azure | google | null
+  azure:
+    connection_string: ""
+    container_name: "qiyas-uploads"
+  google:
+    bucket_name: ""
+    credentials_json: ""
+
+auth:
+  ldap:
+    enabled: false
+    server: ""
+    port: 389
+    use_ssl: false
+    base_dn: ""
+    user_dn_template: "uid={username},ou=users,dc=example,dc=com"
+    bind_dn: ""
+    bind_password: ""
+  local_db_fallback: true
+  jwt_secret: "your-secret-key-change-in-production"
+  jwt_algorithm: "HS256"
+  jwt_expiration_hours: 24
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  reload: true
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://localhost:8000"
+    - "http://127.0.0.1:5173"
+    - "http://127.0.0.1:8000"
+
+database:
+  url: "sqlite:///./data/qiyas.db"
+  echo: false
