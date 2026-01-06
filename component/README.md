@@ -44,6 +44,14 @@ Simply add the following to your markup:
 
 The exact syntax for the above example will vary depending on the framework of your choice ([see here](https://deepchat.dev/examples/frameworks)).
 
+### :computer: Install with AI
+
+Use the [LLM.md](https://github.com/OvidijusParsiunas/deep-chat/blob/main/LLM.md) file as a reference for installing and configuring Deep Chat with your code assistant:
+
+```
+"Use https://github.com/OvidijusParsiunas/deep-chat/blob/main/LLM.md to add a chat component to my website."
+```
+
 ### :zap: Connect
 
 ![Connect](https://raw.githubusercontent.com/OvidijusParsiunas/deep-chat/HEAD/assets/readme/connect.png)
