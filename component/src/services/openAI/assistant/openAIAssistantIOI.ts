@@ -298,13 +298,13 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
 
   // prettier-ignore
   private async handleTools(toolCalls: ToolCalls): PollResult {
-    if (!this.functionHandler) {
+    if (!this._functionHandlerI) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
     const functions = toolCalls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });
-    const handlerResponse = await this.functionHandler(functions);
+    const handlerResponse = await this._functionHandlerI(functions);
     if (!Array.isArray(handlerResponse) || toolCalls.length !== handlerResponse.length) {
       throw Error(OpenAIAssistantUtils.FUNCTION_TOOL_RESP_ERROR);
     }
