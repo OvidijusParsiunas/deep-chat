@@ -96,10 +96,10 @@ The exact syntax for the above will vary depending on the framework of your choi
 
 ### :computer: Install with AI
 
-Use the [AGENTS.md](https://github.com/OvidijusParsiunas/deep-chat/blob/main/AGENTS.md) file as a reference for installing and configuring Deep Chat with your code assistant:
+Use the [llms.txt](https://github.com/OvidijusParsiunas/deep-chat/blob/main/llms.txt) file as a reference for installing and configuring Deep Chat with your code assistant:
 
 ```
-"Use https://github.com/OvidijusParsiunas/deep-chat/blob/main/AGENTS.md to add a chat component to my website."
+"Use https://github.com/OvidijusParsiunas/deep-chat/blob/main/llms.txt to add a chat component to my website."
 ```
 
 ### :zap: Connect
