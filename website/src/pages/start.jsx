@@ -5,6 +5,7 @@ import StartSmallScreen from './start/startSmallScreen';
 import AIInyourBrowser from './start/aiInYourBrowser';
 import CreateComponent from './start/createComponent';
 import StartParticles from './start/startParticles';
+import InstallWithAI from './start/installWithAI';
 import Options from './start/options';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
@@ -40,6 +41,7 @@ function Main() {
             {text: 'Create a chat component', number: 2},
             {text: 'Connect to a service', number: 3},
             {text: 'AI in your browser', number: 6},
+            {text: 'Install with AI', number: 7},
           ]}
           quickEntryTransition={quickEntryTransition}
         ></Options>
@@ -67,6 +69,9 @@ function Main() {
       )}
       {optionNumber === 6 && (
         <AIInyourBrowser setOptionNumber={setOptionNumberAndManipulateHeight} keepHeight={keepHeight}></AIInyourBrowser>
+      )}
+      {optionNumber === 7 && (
+        <InstallWithAI setOptionNumber={setOptionNumberAndManipulateHeight} keepHeight={keepHeight}></InstallWithAI>
       )}
     </div>
   );

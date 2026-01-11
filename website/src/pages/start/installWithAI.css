@@ -1,0 +1,38 @@
+/* if there is a problem with tradition delays - check if transition-delay does not collide with transition */
+
+#start-page-install-ai {
+  width: 662px;
+  height: 176px;
+}
+
+#start-page-install-ai-intro {
+  margin-top: 18px;
+  font-size: 22px;
+}
+
+#start-page-install-ai-code {
+  margin-top: 16px;
+  left: 6px;
+  font-size: 15px;
+}
+
+#start-page-install-ai-navigation {
+  padding-left: 40px;
+  margin-top: 30px;
+  margin-left: 0px;
+  cursor: pointer;
+}
+
+#start-page-install-ai-navigation.start-page-main-details-visible {
+  padding-left: 0px;
+}
+
+#start-page-install-ai-navigation:hover {
+  padding-left: 4px;
+}
+
+@media (max-width: 710px) {
+  #start-page-install-ai {
+    width: 570px;
+  }
+}
