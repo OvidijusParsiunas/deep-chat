@@ -5,11 +5,11 @@ import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAcces
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
+import {ACTIVE, DEFAULT} from '../../../utils/consts/inputConstants';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import avatarUrl from '../../../../assets/person-avatar.png';
-import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {OpenAIRealtimeButton} from './openAIRealtimeButton';
 import {DirectServiceIO} from '../../utils/directServiceIO';
 import {ObjectUtils} from '../../../utils/data/objectUtils';
@@ -243,9 +243,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       newConfig.toggle[DEFAULT] ??= {};
       newConfig.toggle[DEFAULT].svg ??= {};
       newConfig.toggle[DEFAULT].svg.content ??= PLAY_ICON_STRING;
-      newConfig.toggle.active ??= {};
-      newConfig.toggle.active.svg ??= {};
-      newConfig.toggle.active.svg.content ??= STOP_ICON_STRING;
+      newConfig.toggle[ACTIVE] ??= {};
+      newConfig.toggle[ACTIVE].svg ??= {};
+      newConfig.toggle[ACTIVE].svg.content ??= STOP_ICON_STRING;
     }
     return newConfig;
   }

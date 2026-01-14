@@ -13,3 +13,5 @@ export const DEFAULT = 'default';
 export const HOVER = 'hover';
 
 export const CLICK = 'click';
+
+export const ACTIVE = 'active';
