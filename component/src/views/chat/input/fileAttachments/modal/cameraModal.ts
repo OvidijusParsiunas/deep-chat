@@ -5,6 +5,7 @@ import {ERROR, START} from '../../../../../utils/consts/messageConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
+import {DISABLED} from '../../../../../utils/consts/inputConstants';
 import {SVGIconUtils} from '../../../../../utils/svg/svgIconUtils';
 import {CLOSE_ICON_STRING} from '../../../../../icons/closeIcon';
 import {TICK_ICON_STRING} from '../../../../../icons/tickIcon';
@@ -87,7 +88,7 @@ export class CameraModal extends Modal {
 
   start() {
     this._dataURL = undefined;
-    this._submitButton[CLASS_LIST].add('modal-svg-submit-disabled');
+    this._submitButton[CLASS_LIST].add(`modal-svg-submit-${DISABLED}`);
     this._stopped = false;
     navigator.mediaDevices
       .getUserMedia({video: this._dimensions || true})
@@ -110,12 +111,12 @@ export class CameraModal extends Modal {
     if (this._dataURL) {
       this._captureButton.replaceChildren(this._captureIcon);
       this._captureButton[CLASS_LIST].replace('modal-svg-refresh-button', 'modal-svg-camera-button');
-      this._submitButton[CLASS_LIST].add('modal-svg-submit-disabled');
+      this._submitButton[CLASS_LIST].add(`modal-svg-submit-${DISABLED}`);
       this._dataURL = undefined;
     } else {
       this._captureButton.replaceChildren(this._refreshIcon);
       this._captureButton[CLASS_LIST].replace('modal-svg-camera-button', 'modal-svg-refresh-button');
-      this._submitButton[CLASS_LIST].remove('modal-svg-submit-disabled');
+      this._submitButton[CLASS_LIST].remove(`modal-svg-submit-${DISABLED}`);
       this._dataURL = this._canvas.toDataURL();
     }
   }

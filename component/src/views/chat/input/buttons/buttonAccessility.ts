@@ -1,3 +1,5 @@
+import {DISABLED} from '../../../../utils/consts/inputConstants';
+
 export class ButtonAccessibility {
   public static addAttributes(button: HTMLElement) {
     button.role = 'button';
@@ -13,11 +15,11 @@ export class ButtonAccessibility {
   }
 
   public static addAriaDisabled(button: HTMLElement) {
-    button.setAttribute('aria-disabled', 'true');
+    button.setAttribute(`aria-${DISABLED}`, 'true');
   }
 
   public static removeAriaDisabled(button: HTMLElement) {
-    button.removeAttribute('aria-disabled');
+    button.removeAttribute(`aria-${DISABLED}`);
   }
 
   public static removeAriaAttributes(button: HTMLElement) {

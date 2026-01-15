@@ -1,7 +1,7 @@
+import {CLICK, DISABLED} from '../utils/consts/inputConstants';
 import {CREATE_ELEMENT} from '../utils/consts/htmlConstants';
 import {WebModelIntro} from '../types/webModel/webModel';
 import {FILES} from '../utils/consts/messageConstants';
-import {CLICK} from '../utils/consts/inputConstants';
 import {WebModel} from './webModel';
 
 export class WebModelIntroMessage {
@@ -12,8 +12,8 @@ export class WebModelIntroMessage {
 
   private static enableButtons(dwnload: HTMLButtonElement | undefined, upload: HTMLButtonElement | undefined, rounds = 0) {
     if (window.webLLM) {
-      if (dwnload) dwnload.disabled = false;
-      if (upload) upload.disabled = false;
+      if (dwnload) dwnload[DISABLED] = false;
+      if (upload) upload[DISABLED] = false;
     } else if (rounds < WebModel.MODULE_SEARCH_LIMIT_S * 4) {
       setTimeout(() => WebModelIntroMessage.enableButtons(dwnload, upload, rounds + 1), 250);
     }

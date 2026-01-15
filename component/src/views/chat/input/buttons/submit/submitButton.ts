@@ -8,6 +8,7 @@ import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
+import {DISABLED} from '../../../../../utils/consts/inputConstants';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {UserContentI} from '../../../../../types/messagesInternal';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
@@ -79,7 +80,7 @@ export class SubmitButton extends InputButton<Styles> {
       submit: submit as ButtonInnerElement[],
       loading: loading || [SubmitButton.createLoadingIconElement()],
       stop: stop || [SubmitButton.createStopIconElement()],
-      disabled: this.createDisabledIconElement(submit as ButtonInnerElement[]),
+      [DISABLED]: this.createDisabledIconElement(submit as ButtonInnerElement[]),
     };
   }
 
@@ -114,7 +115,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createDisabledIconElement(submitElement: ButtonInnerElement[]) {
-    const elements = ButtonInnerElements.createCustomElements('disabled', this.svg, this.customStyles);
+    const elements = ButtonInnerElements.createCustomElements(DISABLED, this.svg, this.customStyles);
     return elements || [submitElement[0].cloneNode(true) as ButtonInnerElement];
   }
 
@@ -276,8 +277,8 @@ export class SubmitButton extends InputButton<Styles> {
       ButtonAccessibility.removeAriaBusy(this.elementRef);
       this.elementRef[CLASS_LIST].add(DISABLED_CLASS);
       ButtonAccessibility.addAriaDisabled(this.elementRef);
-      this.changeElementsByState(this._innerElements.disabled);
-      this.reapplyStateStyle('disabled', ['submit']);
+      this.changeElementsByState(this._innerElements[DISABLED]);
+      this.reapplyStateStyle(DISABLED, ['submit']);
       ElementUtils.assignButtonEvents(this.elementRef, () => {});
     }
   }

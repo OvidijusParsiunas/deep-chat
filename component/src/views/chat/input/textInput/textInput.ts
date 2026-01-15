@@ -3,6 +3,7 @@ import {BrowserStorage} from '../../messages/browserStorage/browserStorage';
 import {FILES, TEXT} from '../../../../utils/consts/messageConstants';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
+import {DISABLED} from '../../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
@@ -45,7 +46,7 @@ export class TextInputEl {
 
   private static processConfig(serviceIO: ServiceIO, textInput?: TextInput) {
     textInput ??= {};
-    textInput.disabled ??= serviceIO.isTextInputDisabled;
+    textInput[DISABLED] ??= serviceIO.isTextInputDisabled;
     textInput.placeholder ??= {};
     textInput.placeholder[TEXT] ??= serviceIO.textInputPlaceholderText;
     return textInput;
@@ -72,7 +73,7 @@ export class TextInputEl {
   // this also similarly prevents scroll up
   public clear() {
     const scrollY = window.scrollY;
-    if (!this.inputElementRef[CLASS_LIST].contains('text-input-disabled')) {
+    if (!this.inputElementRef[CLASS_LIST].contains(`text-input-${DISABLED}`)) {
       Object.assign(this.inputElementRef[STYLE], this._config.placeholder?.[STYLE]);
       this.inputElementRef.textContent = '';
       FocusUtils.focusEndOfInput(this.inputElementRef);
@@ -96,13 +97,13 @@ export class TextInputEl {
     // https://github.com/OvidijusParsiunas/deep-chat/pull/452/files/b8cf45dc559be2667e51f8cf2bb026527000076d
     if (Browser.IS_MOBILE) inputElement.setAttribute('tabindex', '0');
     if (Browser.IS_CHROMIUM) TextInputEl.preventAutomaticScrollUpOnNewLine(inputElement);
-    if (typeof this._config.disabled === 'boolean' && this._config.disabled === true) {
+    if (typeof this._config[DISABLED] === 'boolean' && this._config[DISABLED] === true) {
       inputElement.contentEditable = 'false';
-      inputElement[CLASS_LIST].add('text-input-disabled');
-      inputElement.setAttribute('aria-disabled', 'true');
+      inputElement[CLASS_LIST].add(`text-input-${DISABLED}`);
+      inputElement.setAttribute(`aria-${DISABLED}`, 'true');
     } else {
       inputElement.contentEditable = 'true';
-      inputElement.removeAttribute('aria-disabled');
+      inputElement.removeAttribute(`aria-${DISABLED}`);
       this.addEventListeners(inputElement);
     }
     Object.assign(inputElement[STYLE], this._config.styles?.[TEXT]);
@@ -116,7 +117,7 @@ export class TextInputEl {
   }
 
   public removePlaceholderStyle() {
-    if (!this.inputElementRef[CLASS_LIST].contains('text-input-disabled') && this._config.placeholder?.[STYLE]) {
+    if (!this.inputElementRef[CLASS_LIST].contains(`text-input-${DISABLED}`) && this._config.placeholder?.[STYLE]) {
       StyleUtils.unsetStyle(this.inputElementRef, this._config.placeholder?.[STYLE]);
       Object.assign(this.inputElementRef[STYLE], this._config?.styles?.[TEXT]);
     }

@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
+import {ACTIVE, DEFAULT, DISABLED} from '../../../../../utils/consts/inputConstants';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
-import {ACTIVE, DEFAULT} from '../../../../../utils/consts/inputConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
 import {CUSTOM_ICON_STRING} from '../../../../../icons/customIcon';
@@ -76,7 +76,7 @@ export class CustomButton extends InputButton<Styles> {
     return {
       [DEFAULT]: defaultElements,
       [ACTIVE]: this.genStateInnerElements(iconId, ACTIVE, defaultElements, customStyles),
-      disabled: this.genStateInnerElements(iconId, 'disabled', defaultElements, customStyles),
+      [DISABLED]: this.genStateInnerElements(iconId, DISABLED, defaultElements, customStyles),
     };
   }
 
@@ -84,7 +84,7 @@ export class CustomButton extends InputButton<Styles> {
     customButton.setState = (state: keyof CustomButtonStyles) => {
       if (state === DEFAULT) this.changeToDefault();
       if (state === ACTIVE) this.changeToActive();
-      if (state === 'disabled') this.changeToDisabled();
+      if (state === DISABLED) this.changeToDisabled();
     };
   }
 
@@ -92,14 +92,14 @@ export class CustomButton extends InputButton<Styles> {
     ElementUtils.assignButtonEvents(this.elementRef, () => {
       const resultState = this._onClick?.(this._state);
       focusInput?.();
-      if (resultState === DEFAULT || resultState === ACTIVE || resultState === 'disabled') {
+      if (resultState === DEFAULT || resultState === ACTIVE || resultState === DISABLED) {
         this.changeState(resultState);
       }
     });
   }
 
   private changeState(state?: keyof CustomButtonStyles, override?: boolean) {
-    if (state === 'disabled') {
+    if (state === DISABLED) {
       this.changeToDisabled(override);
     } else if (state === ACTIVE) {
       this.changeToActive(override);
@@ -151,8 +151,8 @@ export class CustomButton extends InputButton<Styles> {
     } else {
       this.changeElementsByState(this._innerElements[DEFAULT]);
       if (this.customStyles?.[ACTIVE]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[ACTIVE]);
-      if (this.customStyles?.disabled) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.disabled);
-      this.reapplyStateStyle(DEFAULT, [ACTIVE, 'disabled']);
+      if (this.customStyles?.[DISABLED]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[DISABLED]);
+      this.reapplyStateStyle(DEFAULT, [ACTIVE, DISABLED]);
     }
     this.elementRef[CLASS_LIST].remove(CustomButton.DISABLED_CONTAINER_CLASS, CustomButton.ACTIVE_CONTAINER_CLASS);
     this.elementRef[CLASS_LIST].add(CustomButton.DEFAULT_CONTAINER_CLASS);
@@ -166,7 +166,7 @@ export class CustomButton extends InputButton<Styles> {
       this.assignDropupItemStyle(this._dropupStyles?.[ACTIVE], this.customStyles?.[ACTIVE]);
     } else {
       this.changeElementsByState(this._innerElements[ACTIVE]);
-      this.reapplyStateStyle(ACTIVE, ['disabled', DEFAULT]);
+      this.reapplyStateStyle(ACTIVE, [DISABLED, DEFAULT]);
     }
     this.elementRef[CLASS_LIST].remove(CustomButton.DISABLED_CONTAINER_CLASS, CustomButton.DEFAULT_CONTAINER_CLASS);
     this.elementRef[CLASS_LIST].add(CustomButton.ACTIVE_CONTAINER_CLASS);
@@ -175,19 +175,19 @@ export class CustomButton extends InputButton<Styles> {
   }
 
   private changeToDisabled(override?: boolean) {
-    if (!override && this._state === 'disabled') return;
+    if (!override && this._state === DISABLED) return;
     if (this.elementRef[CLASS_LIST].contains(DropupItem.MENU_ITEM_CLASS)) {
-      this.assignDropupItemStyle(this._dropupStyles?.disabled, this.customStyles?.disabled);
+      this.assignDropupItemStyle(this._dropupStyles?.[DISABLED], this.customStyles?.[DISABLED]);
     } else {
-      this.changeElementsByState(this._innerElements.disabled);
+      this.changeElementsByState(this._innerElements[DISABLED]);
       if (this.customStyles?.[ACTIVE]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[ACTIVE]);
       if (this.customStyles?.[DEFAULT]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[DEFAULT]);
-      this.reapplyStateStyle('disabled', [DEFAULT, ACTIVE]);
+      this.reapplyStateStyle(DISABLED, [DEFAULT, ACTIVE]);
     }
     this.elementRef[CLASS_LIST].remove(CustomButton.ACTIVE_CONTAINER_CLASS, CustomButton.DEFAULT_CONTAINER_CLASS);
     this.elementRef[CLASS_LIST].add(CustomButton.DISABLED_CONTAINER_CLASS);
     ButtonAccessibility.addAriaDisabled(this.elementRef);
-    this._state = 'disabled';
+    this._state = DISABLED;
   }
 
   // called after class is initialised

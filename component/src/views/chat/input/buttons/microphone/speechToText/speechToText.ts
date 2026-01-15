@@ -1,7 +1,7 @@
+import {CLICK, DISABLED} from '../../../../../../utils/consts/inputConstants';
 import {ValidationHandler} from '../../../../../../types/validationHandler';
 import {ElementUtils} from '../../../../../../utils/element/elementUtils';
 import {SpeechToTextConfig} from '../../../../../../types/microphone';
-import {CLICK} from '../../../../../../utils/consts/inputConstants';
 import {OnPreResult} from 'speech-to-element/dist/types/options';
 import {TextInputEl} from '../../../textInput/textInput';
 import {Messages} from '../../../../messages/messages';
@@ -28,7 +28,7 @@ export class SpeechToText extends MicrophoneButton {
     if (serviceName === 'webspeech' && !SpeechToElement.isWebSpeechSupported()) {
       this.changeToUnsupported();
     } else {
-      const isInputEnabled = !deepChat.textInput || !deepChat.textInput.disabled;
+      const isInputEnabled = !deepChat.textInput || !deepChat.textInput[DISABLED];
       ElementUtils.assignButtonEvents(
         this.elementRef,
         this.buttonClick.bind(this, textInput, isInputEnabled, serviceName, processedConfig)

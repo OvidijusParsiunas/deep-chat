@@ -15,3 +15,5 @@ export const HOVER = 'hover';
 export const CLICK = 'click';
 
 export const ACTIVE = 'active';
+
+export const DISABLED = 'disabled';
