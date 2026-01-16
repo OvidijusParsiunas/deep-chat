@@ -8,6 +8,7 @@ export interface Dify {
   key?: string;
   url?: string;
   user?: string;
+  mode: 'blocking' | 'streaming';
 }
 
 export interface DifyBlockingResponse {

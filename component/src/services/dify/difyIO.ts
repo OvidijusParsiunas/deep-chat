@@ -17,23 +17,26 @@ export class DifyChatIO extends DirectServiceIO {
   private readonly user: string;
   private readonly inputs: Record<string, unknown>;
   private readonly uploadUrl: string;
+  private readonly mode: 'blocking' | 'streaming';
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
-    const apiKey = directConnectionCopy.dify;
-    const config = directConnectionCopy.dify;
-
-    const baseUrl = config?.url || 'https://api.dify.ai/v1';
+    const difyConfig = directConnectionCopy?.dify;
+    const apiKey = difyConfig;
+    const baseUrl = difyConfig?.url || 'https://api.dify.ai/v1';
 
     super(deepChat, DifyChatIO.buildKeyVerificationDetails(baseUrl), DifyChatIO.buildHeaders, apiKey);
 
     this.url = `${baseUrl}/chat-messages`;
     this.uploadUrl = `${baseUrl}/files/upload`;
-    this.user = (typeof config?.chat === 'object' ? config.chat.user : undefined) || 'deep-chat-user';
-    this.inputs = (typeof config?.chat === 'object' ? config.chat.inputs : undefined) || {};
+
+    const chatConfig = typeof difyConfig?.chat === 'object' ? difyConfig.chat : {};
+    this.user = chatConfig.user || 'deep-chat-user';
+    this.inputs = chatConfig.inputs || {};
+    this.mode = difyConfig?.mode === 'streaming' ? 'streaming' : 'blocking';
 
     this.maxMessages = -1;
-    this.stream = undefined;
+    this.stream = this.mode === 'streaming';
   }
 
   private static buildKeyVerificationDetails(baseUrl: string): KeyVerificationDetails {
@@ -41,7 +44,7 @@ export class DifyChatIO extends DirectServiceIO {
       url: `${baseUrl}/parameters`,
       method: 'GET',
       handleVerificationResult: (result: object): boolean => {
-        return 'user_input_form' in result || 'opening_statement' in result || 'file_upload' in result;
+        return !!result && ('user_input_form' in result || 'opening_statement' in result || 'file_upload' in result);
       },
     };
   }
@@ -60,17 +63,17 @@ export class DifyChatIO extends DirectServiceIO {
     return {
       inputs: this.inputs,
       query,
-      response_mode: 'blocking',
+      response_mode: this.mode,
       user: this.user,
-      ...(this.conversationId && {conversation_id: this.conversationId}),
-      ...(files && files.length > 0 && {files}),
+      ...(this.conversationId ? {conversation_id: this.conversationId} : {}),
+      ...(files && files.length > 0 ? {files} : {}),
     };
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[], files?: File[]) {
     this.messages = messages;
-
     let difyFiles: DifyFileInput[] = [];
+
     if (files && files.length > 0) {
       const headers = this.connectSettings.headers as Record<string, string>;
       difyFiles = await uploadFilesToDify(this.uploadUrl, files, this.user, headers);
@@ -83,13 +86,61 @@ export class DifyChatIO extends DirectServiceIO {
     this.callDirectServiceServiceAPI(messages, pMessages, preprocessWithFiles);
   }
 
-  override async extractResultData(result: DifyBlockingResponse): Promise<ResponseI> {
+  override async extractResultData(result: DifyBlockingResponse | Blob): Promise<ResponseI> {
+    if (this.mode === 'blocking' && !this.stream) {
+      return this.processBlockingResponse(result as DifyBlockingResponse);
+    }
+    return this.processStreamingResponse(result as Blob);
+  }
+
+  private processBlockingResponse(result: DifyBlockingResponse): ResponseI {
     if (result.conversation_id) {
       this.conversationId = result.conversation_id;
     }
+    return {text: result.answer || ''};
+  }
 
-    return {
-      text: result.answer || '',
-    };
+  /**
+   * Process streaming responses (SSE)
+   * The data format returned by Dify is "data: {...}",
+   * with event types including "message", "agent_message", "workflow_finished", etc.
+   */
+  private async processStreamingResponse(result: Blob): Promise<ResponseI> {
+    const text = await result.text();
+    const lines = text.split('\n');
+    let fullAnswer = '';
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+
+      try {
+        const jsonStr = line.slice(6).trim();
+        if (!jsonStr) continue;
+
+        const payload = JSON.parse(jsonStr);
+
+        if (payload.conversation_id && !this.conversationId) {
+          this.conversationId = payload.conversation_id;
+        }
+
+        if (payload.event === 'message' || payload.event === 'agent_message') {
+          fullAnswer += payload.answer || '';
+        }
+
+        if (payload.event === 'workflow_finished') {
+          if (!fullAnswer && payload.data?.outputs?.answer) {
+            fullAnswer = payload.data.outputs.answer;
+          }
+        }
+
+        if (payload.event === 'error') {
+          console.error('[Dify API Error]', payload);
+        }
+      } catch (e) {
+        console.warn('Error parsing Dify stream line:', line, e);
+      }
+    }
+
+    return {text: fullAnswer};
   }
 }
