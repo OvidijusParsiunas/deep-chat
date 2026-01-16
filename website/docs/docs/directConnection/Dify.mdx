@@ -1,0 +1,153 @@
+---
+sidebar_position: 23
+---
+
+# Dify
+
+import difyLogo from '/img/difyLogo.png';
+
+# <img src={difyLogo} className="adaptive-logo-filter" width="38" style={{float: 'left', marginRight: '10px', marginTop: '9px'}} /><span className="direct-service-title"></span>
+
+<br />
+<br />
+
+Properties used to connect to [Dify](https://dify.ai/).
+
+### `Dify` {#Dify}
+
+- Type: \{[`chat?: Chat`](#Chat), `url?: string`, `key?: string`, `mode?: "blocking" | "streaming"`}
+- Default: _\{url: "https://api.dify.ai/v1", mode: "blocking"\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+## Service Types
+
+### `Chat` {#Chat}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `inputs?: object`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `user?: string` <br />
+  \}
+- Default: _true_
+
+Connect to Dify's [Chat App API](https://docs.dify.ai/guides/application-publishing/developing-with-apis#chat-app-api). You can set this property to _true_ or configure it using an object: <br />
+`inputs` allows you to pass variables defined in your Dify App (e.g., prompt variables). <br />
+`user` is a unique identifier for the user (default: "deep-chat-user"). <br />
+
+### `Url` {#Url}
+
+- Type: `string`
+- Default: _"https://api.dify.ai/v1"_
+
+The base URL for the API. Change this if you are using a self-hosted version of Dify (e.g., `http://localhost/v1`).
+
+### `Mode` {#Mode}
+
+- Type: `"blocking" | "streaming"`
+- Default: _"blocking"_
+
+Determines how the response is received. Set to `"streaming"` for real-time typewriter effects (SSE).
+
+### `Key` {#Key}
+
+- Type: `string`
+
+The **App API Key** found in your Dify App's "API Access" section.
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: {
+          key: 'app-placeholder-key',
+          url: 'https://api.dify.ai/v1',
+          mode: 'streaming',
+          chat: {
+            inputs: {variable_name: 'some value'},
+            user: 'user-123'
+          },
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: {
+          chat: {inputs: {name: 'User'}},
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "dify": {
+      "key": "app-placeholder-key",
+      "url": "https://api.dify.ai/v1",
+      "mode": "streaming",
+      "chat": {
+        "inputs": {"variable_name": "some value"},
+        "user": "user-123"
+      }
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "dify": {
+      "key": "app-placeholder-key",
+      "url": "https://api.dify.ai/v1",
+      "mode": "streaming",
+      "chat": {
+        "inputs": {"variable_name": "some value"},
+        "user": "user-123"
+      }
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## File Uploads
+
+Dify supports multimodal file uploads (images, documents). To enable this in Deep Chat, simply add the `images="true"`, `camera="true"`, or `microphone="true"` attributes to the component. The integration automatically handles the file upload to Dify's `/files/upload` endpoint.
+
+```html
+<deep-chat
+  images="true"
+  directConnection='{"dify": {"key": "..."}}'
+></deep-chat>
+```
+
+<LineBreak></LineBreak>
