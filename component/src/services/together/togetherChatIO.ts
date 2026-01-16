@@ -1,8 +1,8 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
+import {AI, ASSISTANT, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
-import {AI, ASSISTANT, ERROR, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -34,7 +34,7 @@ export class TogetherChatIO extends DirectServiceIO {
     const processedMessages: TogetherMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
-        role: message.role === AI ? ASSISTANT : (message.role as 'user'),
+        [ROLE]: message[ROLE] === AI ? ASSISTANT : (message[ROLE] as 'user'),
       };
     });
     this.addSystemMessage(processedMessages);

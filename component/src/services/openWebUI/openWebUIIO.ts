@@ -2,7 +2,7 @@ import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '.
 import {OpenWebUIConverseResult, OpenWebUIStreamResult, OpenWebUIToolCall} from '../../types/openWebUIResult';
 import {OPEN_WEB_UI_BUILD_HEADERS, OPEN_WEB_UI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openWebUIUtils';
 import {OpenWebUIConverseBodyInternal, OpenWebUIMessage} from '../../types/openWebUIInternal';
-import {ASSISTANT, ERROR, FILES, TEXT} from '../../utils/consts/messageConstants';
+import {ASSISTANT, ERROR, FILES, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -41,7 +41,7 @@ export class OpenWebUIIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       const openWebUIMessage: OpenWebUIMessage = {
         content: DirectServiceIO.getTextWImagesContent(message),
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       };
       return openWebUIMessage;
     });
@@ -120,12 +120,12 @@ export class OpenWebUIIO extends DirectServiceIO {
     const {responses, processedResponse} = await this.callToolFunction(this.functionHandler, functions);
     if (processedResponse) return processedResponse;
 
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: ASSISTANT, content: ''});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, [ROLE]: ASSISTANT, content: ''});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
-          role: 'tool',
+          [ROLE]: 'tool',
           tool_name: toolCall?.function.name,
           content: resp.response,
         });

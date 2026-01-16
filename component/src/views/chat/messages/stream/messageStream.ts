@@ -1,4 +1,4 @@
-import {AI, ERROR, FILES, HTML, TEXT} from '../../../../utils/consts/messageConstants';
+import {AI, ERROR, FILES, HTML, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
@@ -51,13 +51,13 @@ export class MessageStream {
     const isScrollbarAtBottomOfElement = ElementUtils.isScrollbarAtBottomOfElement(this._messages.elementRef);
     const streamType = response?.[TEXT] !== undefined ? TEXT : HTML;
     if (!this._elements && !this._message) {
-      this.setInitialState(streamType, content, response?.role);
+      this.setInitialState(streamType, content, response?.[ROLE]);
     } else if (this._streamType !== streamType) {
       return console[ERROR](INVALID_STREAM_EVENT_MIX);
     } else {
-      if (response?.role && response?.role !== this._activeMessageRole) {
+      if (response?.[ROLE] && response?.[ROLE] !== this._activeMessageRole) {
         this.finaliseStreamedMessage(false);
-        this.setInitialState(streamType, content, response?.role);
+        this.setInitialState(streamType, content, response?.[ROLE]);
       } else {
         this.updateBasedOnType(content, streamType, response?.overwrite);
       }
@@ -85,7 +85,7 @@ export class MessageStream {
     if (this._elements) {
       this._elements.bubbleElement[CLASS_LIST].add(MessageStream.MESSAGE_CLASS);
       this._activeMessageRole = role;
-      this._message = {role: this._activeMessageRole, [streamType]: initContent};
+      this._message = {[ROLE]: this._activeMessageRole, [streamType]: initContent};
       this._messages.messageToElements.push([this._message, {[streamType]: this._elements}]);
       if (customWrapper) this.setTargetWrapperIfNeeded(this._elements, content, this._streamType, customWrapper);
       this._messages.scrollButton?.updateHidden();

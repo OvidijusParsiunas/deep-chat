@@ -1,4 +1,4 @@
-import {AI, ASSISTANT, FILES, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
+import {AI, ASSISTANT, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
@@ -106,7 +106,7 @@ export class DirectServiceIO extends BaseServiceIO {
   }
 
   protected addSystemMessage(processedMessages: (MessageContent & {content: unknown})[]) {
-    if (this.systemMessage) processedMessages.unshift({role: 'system', content: this.systemMessage});
+    if (this.systemMessage) processedMessages.unshift({[ROLE]: 'system', content: this.systemMessage});
   }
 
   async callDirectServiceServiceAPI(
@@ -277,14 +277,14 @@ export class DirectServiceIO extends BaseServiceIO {
 
     if (system) {
       bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
-      if (system.message) bodyCp.messages.unshift({role: 'system', content: system.message});
+      if (system.message) bodyCp.messages.unshift({[ROLE]: 'system', content: system.message});
     }
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: ASSISTANT, content: null});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, [ROLE]: ASSISTANT, content: null});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
-          role: 'tool',
+          [ROLE]: 'tool',
           tool_call_id: toolCall?.id,
           name: toolCall?.function.name,
           content: resp.response,

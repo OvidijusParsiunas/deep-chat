@@ -1,5 +1,5 @@
 import {MessageToElements, MessageBodyElements, MessageBody} from '../../../../types/messagesInternal';
-import {ERROR, FILES, HTML, TEXT} from '../../../../utils/consts/messageConstants';
+import {ERROR, FILES, HTML, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {MessageFile} from '../../../../types/messageFile';
 import {MessageStyles} from '../../../../types/messages';
@@ -37,7 +37,7 @@ export class UpdateMessage {
     if (messageToEls[1][HTML]) {
       HTMLMessages.overwriteElements(msg, newHTML, messageToEls[1][HTML]);
     } else {
-      const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0].role);
+      const messageElements = HTMLMessages.create(msg, newHTML, messageToEls[0][ROLE]);
       const previousElements = (messageToEls[1][FILES]?.[messageToEls[1][FILES]?.length - 1] ||
         messageToEls[1][TEXT]) as MessageElements;
       const {nextSibling} = previousElements.outerContainer;
@@ -52,7 +52,7 @@ export class UpdateMessage {
 
   // finds beforeElement, creates new elements, remove old and adds new ones
   private static updateFileMessages(msg: MessagesBase, messageToEls: MessageToElements[0], newFiles: MessageFile[]) {
-    const role = messageToEls[0].role;
+    const role = messageToEls[0][ROLE];
     const typeToElements = FileMessages.createMessages(msg, newFiles, role, false);
     const nextElement = messageToEls[1][HTML];
     const prevElement = messageToEls[1][FILES]?.[messageToEls[1][FILES]?.length - 1] || messageToEls[1][TEXT];
@@ -73,9 +73,9 @@ export class UpdateMessage {
 
   private static updateTextMessage(msg: MessagesBase, messageToEls: MessageToElements[0], newText: string) {
     if (messageToEls[1][TEXT]) {
-      msg.renderText(messageToEls[1][TEXT].bubbleElement, newText, messageToEls[0].role);
+      msg.renderText(messageToEls[1][TEXT].bubbleElement, newText, messageToEls[0][ROLE]);
     } else {
-      const messageElements = msg.createElements(newText, messageToEls[0].role);
+      const messageElements = msg.createElements(newText, messageToEls[0][ROLE]);
       const nextElements = (messageToEls[1][FILES]?.[0] || messageToEls[1][HTML]) as MessageElements;
       nextElements.outerContainer.parentElement?.insertBefore(messageElements.outerContainer, nextElements.outerContainer);
       const nextMsgElsIndex = msg.messageElementRefs.findIndex((messageElements) => messageElements === nextElements);

@@ -1,5 +1,4 @@
 import {OpenAIAssistantData, OpenAIAssistantContent, OpenAIAssistantMessagesResult} from '../../../../types/openAIResult';
-import {ANY, ASSISTANT, DOCS_BASE_URL, FILES, IMAGE, SRC, TEXT, TYPE} from '../../../../utils/consts/messageConstants';
 import {MessageFileType, MessageFile} from '../../../../types/messageFile';
 import {CONTENT_TYPE_H_KEY, POST} from '../../../utils/serviceConstants';
 import {Messages} from '../../../../views/chat/messages/messages';
@@ -8,6 +7,17 @@ import {DirectServiceIO} from '../../../utils/directServiceIO';
 import {OPEN_AI_DIRECT_FETCH} from '../../utils/openAIUtils';
 import {URLSegments} from '../openAIAssistantIOI';
 import {ServiceIO} from '../../../serviceIO';
+import {
+  DOCS_BASE_URL,
+  ASSISTANT,
+  FILES,
+  IMAGE,
+  ROLE,
+  TEXT,
+  TYPE,
+  ANY,
+  SRC,
+} from '../../../../utils/consts/messageConstants';
 
 type FileDetails = {fileId: string; path?: string; name?: string}[];
 
@@ -105,7 +115,7 @@ export class OpenAIAssistantUtils {
       }
     }
     // not displaying a separate file if annotated
-    return content?.[TEXT]?.value ? {[TEXT]: content[TEXT].value, role} : {[FILES]: files, role};
+    return content?.[TEXT]?.value ? {[TEXT]: content[TEXT].value, [ROLE]: role} : {[FILES]: files, [ROLE]: role};
   }
 
   // Noticed an issue where text contains a sandbox hyperlink to a csv, but no annotation provided

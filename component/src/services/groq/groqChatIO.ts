@@ -1,5 +1,5 @@
 import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
-import {AI, ASSISTANT, ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {AI, ASSISTANT, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {GroqResult, GroqToolCall, GroqChoice} from '../../types/groqResult';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqMessage, GroqRequestBody} from '../../types/groqInternal';
@@ -36,7 +36,7 @@ export class GroqChatIO extends DirectServiceIO {
     const processedMessages: GroqMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: GroqChatIO.getTextWImagesContent(message),
-        role: message.role === AI ? ASSISTANT : (message.role as 'user'),
+        [ROLE]: message[ROLE] === AI ? ASSISTANT : (message[ROLE] as 'user'),
       };
     });
     this.addSystemMessage(processedMessages);

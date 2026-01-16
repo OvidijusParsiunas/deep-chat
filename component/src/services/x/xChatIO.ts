@@ -1,6 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {X_BUILD_KEY_VERIFICATION_DETAILS, X_BUILD_HEADERS} from './utils/xUtils';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -33,7 +33,7 @@ export class XChatIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as XMessage;
     });
     this.addSystemMessage(processedMessages);

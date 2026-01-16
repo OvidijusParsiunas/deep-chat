@@ -1,4 +1,4 @@
-import {AI, DOCS_BASE_URL, ERROR, SERVICE, TEXT, USER} from '../utils/consts/messageConstants';
+import {AI, DOCS_BASE_URL, ERROR, ROLE, SERVICE, TEXT, USER} from '../utils/consts/messageConstants';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {IntroMessage, MessageContent} from '../types/messages';
@@ -67,9 +67,9 @@ export class WebModel extends BaseServiceIO {
 
   private static setUpHistory(conversationHistory: Array<[string, string]>, history: MessageContent[]) {
     history.forEach((message, index) => {
-      if (message.role === USER && message[TEXT]) {
+      if (message[ROLE] === USER && message[TEXT]) {
         const nextMessage = history[index + 1];
-        if (nextMessage?.[TEXT] && nextMessage.role !== USER) {
+        if (nextMessage?.[TEXT] && nextMessage[ROLE] !== USER) {
           conversationHistory.push([message[TEXT], nextMessage[TEXT]]); // [userText, aiText]
         }
       }
@@ -107,7 +107,7 @@ export class WebModel extends BaseServiceIO {
     const html = WebModelIntroMessage.setUpInitial(
       this.init.bind(this), this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
     this.scrollToTop(1);
-    return {role: AI, html, sendUpdate: false};
+    return {[ROLE]: AI, html, sendUpdate: false};
   }
 
   private async configureInit(wasIntroSet: boolean) {

@@ -1,5 +1,5 @@
+import {AI, ERROR, HTML, ROLE, SERVICE, TEXT} from '../consts/messageConstants';
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
-import {AI, ERROR, HTML, SERVICE, TEXT} from '../consts/messageConstants';
 import {CustomHandler, IWebsocketHandler} from './customHandler';
 import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
 import {OBJECT} from '../../services/utils/serviceConstants';
@@ -74,7 +74,7 @@ export class Websocket {
         }
         if (Stream.isSimulation(io.stream)) {
           const upsertFunc = Websocket.stream.bind(this, io, messages, roleToStream);
-          const stream = roleToStream[result.role || AI];
+          const stream = roleToStream[result[ROLE] || AI];
           Stream.upsertContent(messages, upsertFunc, stream, finalResult);
         } else {
           const messageDataArr = Array.isArray(finalResult) ? finalResult : [finalResult];
@@ -131,7 +131,7 @@ export class Websocket {
     if (!result) return;
     const simulation = (io.stream as StreamConfig).simulation;
     if (typeof simulation === 'string') {
-      const role = result.role || AI;
+      const role = result[ROLE] || AI;
       const stream = roleToStream[role];
       if (result[TEXT] === simulation || result[HTML] === simulation) {
         stream?.finaliseStreamedMessage();

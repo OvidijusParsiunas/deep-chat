@@ -1,7 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DEEPSEEK_BUILD_HEADERS, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS} from './utils/deepSeekUtils';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -35,7 +35,7 @@ export class DeepSeekIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as DeepSeekMessage;
     });
     this.addSystemMessage(processedMessages);

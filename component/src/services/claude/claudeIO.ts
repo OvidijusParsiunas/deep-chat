@@ -1,7 +1,7 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
+import {ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {CLAUDE_BUILD_HEADERS, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/claudeUtils';
-import {ERROR, FILE, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -49,7 +49,7 @@ export class ClaudeIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: ClaudeIO.getTextWFilesContent(message, ClaudeIO.getFileContent),
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as ClaudeMessage;
     });
 
@@ -123,7 +123,7 @@ export class ClaudeIO extends DirectServiceIO {
       input: block.input,
     }));
     bodyCp.messages.push({
-      role: 'assistant',
+      [ROLE]: 'assistant',
       content: assistantContent,
     });
 
@@ -135,7 +135,7 @@ export class ClaudeIO extends DirectServiceIO {
         content: resp.response,
       }));
 
-      bodyCp.messages.push({role: USER, content: toolResultContent});
+      bodyCp.messages.push({[ROLE]: USER, content: toolResultContent});
 
       return this.makeAnotherRequest(bodyCp, this.messages);
     }

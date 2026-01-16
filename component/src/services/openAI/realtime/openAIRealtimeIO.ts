@@ -46,8 +46,9 @@ import {
   TEXT,
   TYPE,
   USER,
-  AI,
+  ROLE,
   SRC,
+  AI,
 } from '../../../utils/consts/messageConstants';
 
 export class OpenAIRealtimeIO extends DirectServiceIO {
@@ -218,7 +219,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
         const messageRole = role || 'system';
         const content = [{[TYPE]: messageRole === 'system' || messageRole === USER ? INPUT_TEXT : TEXT, text}];
-        const item = {role: messageRole, [TYPE]: 'message', content};
+        const item = {[ROLE]: messageRole, [TYPE]: 'message', content};
         this.sendMessage(item);
       },
     };
@@ -442,11 +443,11 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         // console.log(response.delta);
       } else if (response.type === 'response.audio_transcript.done') {
         if (response.transcript) {
-          FireEvents.onMessage(this._deepChat, {role: AI, [TEXT]: response.transcript}, false);
+          FireEvents.onMessage(this._deepChat, {[ROLE]: AI, [TEXT]: response.transcript}, false);
         }
       } else if (response.type === 'conversation.item.input_audio_transcription.completed') {
         if (response.transcript) {
-          FireEvents.onMessage(this._deepChat, {role: USER, [TEXT]: response.transcript}, false);
+          FireEvents.onMessage(this._deepChat, {[ROLE]: USER, [TEXT]: response.transcript}, false);
         }
       }
     });

@@ -1,5 +1,5 @@
 import {OPEN_ROUTER_BUILD_HEADERS, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openRouterUtils';
-import {AUDIO, ERROR, FILES, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AUDIO, ERROR, FILES, IMAGES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {OpenRouter, OpenRouterChat} from '../../types/openRouter';
 import {DirectConnection} from '../../types/directConnection';
@@ -80,12 +80,12 @@ export class OpenRouterIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: OpenRouterIO.getContent(message),
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as OpenRouterMessage;
     });
 
     const messages: OpenRouterMessage[] = [];
-    if (this.systemMessage) messages.push({role: 'system', content: this.systemMessage});
+    if (this.systemMessage) messages.push({[ROLE]: 'system', content: this.systemMessage});
     messages.push(...processedMessages);
 
     bodyCopy.messages = messages;

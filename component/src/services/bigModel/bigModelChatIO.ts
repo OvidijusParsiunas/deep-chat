@@ -1,7 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, IMAGE_URL, OBJECT} from '../utils/serviceConstants';
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
-import {AI, ERROR, FILE, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AI, ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -50,7 +50,7 @@ export class BigModelChatIO extends DirectServiceIO {
     const processedMessages: BigModelMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: BigModelChatIO.getTextWFilesContent(message, BigModelChatIO.getFileContent),
-        role: DirectServiceIO.getRoleViaAI(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaAI(message[ROLE]),
       } as BigModelUserMessage;
     });
     this.addSystemMessage(processedMessages);
@@ -87,7 +87,7 @@ export class BigModelChatIO extends DirectServiceIO {
     // and then creates a new stream with the actual result. The problem is that the first
     // message can sometimes be completely empty which does not look good in the UI.
     // To repeat this behaviour, ask for something twice in same chat
-    if (lastMessage?.[0].role === AI && lastMessage?.[0][TEXT]?.replace(/\n/g, '').trim().length === 0) {
+    if (lastMessage?.[0][ROLE] === AI && lastMessage?.[0][TEXT]?.replace(/\n/g, '').trim().length === 0) {
       this.messages?.removeMessage(lastMessage[1][TEXT] as MessageElements);
       this.messages?.messageToElements.splice(this.messages.messageToElements.length - 2, 1);
     }

@@ -1,4 +1,3 @@
-import {AI, ERROR_MESSAGE_TEXT_CLASS, FILES, HTML, MESSAGES_ID, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {MessageElementsStyles, MessageRoleStyles, MessageStyles, UserContent} from '../../../types/messages';
 import {MessageContentI, MessageToElements, Overwrite} from '../../../types/messagesInternal';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
@@ -27,6 +26,16 @@ import {HTMLUtils} from './html/htmlUtils';
 import {Remarkable} from 'remarkable';
 import {Avatar} from './avatar';
 import {Name} from './name';
+import {
+  ERROR_MESSAGE_TEXT_CLASS,
+  MESSAGES_ID,
+  FILES,
+  HTML,
+  ROLE,
+  TEXT,
+  USER,
+  AI,
+} from '../../../utils/consts/messageConstants';
 
 export class MessagesBase {
   messageElementRefs: MessageElements[] = [];
@@ -124,7 +133,7 @@ export class MessagesBase {
     // first group should not have height 100% to not create a partial chat scroll bar
     if (
       this.messageToElements.length > 1 ||
-      (this.messageToElements.length === 1 && this.messageToElements[0][0].role !== USER)
+      (this.messageToElements.length === 1 && this.messageToElements[0][0][ROLE] !== USER)
     ) {
       lastGroupMessageElement[CLASS_LIST].add(MessagesBase.LAST_GROUP_MESSAGES_ACTIVE);
     }
@@ -253,7 +262,7 @@ export class MessagesBase {
   public static createMessageContent(content: Response): MessageContentI {
     // it is important to create a new object as its properties get manipulated later on e.g. delete message.html
     const {text, files, html, custom, _sessionId, role} = content;
-    const messageContent: MessageContentI = {role: role || AI};
+    const messageContent: MessageContentI = {[ROLE]: role || AI};
     if (text) messageContent[TEXT] = text;
     if (files) messageContent[FILES] = files;
     if (html) messageContent[HTML] = html;
@@ -313,7 +322,7 @@ export class MessagesBase {
     this._remarkable = RemarkableConfig.createNew(customConfig);
     this.messageToElements.forEach((msgToEls) => {
       if (msgToEls[1][TEXT] && msgToEls[0][TEXT]) {
-        this.renderText(msgToEls[1][TEXT].bubbleElement, msgToEls[0][TEXT], msgToEls[0].role);
+        this.renderText(msgToEls[1][TEXT].bubbleElement, msgToEls[0][TEXT], msgToEls[0][ROLE]);
       }
     });
   }

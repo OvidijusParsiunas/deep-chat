@@ -1,8 +1,9 @@
 import {DISABLED} from '../../../../utils/consts/inputConstants';
+import {ROLE} from '../../../../utils/consts/messageConstants';
 
 export class ButtonAccessibility {
   public static addAttributes(button: HTMLElement) {
-    button.role = 'button';
+    button[ROLE] = 'button';
     button.setAttribute('tabindex', '0');
   }
 

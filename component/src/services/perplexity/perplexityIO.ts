@@ -1,7 +1,7 @@
 import {PERPLEXITY_BUILD_HEADERS, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS} from './utils/perplexityUtils';
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
 import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -33,7 +33,7 @@ export class PerplexityIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as PerplexityMessage;
     });
     this.addSystemMessage(processedMessages);

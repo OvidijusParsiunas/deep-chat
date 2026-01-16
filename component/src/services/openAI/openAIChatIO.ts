@@ -1,5 +1,5 @@
 import {COMPLETED, FUNCTION_CALL, GET, IMAGE_URL, INPUT_AUDIO, OBJECT, POST} from '../utils/serviceConstants';
-import {AI, ERROR, FILES, IMAGE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
+import {AI, ERROR, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {OpenAIFileContent, OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -86,7 +86,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
 
   private static getContent(message: MessageContentI) {
     // Attaching history files only allowed for user
-    const shouldIncludeFiles = message.role === USER;
+    const shouldIncludeFiles = message[ROLE] === USER;
     if (shouldIncludeFiles && message[FILES] && message[FILES].length > 0) {
       const content: OpenAIFileContent = OpenAIChatIO.getFileContent(message[FILES]);
       if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: INPUT_TEXT, [TEXT]: message[TEXT]});
@@ -122,17 +122,17 @@ export class OpenAIChatIO extends OpenAIBaseIO {
       if (item.type === 'message' && item.content && Array.isArray(item.content)) {
         for (const content of item.content) {
           if ((content.type === INPUT_TEXT || content.type === OUTPUT_TEXT) && content[TEXT]) {
-            messages.push({role: item.role, [TEXT]: content[TEXT]});
+            messages.push({[ROLE]: item[ROLE], [TEXT]: content[TEXT]});
           } else if (content.type === INPUT_IMAGE) {
             messages.push({
-              role: item.role,
+              [ROLE]: item[ROLE],
               [FILES]: OpenAIChatIO.generateImageFile(content[IMAGE_URL] || ''),
             });
           }
         }
       } else if (item.type === IMAGE_GENERATION_CALL) {
         messages.push({
-          role: AI,
+          [ROLE]: AI,
           [FILES]: OpenAIChatIO.generateImageFile((item as ResponsesImageGenerationCall).result),
         });
       }
@@ -146,7 +146,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     pMessages = this._useConversation ? [pMessages[pMessages.length - 1]] : pMessages;
     const processedMessages = pMessages.map((message) => ({
       content: OpenAIChatIO.getContent(message),
-      role: DirectServiceIO.getRoleViaUser(message.role),
+      [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
     }));
     bodyCopy.input = processedMessages;
     if (this._conversationId) bodyCopy.conversation = this._conversationId;
@@ -251,7 +251,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     // For responses API, we need to include the original function calls in conversation history
     const bodyCp = JSON.parse(JSON.stringify(prevBody));
     if (bodyCp.input) {
-      // Add original function calls to the conversation history which is equired to prevent error based on this thread:
+      // Add original function calls to the conversation history which is required to prevent error based on this thread:
       // eslint-disable-next-line max-len
       // https://community.openai.com/t/issue-with-new-responses-api-400-no-tool-call-found-for-function-call-output-with-call-id/1142327
       functionCalls.forEach((functionCall) => bodyCp.input.push(functionCall));

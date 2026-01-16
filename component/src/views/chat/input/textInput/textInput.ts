@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {BrowserStorage} from '../../messages/browserStorage/browserStorage';
-import {FILES, TEXT} from '../../../../utils/consts/messageConstants';
+import {FILES, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
 import {DISABLED} from '../../../../utils/consts/inputConstants';
@@ -87,7 +87,7 @@ export class TextInputEl {
     const inputElement = CREATE_ELEMENT() as HTMLDivElement;
     inputElement.id = TextInputEl.TEXT_INPUT_ID;
     inputElement[CLASS_LIST].add('text-input-styling');
-    inputElement.role = 'textbox';
+    inputElement[ROLE] = 'textbox';
     if (typeof defaultText === 'string') {
       inputElement.innerText = defaultText;
     } else if (storage?.trackInputText) {

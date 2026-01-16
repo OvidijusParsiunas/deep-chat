@@ -41,6 +41,7 @@ import {
   USER,
   TEXT,
   HTML,
+  ROLE,
   ANY,
   SRC,
   AI,
@@ -215,8 +216,8 @@ export class Messages extends MessagesBase {
 
   private tryAddTextMessage(msg: MessageContentI, overwrite: Overwrite, data: ResponseI, history = false, isTop = false) {
     if (msg[TEXT] !== undefined && data[TEXT] !== null) {
-      this.addNewTextMessage(msg[TEXT], msg.role, overwrite, isTop);
-      if (!history && this.textToSpeech && msg.role !== USER) {
+      this.addNewTextMessage(msg[TEXT], msg[ROLE], overwrite, isTop);
+      if (!history && this.textToSpeech && msg[ROLE] !== USER) {
         TextToSpeech.speak(msg[TEXT], this.textToSpeech);
       }
     }
@@ -224,20 +225,20 @@ export class Messages extends MessagesBase {
 
   private tryAddFileMessages(message: MessageContentI, isScrollAtBottom: boolean, isTop = false) {
     if (message[FILES] && Array.isArray(message[FILES])) {
-      FileMessages.addMessages(this, message[FILES], message.role, isScrollAtBottom, isTop);
+      FileMessages.addMessages(this, message[FILES], message[ROLE], isScrollAtBottom, isTop);
     }
   }
 
   private tryAddHTMLMessage(message: MessageContentI, overwrite: Overwrite, isTop = false) {
     if (message[HTML] !== undefined && message[HTML] !== null) {
-      const elements = HTMLMessages.add(this, message[HTML], message.role, overwrite, isTop);
+      const elements = HTMLMessages.add(this, message[HTML], message[ROLE], overwrite, isTop);
       if (!isTop && HTMLDeepChatElements.isElementTemporary(elements)) delete message[HTML];
     }
   }
 
   // this should not be activated by streamed messages
   public addNewMessage(data: ResponseI, isHistory = false, isTop = false) {
-    if (data.role !== USER) this._hiddenAttachments?.removeHiddenFiles();
+    if (data[ROLE] !== USER) this._hiddenAttachments?.removeHiddenFiles();
     const message = Messages.createMessageContent(data);
     const displayText = this.textToSpeech?.audio?.displayText;
     if (typeof displayText === 'boolean' && !displayText) delete message[TEXT];
@@ -255,9 +256,9 @@ export class Messages extends MessagesBase {
     if (this.isValidMessageContent(message) && !isTop) {
       this.updateStateOnMessage(message, data.overwrite, data.sendUpdate, isHistory);
       // in timeout for it to move to the loading bubble and when bubble font is large
-      if (!overwrite.status) setTimeout(() => this.scrollToFirstElement(message.role, isScrollAtBottom));
+      if (!overwrite.status) setTimeout(() => this.scrollToFirstElement(message[ROLE], isScrollAtBottom));
       if (!isHistory) this.browserStorage?.addMessages(this.messageToElements.map(([msg]) => msg));
-      if (this.scrollButton && message.role !== USER) this.tryUpdateHiddenMessageCount(isHistory, data);
+      if (this.scrollButton && message[ROLE] !== USER) this.tryUpdateHiddenMessageCount(isHistory, data);
     }
     if (this._activeLoadingConfig) this.addLoadingMessage(false);
     return message;
@@ -383,7 +384,7 @@ export class Messages extends MessagesBase {
   public addLoadingMessage(override = false) {
     if (MessagesBase.isLoadingMessage(this.messageElementRefs[this.messageElementRefs.length - 1]) ||
       (!this._activeLoadingConfig && !override && !this._isLoadingMessageAllowed)) return;
-    const role = this._activeLoadingConfig?.role || AI;
+    const role = this._activeLoadingConfig?.[ROLE] || AI;
     const style = this._activeLoadingConfig?.[STYLE] || this.messageStyles?.loading?.message;
     const html = style?.[HTML];
     const messageElements = html

@@ -1,7 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {MINI_MAX_BUILD_KEY_VERIFICATION_DETAILS, MINI_MAX_BUILD_HEADERS} from './utils/miniMaxUtils';
 import {MiniMaxRequestBody, MiniMaxMessage} from '../../types/miniMaxInternal';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -33,7 +33,7 @@ export class MiniMaxIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as MiniMaxMessage;
     });
     this.addSystemMessage(processedMessages);

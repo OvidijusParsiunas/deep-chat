@@ -1,5 +1,5 @@
+import {AI, ERROR, ROLE, TEXT, USER} from '../../utils/consts/messageConstants';
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
-import {AI, ERROR, TEXT, USER} from '../../utils/consts/messageConstants';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContentI} from '../../types/messagesInternal';
 import {HuggingFaceIO} from './huggingFaceIO';
@@ -22,10 +22,10 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     const previousMessages = textMessages.slice(0, textMessages.length - 1);
     if (!mostRecentMessageText) return;
     const past_user_inputs = previousMessages
-      .filter((message) => message.role === USER)
+      .filter((message) => message[ROLE] === USER)
       .map((message) => message[TEXT]);
     const generated_responses = previousMessages
-      .filter((message) => message.role === AI)
+      .filter((message) => message[ROLE] === AI)
       .map((message) => message[TEXT]);
     return {past_user_inputs, generated_responses, mostRecentMessageText};
   }

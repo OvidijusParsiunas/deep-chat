@@ -1,6 +1,6 @@
 import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/classConstants';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {FILE, FILES, TEXT, USER} from '../../../../../utils/consts/messageConstants';
+import {FILE, FILES, ROLE, TEXT, USER} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
@@ -213,7 +213,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private async addNewMessage({text, files, custom}: UserContentI) {
-    const data: Response = {role: USER, custom};
+    const data: Response = {[ROLE]: USER, custom};
     if (text) data[TEXT] = text;
     if (files) data[FILES] = await this._messages.addMultipleFiles(files, this._fileAttachments);
     if (this._serviceIO.sessionId) data._sessionId = this._serviceIO.sessionId;

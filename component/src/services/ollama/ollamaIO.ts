@@ -1,5 +1,5 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
-import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT} from '../../utils/consts/messageConstants';
+import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, ROLE, SRC, TEXT} from '../../utils/consts/messageConstants';
 import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
 import {OLLAMA_BUILD_HEADERS, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS} from './utils/ollamaUtils';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
@@ -47,7 +47,7 @@ export class OllamaIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       const ollamaMessage: OllamaMessage = {
         content: message[TEXT] || '',
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       };
       if (message[FILES] && message[FILES].length > 0) {
         const images = OllamaIO.getImageData(message[FILES]);
@@ -99,12 +99,12 @@ export class OllamaIO extends DirectServiceIO {
     const {responses, processedResponse} = await this.callToolFunction(this.functionHandler, functions);
     if (processedResponse) return processedResponse;
 
-    bodyCp.messages.push({tool_calls: tools.tool_calls, role: ASSISTANT, content: ''});
+    bodyCp.messages.push({tool_calls: tools.tool_calls, [ROLE]: ASSISTANT, content: ''});
     if (!responses.find(({response}) => typeof response !== 'string') && functions.length === responses.length) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
-          role: 'tool',
+          [ROLE]: 'tool',
           tool_name: toolCall?.function.name,
           content: resp.response,
         });

@@ -1,6 +1,6 @@
 import {MistralMessage, MistralRequestBody, MistralContentItem} from '../../types/mistralInternal';
 import {MISTRAL_BUILD_HEADERS, MISTRAL_BUILD_KEY_VERIFICATION_DETAILS} from './utils/mistralUtils';
-import {ERROR, FILE, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {IMAGE_URL, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -43,7 +43,7 @@ export class MistralIO extends DirectServiceIO {
   private preprocessBody(body: MistralRequestBody, pMessages: MessageContentI[]) {
     const bodyCopy = JSON.parse(JSON.stringify(body)) as MistralRequestBody;
     const processedMessages: MistralMessage[] = this.processMessages(pMessages).map((message) => ({
-      role: DirectServiceIO.getRoleViaAI(message.role),
+      [ROLE]: DirectServiceIO.getRoleViaAI(message[ROLE]),
       content: DirectServiceIO.getTextWFilesContent(message, MistralIO.getFileContent),
     }));
     this.addSystemMessage(processedMessages);

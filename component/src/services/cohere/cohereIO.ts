@@ -1,6 +1,6 @@
 import {COHERE_BUILD_HEADERS, COHERE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/cohereUtils';
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -39,7 +39,7 @@ export class CohereIO extends DirectServiceIO {
     const bodyCopy = JSON.parse(JSON.stringify(body));
     const textMessages = pMessages.filter((message) => message[TEXT]);
     bodyCopy.messages = textMessages.map((message) => ({
-      role: DirectServiceIO.getRoleViaAI(message.role),
+      [ROLE]: DirectServiceIO.getRoleViaAI(message[ROLE]),
       content: message[TEXT],
     }));
     return bodyCopy;

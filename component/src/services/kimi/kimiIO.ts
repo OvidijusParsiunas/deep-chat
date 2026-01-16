@@ -1,7 +1,7 @@
 import {KIMI_BUILD_HEADERS, KIMI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/kimiUtils';
 import {KimiRequestBody, KimiMessage, KimiToolCall} from '../../types/kimiInternal';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, TEXT} from '../../utils/consts/messageConstants';
+import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -36,7 +36,7 @@ export class KimiIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: KimiIO.getTextWImagesContent(message),
-        role: DirectServiceIO.getRoleViaUser(message.role),
+        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
       } as KimiMessage;
     });
     this.addSystemMessage(processedMessages);

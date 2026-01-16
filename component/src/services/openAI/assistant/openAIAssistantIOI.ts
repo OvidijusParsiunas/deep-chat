@@ -1,5 +1,5 @@
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
-import {ASSISTANT, ERROR, FILES, IMAGES, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
+import {ASSISTANT, ERROR, FILES, IMAGES, ROLE, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {COMPLETED, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
@@ -115,7 +115,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       if (processedMessage[TEXT] && processedMessage[TEXT].length > 0) {
         contentArr.push({[TYPE]: TEXT, [TEXT]: processedMessage[TEXT]});
       }
-      return {content: contentArr, role: USER};
+      return {content: contentArr, [ROLE]: USER};
     }
     return undefined;
   }
@@ -128,7 +128,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     const attachments: FileAttachments = uploadedFiles.map((file) => {
       return {tools: [{[TYPE]: toolType}], file_id: file.id};
     });
-    return {attachments, content: [{[TYPE]: TEXT, [TEXT]: processedMessage[TEXT]}], role: USER};
+    return {attachments, content: [{[TYPE]: TEXT, [TEXT]: processedMessage[TEXT]}], [ROLE]: USER};
   }
 
   private processMessage(pMessages: MessageContentI[], uploadedFiles?: UploadedFile[]) {
@@ -174,7 +174,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
         if (imageMessage) return imageMessage;
       }
     }
-    return {content: processedMessage[TEXT] || '', role: USER};
+    return {content: processedMessage[TEXT] || '', [ROLE]: USER};
   }
 
   private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], files?: UploadedFile[]) {
@@ -354,7 +354,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       if (textContent?.[TEXT]?.annotations && textContent[TEXT].annotations.length > 0) {
         const textFileFirst = result.content.find((content) => !!content[TEXT]) || result.content[0];
         const downloadCb = OpenAIAssistantUtils.getFilesAndText.bind(this,
-          this, {role: ASSISTANT, content: result.content}, this.urlSegments, textFileFirst);
+          this, {[ROLE]: ASSISTANT, content: result.content}, this.urlSegments, textFileFirst);
         this._messageStream?.endStreamAfterFileDownloaded(this.messages, downloadCb);
         return {[TEXT]: ''};
       }

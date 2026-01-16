@@ -1,5 +1,5 @@
 import {GEMINI_BUILD_HEADERS, GEMINI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/geminiUtils';
-import {ERROR, FILES, SRC, TEXT, USER} from '../../utils/consts/messageConstants';
+import {ERROR, FILES, ROLE, SRC, TEXT, USER} from '../../utils/consts/messageConstants';
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -72,7 +72,7 @@ export class GeminiIO extends DirectServiceIO {
 
     return {
       parts,
-      role: message.role === USER ? USER : 'model',
+      [ROLE]: message[ROLE] === USER ? USER : 'model',
     };
   }
 
@@ -141,7 +141,7 @@ export class GeminiIO extends DirectServiceIO {
           args: call.args,
         },
       })),
-      role: 'model',
+      [ROLE]: 'model',
     };
 
     bodyCp.contents.push(assistantContent);
@@ -156,7 +156,7 @@ export class GeminiIO extends DirectServiceIO {
             },
           },
         })),
-        role: USER,
+        [ROLE]: USER,
       };
 
       bodyCp.contents.push(functionResponseContent);

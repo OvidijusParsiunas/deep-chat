@@ -19,6 +19,7 @@ import {
   FILES,
   TEXT,
   HTML,
+  ROLE,
 } from '../../../../utils/consts/messageConstants';
 
 export class MessageUtils {
@@ -42,7 +43,7 @@ export class MessageUtils {
 
   public static getLastMessage(msgToEls: MessageToElements, role: string, content?: keyof Omit<MessageContent, 'role'>) {
     for (let i = msgToEls.length - 1; i >= 0; i -= 1) {
-      if (msgToEls[i][0].role === role) {
+      if (msgToEls[i][0][ROLE] === role) {
         if (content) {
           if (msgToEls[i][0][content]) return msgToEls[i][0];
         } else {

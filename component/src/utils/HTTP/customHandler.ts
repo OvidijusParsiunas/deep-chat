@@ -1,7 +1,7 @@
 import {MessageStream} from '../../views/chat/messages/stream/messageStream';
 import {MessagesBase} from '../../views/chat/messages/messagesBase';
+import {AI, ERROR, ROLE, SERVICE} from '../consts/messageConstants';
 import {INVALID_RESPONSE} from '../errorMessages/errorMessages';
-import {AI, ERROR, SERVICE} from '../consts/messageConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestDetails} from '../../types/interceptors';
 import {RoleToStream, Websocket} from './websocket';
@@ -132,7 +132,7 @@ export class CustomHandler {
         } else if (Stream.isSimulation(io.stream)) {
           const message = result as Response; // array not supported for streaming
           const upsertFunc = Websocket.stream.bind(this, io, messages, internalConfig.roleToStream);
-          const stream = (internalConfig.roleToStream as RoleToStream)[message.role || AI];
+          const stream = (internalConfig.roleToStream as RoleToStream)[message[ROLE] || AI];
           Stream.upsertContent(messages, upsertFunc, stream, message);
         } else {
           messageDataArr.forEach((message) => messages.addNewMessage(message));
