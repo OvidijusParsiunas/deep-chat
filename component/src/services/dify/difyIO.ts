@@ -5,7 +5,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {uploadFilesToDify} from './utils/difyUtils';
-import {DifyBlockingResponse, DifyFileInput} from '../../types/dify';
+import {DifyBlockingResponse, DifyFileInput, DifyResponseMode, DifyStreamEvent} from '../../types/dify';
 import {DeepChat} from '../../deepChat';
 
 export class DifyChatIO extends DirectServiceIO {
@@ -17,7 +17,7 @@ export class DifyChatIO extends DirectServiceIO {
   private readonly user: string;
   private readonly inputs: Record<string, unknown>;
   private readonly uploadUrl: string;
-  private readonly mode: 'blocking' | 'streaming';
+  private readonly mode: DifyResponseMode;
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
@@ -33,10 +33,11 @@ export class DifyChatIO extends DirectServiceIO {
     const chatConfig = typeof difyConfig?.chat === 'object' ? difyConfig.chat : {};
     this.user = chatConfig.user || 'deep-chat-user';
     this.inputs = chatConfig.inputs || {};
-    this.mode = difyConfig?.mode === 'streaming' ? 'streaming' : 'blocking';
+
+    this.mode = difyConfig?.mode === DifyResponseMode.STREAMING ? DifyResponseMode.STREAMING : DifyResponseMode.BLOCKING;
 
     this.maxMessages = -1;
-    this.stream = this.mode === 'streaming';
+    this.stream = this.mode === DifyResponseMode.STREAMING;
   }
 
   private static buildKeyVerificationDetails(baseUrl: string): KeyVerificationDetails {
@@ -87,7 +88,7 @@ export class DifyChatIO extends DirectServiceIO {
   }
 
   override async extractResultData(result: DifyBlockingResponse | Blob): Promise<ResponseI> {
-    if (this.mode === 'blocking' && !this.stream) {
+    if (this.mode === DifyResponseMode.BLOCKING && !this.stream) {
       return this.processBlockingResponse(result as DifyBlockingResponse);
     }
     return this.processStreamingResponse(result as Blob);
@@ -123,17 +124,17 @@ export class DifyChatIO extends DirectServiceIO {
           this.conversationId = payload.conversation_id;
         }
 
-        if (payload.event === 'message' || payload.event === 'agent_message') {
+        if (payload.event === DifyStreamEvent.MESSAGE || payload.event === DifyStreamEvent.AGENT_MESSAGE) {
           fullAnswer += payload.answer || '';
         }
 
-        if (payload.event === 'workflow_finished') {
+        if (payload.event === DifyStreamEvent.WORKFLOW_FINISHED) {
           if (!fullAnswer && payload.data?.outputs?.answer) {
             fullAnswer = payload.data.outputs.answer;
           }
         }
 
-        if (payload.event === 'error') {
+        if (payload.event === DifyStreamEvent.ERROR) {
           console.error('[Dify API Error]', payload);
         }
       } catch (e) {

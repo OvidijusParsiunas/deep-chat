@@ -23,3 +23,15 @@ export interface DifyFileInput {
   transfer_method: 'local_file' | 'remote_url';
   upload_file_id: string;
 }
+
+export enum DifyResponseMode {
+  BLOCKING = 'blocking',
+  STREAMING = 'streaming',
+}
+
+export enum DifyStreamEvent {
+  MESSAGE = 'message',
+  AGENT_MESSAGE = 'agent_message',
+  WORKFLOW_FINISHED = 'workflow_finished',
+  ERROR = 'error',
+}
