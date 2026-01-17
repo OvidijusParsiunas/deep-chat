@@ -1,6 +1,6 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
+import {DEEP_COPY, ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {CLAUDE_BUILD_HEADERS, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/claudeUtils';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
@@ -23,7 +23,7 @@ export class ClaudeIO extends DirectServiceIO {
   private _streamToolCalls: ClaudeToolUse = {[TYPE]: 'tool_use', id: '', name: '', input: ''};
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.claude as Claude & APIKey;
     super(deepChat, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS(), CLAUDE_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -45,7 +45,7 @@ export class ClaudeIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: ClaudeRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as ClaudeRequestBody;
+    const bodyCopy = DEEP_COPY(body) as ClaudeRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: ClaudeIO.getTextWFilesContent(message, ClaudeIO.getFileContent),
@@ -108,7 +108,7 @@ export class ClaudeIO extends DirectServiceIO {
     if (!toolUseBlocks || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     const functions = toolUseBlocks.map((block) => {
       return {name: block.name, arguments: JSON.stringify(block.input)};
     });

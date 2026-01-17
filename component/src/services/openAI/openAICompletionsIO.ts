@@ -1,5 +1,5 @@
 import {OpenAICompletionsResult, OpenAICompletionsResultChoice, ToolCalls} from '../../types/openAIResult';
-import {AUDIO, ERROR, FILES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AUDIO, DEEP_COPY, ERROR, FILES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {IMAGE_URL, INPUT_AUDIO} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -43,7 +43,7 @@ export class OpenAICompletionsIO extends OpenAIBaseIO {
   }
 
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const processedMessages = this.processMessages(pMessages).map((message) => ({
       content: OpenAICompletionsIO.getContent(message),
       [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),

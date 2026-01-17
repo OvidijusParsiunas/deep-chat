@@ -1,7 +1,7 @@
 import {REQUEST_SETTINGS_ERROR, NO_FILE_ADDED_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {INVALID_ERROR_PREFIX, UPLOAD_AN_AUDIO_FILE} from '../utils/serviceConstants';
-import {AUDIO, ERROR, FILE, TEXT} from '../../utils/consts/messageConstants';
+import {AUDIO, DEEP_COPY, ERROR, FILE, TEXT} from '../../utils/consts/messageConstants';
 import {OPEN_AI_BASE_URL, OPEN_AI_KEY_HELP_URL} from './openAIConsts';
 import {OpenAI, OpenAISpeechToText} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -25,7 +25,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   private _service_url: string = OpenAISpeechToTextIO.AUDIO_TRANSCRIPTIONS_URL;
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection);
     const apiKey = directConnectionCopy?.openAI;
     super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, apiKey, {audio: {}});
     const config = directConnectionCopy?.openAI?.[AUDIO] as NonNullable<OpenAI['speechToText']>;
@@ -64,7 +64,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: OpenAISpeechToText, messages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const lastMessage = messages[messages.length - 1]?.[TEXT]?.trim();
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;

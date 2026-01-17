@@ -1,5 +1,6 @@
 import {CustomStyle, StatefulStyles} from '../../types/styles';
 import {CLICK, DEFAULT, HOVER} from '../consts/inputConstants';
+import {DEEP_COPY} from '../consts/messageConstants';
 import {GenericObject} from '../../types/object';
 import {STYLE} from '../consts/htmlConstants';
 
@@ -25,8 +26,8 @@ export class StyleUtils {
   // if you want to asdd default styling - use pure css classes
   public static processStateful(styles: StatefulStyles): StatefulStyles {
     const defaultStyle = styles[DEFAULT] || {};
-    const hoverStyle = Object.assign(JSON.parse(JSON.stringify(defaultStyle)), styles?.[HOVER]);
-    const clickStyle = Object.assign(JSON.parse(JSON.stringify(hoverStyle)), styles?.[CLICK]);
+    const hoverStyle = Object.assign(DEEP_COPY(defaultStyle), styles?.[HOVER]);
+    const clickStyle = Object.assign(DEEP_COPY(hoverStyle), styles?.[CLICK]);
     return {[DEFAULT]: defaultStyle, [HOVER]: hoverStyle, [CLICK]: clickStyle};
   }
 

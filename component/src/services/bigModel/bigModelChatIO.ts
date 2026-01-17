@@ -1,7 +1,7 @@
+import {AI, DEEP_COPY, ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, IMAGE_URL, OBJECT} from '../utils/serviceConstants';
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
 import {BigModelResult, BigModelNormalResult, BigModelStreamEvent} from '../../types/bigModelResult';
-import {AI, ERROR, FILE, IMAGE, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {MessageElements, Messages} from '../../views/chat/messages/messages';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -25,7 +25,7 @@ export class BigModelChatIO extends DirectServiceIO {
   permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
     super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.bigModel?.chat as BigModelChat;
@@ -46,7 +46,7 @@ export class BigModelChatIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: BigModelRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelRequestBody;
+    const bodyCopy = DEEP_COPY(body) as BigModelRequestBody;
     const processedMessages: BigModelMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: BigModelChatIO.getTextWFilesContent(message, BigModelChatIO.getFileContent),

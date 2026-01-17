@@ -1,5 +1,5 @@
+import {DEEP_COPY, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
-import {TEXT} from '../../utils/consts/messageConstants';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContentI[], limit: number) {
@@ -32,7 +32,7 @@ export class MessageLimitUtils {
     } else {
       messages = [messages[messages.length - 1]]; // last message
     }
-    messages = JSON.parse(JSON.stringify(messages));
+    messages = DEEP_COPY(messages);
     if (totalMessagesMaxCharLength === undefined) return messages;
     return MessageLimitUtils.getCharacterLimitMessages(messages, totalMessagesMaxCharLength);
   }

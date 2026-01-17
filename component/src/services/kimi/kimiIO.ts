@@ -1,7 +1,7 @@
 import {KIMI_BUILD_HEADERS, KIMI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/kimiUtils';
 import {KimiRequestBody, KimiMessage, KimiToolCall} from '../../types/kimiInternal';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -21,7 +21,7 @@ export class KimiIO extends DirectServiceIO {
   readonly _streamToolCalls?: KimiToolCall[];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.kimi as Kimi & APIKey;
     super(deepChat, KIMI_BUILD_KEY_VERIFICATION_DETAILS(), KIMI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -32,7 +32,7 @@ export class KimiIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: KimiRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as KimiRequestBody;
+    const bodyCopy = DEEP_COPY(body) as KimiRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: KimiIO.getTextWImagesContent(message),

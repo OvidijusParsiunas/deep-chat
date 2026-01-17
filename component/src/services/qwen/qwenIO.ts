@@ -1,7 +1,7 @@
 import {QWEN_BUILD_HEADERS, QWEN_BUILD_KEY_VERIFICATION_DETAILS} from './utils/qwenUtils';
 import {QwenRequestBody, QwenMessage, QwenToolCall} from '../../types/qwenInternal';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {INCORRECT_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -21,7 +21,7 @@ export class QwenIO extends DirectServiceIO {
   readonly _streamToolCalls?: QwenToolCall[];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.qwen as Qwen & APIKey;
     super(deepChat, QWEN_BUILD_KEY_VERIFICATION_DETAILS(), QWEN_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -32,7 +32,7 @@ export class QwenIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: QwenRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as QwenRequestBody;
+    const bodyCopy = DEEP_COPY(body) as QwenRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: QwenIO.getTextWImagesContent(message),

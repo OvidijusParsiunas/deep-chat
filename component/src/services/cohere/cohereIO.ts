@@ -1,6 +1,6 @@
 import {COHERE_BUILD_HEADERS, COHERE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/cohereUtils';
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -18,7 +18,7 @@ export class CohereIO extends DirectServiceIO {
   url = 'https://api.cohere.com/v2/chat';
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection);
     const config = directConnectionCopy.cohere;
     super(deepChat, COHERE_BUILD_KEY_VERIFICATION_DETAILS(), COHERE_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -36,7 +36,7 @@ export class CohereIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: Cohere, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const textMessages = pMessages.filter((message) => message[TEXT]);
     bodyCopy.messages = textMessages.map((message) => ({
       [ROLE]: DirectServiceIO.getRoleViaAI(message[ROLE]),

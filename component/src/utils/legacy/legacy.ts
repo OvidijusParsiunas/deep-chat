@@ -1,7 +1,7 @@
 import {MessageContent, MessageElementsStyles, MessageStyles, OnMessage} from '../../types/messages';
 import {INSIDE_END, INSIDE_START, OUTSIDE_END, OUTSIDE_START} from '../consts/inputConstants';
+import {DEEP_COPY, DOCS_BASE_URL, ERROR, FILE, FILES, TEXT} from '../consts/messageConstants';
 import {BrowserStorage} from '../../views/chat/messages/browserStorage/browserStorage';
-import {DOCS_BASE_URL, ERROR, FILE, FILES, TEXT} from '../consts/messageConstants';
 import {FilesServiceConfig} from '../../types/fileServiceConfigs';
 import {OBJECT} from '../../services/utils/serviceConstants';
 import {CLASS_LIST, STYLE} from '../consts/htmlConstants';
@@ -127,7 +127,7 @@ export class Legacy {
 
   public static processMessageStyles(messageStyles?: MessageStyles) {
     if (!messageStyles) return;
-    const messageStylesCp = JSON.parse(JSON.stringify(messageStyles));
+    const messageStylesCp = DEEP_COPY(messageStyles);
     const loading = messageStylesCp.loading as unknown as MessageElementsStyles;
     if (loading && (loading.outerContainer || loading.innerContainer || loading.bubble || loading.media)) {
       console[ERROR](`The loading message styles are defined using LoadingMessageStyles interface${SINCE_VERSION}2.1.0.`);

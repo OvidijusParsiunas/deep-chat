@@ -1,5 +1,5 @@
+import {AI, DEEP_COPY, HTML, MESSAGES_ID} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
-import {AI, HTML, MESSAGES_ID} from '../../../../utils/consts/messageConstants';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {MessageElementsStyles} from '../../../../types/messages';
 import {MessageElements, Messages} from '../messages';
@@ -25,7 +25,7 @@ export class LoadingHistory {
   private static apply(messages: MessagesBase, messageElements: MessageElements, styles?: MessageElementsStyles) {
     LoadingStyle.setRing(messageElements.bubbleElement, styles?.bubble);
     if (styles?.bubble) {
-      styles = JSON.parse(JSON.stringify(styles)) as MessageElementsStyles;
+      styles = DEEP_COPY(styles) as MessageElementsStyles;
       delete styles.bubble; // removing bubble styling as above uses it
     }
     messages.applyCustomStyles(messageElements, 'history', false, styles);

@@ -1,6 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
-import {FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {TogetherImagesRequestBody} from '../../types/togetherInternal';
 import {TogetherImagesResult} from '../../types/togetherResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -21,7 +21,7 @@ export class TogetherImagesIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.together?.[IMAGES] as TogetherImages & APIKey;
@@ -30,7 +30,7 @@ export class TogetherImagesIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: TogetherImagesRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherImagesRequestBody;
+    const bodyCopy = DEEP_COPY(body) as TogetherImagesRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
     bodyCopy.prompt = lastMessage?.[TEXT] || '';
     return bodyCopy;

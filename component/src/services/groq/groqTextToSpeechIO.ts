@@ -1,5 +1,5 @@
+import {AUDIO, DEEP_COPY, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {GROQ_BUILD_HEADERS, GROQ_BUILD_KEY_VERIFICATION_DETAILS} from './utils/groqUtils';
-import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {GroqTextToSpeechRequestBody} from '../../types/groqInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -19,7 +19,7 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, 'property'];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.groq;
     super(deepChat, GROQ_BUILD_KEY_VERIFICATION_DETAILS(), GROQ_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.groq?.textToSpeech as GroqTextToSpeech & APIKey;
@@ -30,7 +30,7 @@ export class GroqTextToSpeechIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: GroqTextToSpeechRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as GroqTextToSpeechRequestBody;
+    const bodyCopy = DEEP_COPY(body) as GroqTextToSpeechRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
     bodyCopy.input = lastMessage?.[TEXT] || '';
     return bodyCopy;

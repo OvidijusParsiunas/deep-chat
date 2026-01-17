@@ -1,5 +1,5 @@
 import {STABILITY_AI_BUILD_HEADERS, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/stabilityAIUtils';
-import {FILES, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, FILES, IMAGE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAI, StabilityAITextToImage} from '../../types/stabilityAI';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
@@ -16,7 +16,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
   textInputPlaceholderText = 'Describe an image';
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection);
     const apiKey = directConnectionCopy.stabilityAI;
     super(deepChat, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS(), STABILITY_AI_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.stabilityAI?.textToImage as NonNullable<StabilityAI['textToImage']>;
@@ -40,7 +40,7 @@ export class StabilityAITextToImageIO extends StabilityAIIO {
 
   private preprocessBody(body: StabilityAITextToImage, messages: MessageContentI[]) {
     const lastMessage = messages[messages.length - 1][TEXT];
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const prompt = {[TEXT]: lastMessage} as {weight?: number};
     if (this._imageWeight) prompt.weight = this._imageWeight;
     bodyCopy.text_prompts = [prompt];

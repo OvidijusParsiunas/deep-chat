@@ -1,7 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DEEPSEEK_BUILD_HEADERS, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS} from './utils/deepSeekUtils';
 import {DeepSeekRequestBody, DeepSeekMessage} from '../../types/deepSeekInternal';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -20,7 +20,7 @@ export class DeepSeekIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.deepSeek as DeepSeek & APIKey;
     super(deepChat, DEEPSEEK_BUILD_KEY_VERIFICATION_DETAILS(), DEEPSEEK_BUILD_HEADERS, config);
     if (typeof config === OBJECT) this.completeConfig(config);
@@ -31,7 +31,7 @@ export class DeepSeekIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: DeepSeekRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as DeepSeekRequestBody;
+    const bodyCopy = DEEP_COPY(body) as DeepSeekRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',

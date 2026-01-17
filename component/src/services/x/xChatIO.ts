@@ -1,6 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {X_BUILD_KEY_VERIFICATION_DETAILS, X_BUILD_HEADERS} from './utils/xUtils';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {XMessage, XRequestBody} from '../../types/xInternal';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -19,7 +19,7 @@ export class XChatIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.x;
     super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.x?.chat as XChat & APIKey;
@@ -29,7 +29,7 @@ export class XChatIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: XRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as XRequestBody;
+    const bodyCopy = DEEP_COPY(body) as XRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',

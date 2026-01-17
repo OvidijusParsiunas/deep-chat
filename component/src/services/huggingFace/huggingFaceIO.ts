@@ -1,12 +1,12 @@
 import {HUGGING_FACE_BUILD_HEADERS, HUGGING_FACE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/huggingFaceUtils';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
+import {DEEP_COPY, TEXT} from '../../utils/consts/messageConstants';
 import {AUTHORIZATION_HEADER} from '../utils/serviceConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HuggingFaceModel} from '../../types/huggingFace';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
-import {TEXT} from '../../utils/consts/messageConstants';
 import {ServiceFileTypes} from '../serviceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -38,10 +38,8 @@ export class HuggingFaceIO extends DirectServiceIO {
     }
   }
 
-  // prettier-ignore
   preprocessBody(body: HuggingFaceServiceConfigObj, messages: MessageContentI[], _?: File[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as (HuggingFaceServiceConfigObj
-      & {options?: {wait_for_model?: boolean}});
+    const bodyCopy = DEEP_COPY(body) as HuggingFaceServiceConfigObj & {options?: {wait_for_model?: boolean}};
     const mostRecentMessageText = messages[messages.length - 1][TEXT];
     if (!mostRecentMessageText) return;
     bodyCopy.options ??= {};

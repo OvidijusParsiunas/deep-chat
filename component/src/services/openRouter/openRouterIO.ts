@@ -1,5 +1,5 @@
+import {AUDIO, DEEP_COPY, ERROR, FILES, IMAGES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OPEN_ROUTER_BUILD_HEADERS, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openRouterUtils';
-import {AUDIO, ERROR, FILES, IMAGES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OpenRouterAPIResult, OpenRouterStreamEvent} from '../../types/openRouterResult';
 import {OpenRouter, OpenRouterChat} from '../../types/openRouter';
 import {DirectConnection} from '../../types/directConnection';
@@ -33,7 +33,7 @@ export class OpenRouterIO extends DirectServiceIO {
   readonly _streamToolCalls?: OpenRouterToolCall[];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.openRouter as OpenRouter & APIKey;
     super(deepChat, OPEN_ROUTER_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_ROUTER_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -76,7 +76,7 @@ export class OpenRouterIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: OpenRouterRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as OpenRouterRequestBody;
+    const bodyCopy = DEEP_COPY(body) as OpenRouterRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: OpenRouterIO.getContent(message),

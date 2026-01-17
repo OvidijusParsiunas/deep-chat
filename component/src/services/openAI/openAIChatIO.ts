@@ -1,5 +1,5 @@
+import {AI, DEEP_COPY, ERROR, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {COMPLETED, FUNCTION_CALL, GET, IMAGE_URL, INPUT_AUDIO, OBJECT, POST} from '../utils/serviceConstants';
-import {AI, ERROR, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {OpenAIFileContent, OpenAIConverseBodyInternal} from '../../types/openAIInternal';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -141,7 +141,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   }
 
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     pMessages = this.processMessages(pMessages);
     pMessages = this._useConversation ? [pMessages[pMessages.length - 1]] : pMessages;
     const processedMessages = pMessages.map((message) => ({
@@ -249,7 +249,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     if (processedResponse) return processedResponse;
 
     // For responses API, we need to include the original function calls in conversation history
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     if (bodyCp.input) {
       // Add original function calls to the conversation history which is required to prevent error based on this thread:
       // eslint-disable-next-line max-len

@@ -1,7 +1,7 @@
 import {PERPLEXITY_BUILD_HEADERS, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS} from './utils/perplexityUtils';
 import {PerplexityRequestBody, PerplexityMessage} from '../../types/perplexityInternal';
 import {AUTHENTICATION, INVALID_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {PerplexityResult} from '../../types/perplexityResult';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -20,7 +20,7 @@ export class PerplexityIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_ERROR_PREFIX, AUTHENTICATION, 'Permission denied'];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.perplexity as Perplexity & APIKey;
     super(deepChat, PERPLEXITY_BUILD_KEY_VERIFICATION_DETAILS(), PERPLEXITY_BUILD_HEADERS, config);
     if (typeof config === OBJECT) this.completeConfig(config);
@@ -29,7 +29,7 @@ export class PerplexityIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: PerplexityRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as PerplexityRequestBody;
+    const bodyCopy = DEEP_COPY(body) as PerplexityRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',

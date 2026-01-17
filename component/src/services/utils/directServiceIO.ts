@@ -1,4 +1,4 @@
-import {AI, ASSISTANT, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
+import {AI, ASSISTANT, DEEP_COPY, FILES, IMAGE, ROLE, SRC, TEXT, TYPE, USER} from '../../utils/consts/messageConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
@@ -268,7 +268,7 @@ export class DirectServiceIO extends BaseServiceIO {
     if (!tools.tool_calls || !prevBody || !functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });

@@ -1,6 +1,6 @@
 import {BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS, BIG_MODEL_BUILD_HEADERS} from './utils/bigModelUtils';
+import {DEEP_COPY, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {AUTHENTICATION_ERROR_PREFIX, AUTHORIZATION_H, OBJECT} from '../utils/serviceConstants';
-import {FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {BigModelImagesRequestBody} from '../../types/bigModelInternal';
 import {BigModelImagesResult} from '../../types/bigModelResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -21,7 +21,7 @@ export class BigModelImagesIO extends DirectServiceIO {
   permittedErrorPrefixes = [AUTHORIZATION_H, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.bigModel;
     super(deepChat, BIG_MODEL_BUILD_KEY_VERIFICATION_DETAILS(), BIG_MODEL_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.bigModel?.[IMAGES] as BigModelImages;
@@ -37,7 +37,7 @@ export class BigModelImagesIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: BigModelImagesRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as BigModelImagesRequestBody;
+    const bodyCopy = DEEP_COPY(body) as BigModelImagesRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
     bodyCopy.prompt = lastMessage?.[TEXT] || '';
     return bodyCopy;

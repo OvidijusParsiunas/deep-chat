@@ -1,8 +1,8 @@
 import {HiddenMessages as HiddenMessagesT, ScrollButton as ScrollButtonT} from '../../../types/scrollToBottom';
+import {DEEP_COPY, ONE, ZERO} from '../../../utils/consts/messageConstants';
 import {CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../utils/element/statefulEvents';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {ONE, ZERO} from '../../../utils/consts/messageConstants';
 import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../utils/element/styleUtils';
 import {StatefulStyles} from '../../../types/styles';
@@ -24,7 +24,7 @@ export class ScrollButton {
     if (hiddenMessages) {
       let config: HiddenMessagesT = {};
       if (typeof hiddenMessages === 'object') {
-        config = JSON.parse(JSON.stringify(hiddenMessages));
+        config = DEEP_COPY(hiddenMessages);
         config.onUpdate = hiddenMessages.onUpdate;
       }
       config.styles ??= {};
@@ -34,7 +34,7 @@ export class ScrollButton {
       this.io = this.initIntersectionObserver(this._messages.elementRef);
     }
     if (scrollButton) {
-      const config: ScrollButtonT = typeof scrollButton === 'object' ? JSON.parse(JSON.stringify(scrollButton)) : {};
+      const config: ScrollButtonT = typeof scrollButton === 'object' ? DEEP_COPY(scrollButton) : {};
       config.styles ??= {};
       config.styles.default = {borderRadius: '50%', width: '1.4rem', height: '1.4rem', ...config.styles.default};
       this.scrollButtonConfig = config;

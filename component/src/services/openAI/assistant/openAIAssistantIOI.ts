@@ -1,5 +1,5 @@
+import {ASSISTANT, DEEP_COPY, ERROR, FILES, IMAGES, ROLE, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {AssistantFunctionHandler, OpenAI, OpenAIAssistant, OpenAINewAssistant} from '../../../types/openAI';
-import {ASSISTANT, ERROR, FILES, IMAGES, ROLE, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {COMPLETED, GET, INCORRECT_ERROR_PREFIX, POST} from '../../utils/serviceConstants';
 import {FileMessageUtils} from '../../../views/chat/messages/utils/fileMessageUtils';
 import {MessageContentI, MessageToElements} from '../../../types/messagesInternal';
@@ -178,7 +178,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   }
 
   private createNewThreadMessages(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[], files?: UploadedFile[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const processedMessage = this.processMessage(pMessages, files);
     bodyCopy.thread = {messages: [processedMessage]};
     return bodyCopy;
@@ -219,7 +219,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
   private async createNewAssistant() {
     try {
       this.url = this.urlSegments.newAssistantUrl;
-      const result = await OPEN_AI_DIRECT_FETCH(this, JSON.parse(JSON.stringify(this._newAssistantDetails)), POST);
+      const result = await OPEN_AI_DIRECT_FETCH(this, DEEP_COPY(this._newAssistantDetails), POST);
       this._config.assistant_id = (result as OpenAINewAssistantResult).id;
       return this._config.assistant_id;
     } catch (e) {
@@ -258,7 +258,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
     if (this.sessionId) {
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
-      const runObj = await OPEN_AI_DIRECT_FETCH(this, JSON.parse(JSON.stringify(this.rawBody)), POST);
+      const runObj = await OPEN_AI_DIRECT_FETCH(this, DEEP_COPY(this.rawBody), POST);
       this.run_id = runObj.id;
     } else {
       this.sessionId = result.thread_id;
@@ -340,7 +340,7 @@ export class OpenAIAssistantIOI extends DirectServiceIO {
       this.asyncCallInProgress = true;
       // https://platform.openai.com/docs/api-reference/runs/createRun
       this.url = `${this.urlSegments.threadsPrefix}/${this.sessionId}/runs${this.urlSegments.threadsPosfix}`;
-      const newBody = JSON.parse(JSON.stringify(this.rawBody));
+      const newBody = DEEP_COPY(this.rawBody);
       this.createStreamRun(newBody);
     }
     return {[TEXT]: ''};

@@ -1,7 +1,7 @@
 import {DEFAULT, DISABLED} from '../../../../../utils/consts/inputConstants';
+import {DEEP_COPY, TEXT} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
-import {TEXT} from '../../../../../utils/consts/messageConstants';
 import {UNSET} from '../../../../../utils/consts/htmlConstants';
 import {ButtonStyles} from '../../../../../types/button';
 import {SubmitButton} from './submitButton';
@@ -18,7 +18,7 @@ export class SubmitButtonStateStyle {
 
   private static overwriteDefaultStyleWithSubmit(styles: SubmitButtonStyles, style: keyof SubmitButtonStyles) {
     if (!styles.submit) return;
-    const newStyle = JSON.parse(JSON.stringify(styles[style] || {})) as ButtonStyles;
+    const newStyle = DEEP_COPY(styles[style] || {}) as ButtonStyles;
     ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['container', DEFAULT]);
     ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, [TEXT, 'styles', DEFAULT]);
     ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['svg', 'styles', DEFAULT]);
@@ -38,7 +38,7 @@ export class SubmitButtonStateStyle {
   }
 
   public static process(submitButtonStyles?: SubmitButtonStyles) {
-    const styles = JSON.parse(JSON.stringify(submitButtonStyles || {})) as SubmitButtonStyles;
+    const styles = DEEP_COPY(submitButtonStyles || {}) as SubmitButtonStyles;
     SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'loading');
     SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'stop');
     if (submitButtonStyles?.alwaysEnabled) return styles;

@@ -1,4 +1,4 @@
-import {AI, ERROR, ROLE, TEXT, USER} from '../../utils/consts/messageConstants';
+import {AI, DEEP_COPY, ERROR, ROLE, TEXT, USER} from '../../utils/consts/messageConstants';
 import {HuggingFaceConversationResult} from '../../types/huggingFaceResult';
 import {HuggingFaceQuestionAnswerConfig} from '../../types/huggingFace';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -30,11 +30,8 @@ export class HuggingFaceConversationIO extends HuggingFaceIO {
     return {past_user_inputs, generated_responses, mostRecentMessageText};
   }
 
-  // prettier-ignore
   override preprocessBody(body: HuggingFaceQuestionAnswerConfig, messages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as HuggingFaceQuestionAnswerConfig & {
-      options?: {wait_for_model?: boolean};
-    };
+    const bodyCopy = DEEP_COPY(body) as HuggingFaceQuestionAnswerConfig & {options?: {wait_for_model?: boolean}};
     const processedMessagesDetails = this.processMessagesI(messages);
     if (!processedMessagesDetails) return;
     bodyCopy.options ??= {};

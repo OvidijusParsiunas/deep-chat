@@ -1,7 +1,7 @@
 import {CLICK, DEFAULT, HOVER} from '../../../../utils/consts/inputConstants';
+import {DEEP_COPY, TEXT} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
-import {TEXT} from '../../../../utils/consts/messageConstants';
 import {HTMLClassUtilities} from '../../../../types/html';
 import {StatefulStyles} from '../../../../types/styles';
 import {MessagesBase} from '../messagesBase';
@@ -71,7 +71,7 @@ export class HTMLDeepChatElements {
     }, []);
     const deepChatStyles = DEEP_CHAT_ELEMENTS[className].styles;
     if (deepChatStyles) {
-      const stylesCp = JSON.parse(JSON.stringify(deepChatStyles));
+      const stylesCp = DEEP_COPY(deepChatStyles);
       if (stylesCp[DEFAULT]) StyleUtils.overwriteDefaultWithAlreadyApplied(stylesCp, element as HTMLElement);
       customStyles.unshift(stylesCp); // add it to the front to be primary
     }

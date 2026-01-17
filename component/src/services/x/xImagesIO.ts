@@ -1,5 +1,5 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
-import {ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {DEEP_COPY, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {X_BUILD_HEADERS, X_BUILD_KEY_VERIFICATION_DETAILS} from './utils/xUtils';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -30,7 +30,7 @@ export class XImagesIO extends DirectServiceIO {
 
   private preprocessBody(body: XImages, messages: MessageContentI[]) {
     const lastMessage = messages[messages.length - 1][TEXT];
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }

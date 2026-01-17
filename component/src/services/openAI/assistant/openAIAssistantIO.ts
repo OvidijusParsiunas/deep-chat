@@ -1,7 +1,7 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from '../utils/openAIUtils';
+import {DEEP_COPY, FILES} from '../../../utils/consts/messageConstants';
 import {DirectConnection} from '../../../types/directConnection';
 import {Response as ResponseI} from '../../../types/response';
-import {FILES} from '../../../utils/consts/messageConstants';
 import {OpenAIAssistantIOI} from './openAIAssistantIOI';
 import {OpenAIAssistant} from '../../../types/openAI';
 import {OBJECT} from '../../utils/serviceConstants';
@@ -12,7 +12,7 @@ export class OpenAIAssistantIO extends OpenAIAssistantIOI {
   fetchHistory?: () => Promise<ResponseI[]>;
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.openAI;
     const config = directConnectionCopy.openAI?.assistant;
     const urlSegments = OpenAIAssistantIO.buildUrlSegments(config);

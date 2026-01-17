@@ -1,5 +1,5 @@
+import {DEEP_COPY, ERROR, FILES} from '../../utils/consts/messageConstants';
 import {OpenAIAssistantIOI} from '../openAI/assistant/openAIAssistantIOI';
-import {ERROR, FILES} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {OpenAIAssistant} from '../../types/openAI';
 import {OBJECT} from '../utils/serviceConstants';
@@ -22,7 +22,7 @@ export class AzureOpenAIAssistantIO extends OpenAIAssistantIOI {
   isTextInputDisabled = false;
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.azure;
     const config = directConnectionCopy.azure?.openAI;
     const urlDetails = config?.urlDetails || ({} as AzureOpenAI['urlDetails']);

@@ -1,7 +1,7 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
 import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
-import {AI, ASSISTANT, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {AI, ASSISTANT, DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -20,7 +20,7 @@ export class TogetherChatIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.together?.chat as TogetherChat & APIKey;
@@ -30,7 +30,7 @@ export class TogetherChatIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: TogetherRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherRequestBody;
+    const bodyCopy = DEEP_COPY(body) as TogetherRequestBody;
     const processedMessages: TogetherMessage[] = this.processMessages(pMessages).map((message) => {
       return {
         content: message[TEXT] || '',

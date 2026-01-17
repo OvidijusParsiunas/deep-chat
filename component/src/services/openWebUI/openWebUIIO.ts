@@ -1,8 +1,8 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
 import {OpenWebUIConverseResult, OpenWebUIStreamResult, OpenWebUIToolCall} from '../../types/openWebUIResult';
 import {OPEN_WEB_UI_BUILD_HEADERS, OPEN_WEB_UI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openWebUIUtils';
+import {ASSISTANT, DEEP_COPY, ERROR, FILES, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {OpenWebUIConverseBodyInternal, OpenWebUIMessage} from '../../types/openWebUIInternal';
-import {ASSISTANT, ERROR, FILES, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
@@ -20,7 +20,7 @@ export class OpenWebUIIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Error'];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.openWebUI as OpenWebUIChat & APIKey;
     super(deepChat, OPEN_WEB_UI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_WEB_UI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -36,7 +36,7 @@ export class OpenWebUIIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: OpenWebUIConverseBodyInternal, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
 
     const processedMessages = this.processMessages(pMessages).map((message) => {
       const openWebUIMessage: OpenWebUIMessage = {
@@ -113,7 +113,7 @@ export class OpenWebUIIO extends DirectServiceIO {
     if (!tools.tool_calls || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: call.function.arguments};
     });

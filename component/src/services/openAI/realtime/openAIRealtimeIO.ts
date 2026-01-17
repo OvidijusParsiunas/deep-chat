@@ -39,6 +39,7 @@ import {
 import {
   DOCS_BASE_URL,
   MICROPHONE,
+  DEEP_COPY,
   AUDIO,
   ERROR,
   IMAGE,
@@ -79,7 +80,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private static readonly UNAVAILABLE = 'deep-chat-openai-realtime-button-unavailable';
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const key = OpenAIRealtimeIO.getKey(deepChat);
     super(deepChat, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS(), OPEN_AI_BUILD_HEADERS, {key});
     const config = directConnectionCopy.openAI?.realtime as OpenAIRealtime;
@@ -226,13 +227,13 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private static buildAvatarConfig(config?: OpenAIRealtime) {
-    const newConfig = typeof config === 'object' && config.avatar ? JSON.parse(JSON.stringify(config.avatar)) : {};
+    const newConfig = typeof config === 'object' && config.avatar ? DEEP_COPY(config.avatar) : {};
     newConfig.maxScale = newConfig.maxScale && newConfig.maxScale >= 1 ? newConfig.maxScale : 2.5;
     return newConfig;
   }
 
   private static buildButtonsConfig(config?: OpenAIRealtime) {
-    const newConfig = typeof config === 'object' && config.buttons ? JSON.parse(JSON.stringify(config.buttons)) : {};
+    const newConfig = typeof config === 'object' && config.buttons ? DEEP_COPY(config.buttons) : {};
     if (!newConfig[MICROPHONE]?.[DEFAULT]?.[TEXT]?.content) {
       newConfig[MICROPHONE] ??= {};
       newConfig[MICROPHONE][DEFAULT] ??= {};

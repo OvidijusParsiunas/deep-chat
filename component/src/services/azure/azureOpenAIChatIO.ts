@@ -1,6 +1,6 @@
+import {DEEP_COPY, ERROR} from '../../utils/consts/messageConstants';
 import {AzureOpenAI, AzureOpenAIChat} from '../../types/azure';
 import {DirectConnection} from '../../types/directConnection';
-import {ERROR} from '../../utils/consts/messageConstants';
 import {OpenAIChatIO} from '../openAI/openAIChatIO';
 import {OBJECT} from '../utils/serviceConstants';
 import {DeepChat} from '../../deepChat';
@@ -16,7 +16,7 @@ export class AzureOpenAIChatIO extends OpenAIChatIO {
   isTextInputDisabled = false;
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const key = directConnectionCopy.azure;
     const urlDetails = directConnectionCopy.azure?.openAI?.urlDetails || ({} as AzureOpenAI['urlDetails']);
     const config = directConnectionCopy.azure?.openAI?.chat as AzureOpenAI['chat'];

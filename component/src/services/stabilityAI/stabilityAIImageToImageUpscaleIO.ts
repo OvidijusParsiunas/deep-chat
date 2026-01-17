@@ -1,7 +1,7 @@
 import {STABILITY_AI_BUILD_HEADERS, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/stabilityAIUtils';
 import {REQUEST_SETTINGS_ERROR, IMAGE_NOT_FOUND_ERROR} from '../../utils/errorMessages/errorMessages';
+import {DEEP_COPY, FILES, IMAGE, SRC, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAI, StabilityAIImageToImageUpscale} from '../../types/stabilityAI';
-import {FILES, IMAGE, SRC, TYPE} from '../../utils/consts/messageConstants';
 import {StabilityAITextToImageResult} from '../../types/stabilityAIResult';
 import {BASE_64_PREFIX} from '../../utils/element/imageUtils';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -18,7 +18,7 @@ export class StabilityAIImageToImageUpscaleIO extends StabilityAIIO {
   textInputPlaceholderText = 'Describe image changes';
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCp = JSON.parse(JSON.stringify(deepChat.directConnection));
+    const directConnectionCp = DEEP_COPY(deepChat.directConnection);
     const apiKey = directConnectionCp?.stabilityAI;
     const defaultFile = {images: {files: {acceptedFormats: '.png', maxNumberOfFiles: 1}}};
     super(deepChat, STABILITY_AI_BUILD_KEY_VERIFICATION_DETAILS(), STABILITY_AI_BUILD_HEADERS, apiKey, defaultFile);

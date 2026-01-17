@@ -1,4 +1,4 @@
-import {CAMERA, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {CAMERA, DEEP_COPY, ERROR, FILES, IMAGE, IMAGES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
 import {OpenAI, OpenAIImagesDalle2, OpenAIImagesDalle3} from '../../types/openAI';
 import {REQUEST_SETTINGS_ERROR} from '../../utils/errorMessages/errorMessages';
@@ -55,7 +55,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: OpenAIImagesDalle, lastMessage?: string) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }

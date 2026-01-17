@@ -1,4 +1,4 @@
-import {AI, DOCS_BASE_URL, ERROR, ROLE, SERVICE, TEXT, USER} from '../utils/consts/messageConstants';
+import {AI, DEEP_COPY, DOCS_BASE_URL, ERROR, ROLE, SERVICE, TEXT, USER} from '../utils/consts/messageConstants';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
 import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {IntroMessage, MessageContent} from '../types/messages';
@@ -145,7 +145,7 @@ export class WebModel extends BaseServiceIO {
   private getConfig() {
     let model = WebModel.DEFAULT_MODEL;
     if (this._webModel.model) model = this._webModel.model;
-    const appConfig = JSON.parse(JSON.stringify(config)) as AppConfig;
+    const appConfig = DEEP_COPY(config) as AppConfig;
     if (this._webModel.urls) {
       const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
       if (modelConfig) {

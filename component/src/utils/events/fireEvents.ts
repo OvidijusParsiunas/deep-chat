@@ -1,12 +1,12 @@
 import {FileMessageUtils} from '../../views/chat/messages/utils/fileMessageUtils';
+import {DEEP_COPY, ERROR, FILES} from '../consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
-import {ERROR, FILES} from '../consts/messageConstants';
 import {DeepChat} from '../../deepChat';
 import {Legacy} from '../legacy/legacy';
 
 export class FireEvents {
   public static onMessage(deepChat: DeepChat, message: MessageContentI, isHistory: boolean) {
-    const updateBody = JSON.parse(JSON.stringify({message, isHistory, isInitial: isHistory}));
+    const updateBody = DEEP_COPY({message, isHistory, isInitial: isHistory});
     FileMessageUtils.reAddFileRefToObject(message, updateBody.message);
     deepChat.onMessage?.(updateBody);
     deepChat.dispatchEvent(new CustomEvent('message', {detail: updateBody}));
@@ -24,7 +24,7 @@ export class FireEvents {
   }
 
   public static onInput(deepChat: DeepChat, content: {text?: string; files?: File[]}, isUser: boolean) {
-    const updateBody = JSON.parse(JSON.stringify({content, isUser}));
+    const updateBody = DEEP_COPY({content, isUser});
     if (content[FILES]) {
       FileMessageUtils.reAddFileRefToObject({[FILES]: content[FILES]?.map((file) => ({ref: file}))}, updateBody.content);
     }

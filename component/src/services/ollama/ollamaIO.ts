@@ -1,5 +1,5 @@
 import {DEFINE_FUNCTION_HANDLER, FUNCTION_TOOL_RESPONSE_STRUCTURE_ERROR} from '../../utils/errorMessages/errorMessages';
-import {ASSISTANT, ERROR, FILES, IMAGE, IMAGES, ROLE, SRC, TEXT} from '../../utils/consts/messageConstants';
+import {ASSISTANT, DEEP_COPY, ERROR, FILES, IMAGE, IMAGES, ROLE, SRC, TEXT} from '../../utils/consts/messageConstants';
 import {OllamaConverseBodyInternal, OllamaToolCall, OllamaMessage} from '../../types/ollamaInternal';
 import {OLLAMA_BUILD_HEADERS, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS} from './utils/ollamaUtils';
 import {OllamaConverseResult, OllamaStreamResult} from '../../types/ollamaResult';
@@ -21,7 +21,7 @@ export class OllamaIO extends DirectServiceIO {
   permittedErrorPrefixes = ['Error'];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     super(deepChat, OLLAMA_BUILD_KEY_VERIFICATION_DETAILS(), OLLAMA_BUILD_HEADERS, {key: 'placeholder'});
     const config = directConnectionCopy.ollama as OllamaChat;
     if (typeof config === OBJECT) {
@@ -43,7 +43,7 @@ export class OllamaIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: OllamaConverseBodyInternal, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const processedMessages = this.processMessages(pMessages).map((message) => {
       const ollamaMessage: OllamaMessage = {
         content: message[TEXT] || '',
@@ -92,7 +92,7 @@ export class OllamaIO extends DirectServiceIO {
     if (!tools.tool_calls || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     const functions = tools.tool_calls.map((call) => {
       return {name: call.function.name, arguments: JSON.stringify(call.function.arguments)};
     });

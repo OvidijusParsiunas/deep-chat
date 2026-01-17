@@ -1,6 +1,6 @@
 import {OPEN_AI_BUILD_HEADERS, OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/openAIUtils';
+import {AUDIO, DEEP_COPY, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {INCORRECT_ERROR_PREFIX, INPUT_AUDIO, OBJECT} from '../utils/serviceConstants';
-import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -19,7 +19,7 @@ export abstract class OpenAIBaseIO extends DirectServiceIO {
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetailsArg?: KeyVerificationDetails,
       buildHeadersFuncArg?: BuildHeadersFunc, apiKeyArg?: APIKey, configArg?: true | OpenAIChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const keyVerificationDetails = keyVerificationDetailsArg || OPEN_AI_BUILD_KEY_VERIFICATION_DETAILS();
     const buildHeadersFunc = buildHeadersFuncArg || OPEN_AI_BUILD_HEADERS;
     const apiKey = apiKeyArg || directConnectionCopy.openAI;

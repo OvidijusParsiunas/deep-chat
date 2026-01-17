@@ -1,6 +1,6 @@
 import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
-import {AUDIO, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
+import {AUDIO, DEEP_COPY, FILES, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {TogetherTextToSpeechRequestBody} from '../../types/togetherInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
@@ -19,7 +19,7 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const apiKey = directConnectionCopy.together;
     super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
     const config = directConnectionCopy.together?.textToSpeech as TogetherTextToSpeech & APIKey;
@@ -29,7 +29,7 @@ export class TogetherTextToSpeechIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: TogetherTextToSpeechRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body)) as TogetherTextToSpeechRequestBody;
+    const bodyCopy = DEEP_COPY(body) as TogetherTextToSpeechRequestBody;
     const lastMessage = pMessages[pMessages.length - 1];
     bodyCopy.input = lastMessage?.[TEXT] || '';
     return bodyCopy;

@@ -1,5 +1,5 @@
+import {DEEP_COPY, ERROR, FILES, ROLE, SRC, TEXT, USER} from '../../utils/consts/messageConstants';
 import {GEMINI_BUILD_HEADERS, GEMINI_BUILD_KEY_VERIFICATION_DETAILS} from './utils/geminiUtils';
-import {ERROR, FILES, ROLE, SRC, TEXT, USER} from '../../utils/consts/messageConstants';
 import {GeminiContent, GeminiRequestBody} from '../../types/geminiInternal';
 import {GeminiGenerateContentResult} from '../../types/geminiResult';
 import {DirectConnection} from '../../types/directConnection';
@@ -31,7 +31,7 @@ export class GeminiIO extends DirectServiceIO {
   permittedErrorPrefixes = ['API_KEY_INVALID'];
 
   constructor(deepChat: DeepChat) {
-    const directConnectionCopy = JSON.parse(JSON.stringify(deepChat.directConnection)) as DirectConnection;
+    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.gemini as Gemini & APIKey;
     super(deepChat, GEMINI_BUILD_KEY_VERIFICATION_DETAILS(), GEMINI_BUILD_HEADERS, config);
     if (typeof config === OBJECT) {
@@ -77,7 +77,7 @@ export class GeminiIO extends DirectServiceIO {
   }
 
   private preprocessBody(body: GeminiRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = JSON.parse(JSON.stringify(body));
+    const bodyCopy = DEEP_COPY(body);
     const processedMessages = this.processMessages(pMessages).map((message) => GeminiIO.getContent(message));
     bodyCopy.contents = processedMessages;
     if (this.systemMessage) bodyCopy.systemInstruction = {parts: [{[TEXT]: this.systemMessage}]};
@@ -127,7 +127,7 @@ export class GeminiIO extends DirectServiceIO {
     if (!functionCalls || !prevBody || !this.functionHandler) {
       throw Error(DEFINE_FUNCTION_HANDLER);
     }
-    const bodyCp = JSON.parse(JSON.stringify(prevBody));
+    const bodyCp = DEEP_COPY(prevBody);
     const functions = functionCalls.map((call) => {
       return {name: call.name, arguments: JSON.stringify(call.args)};
     });
