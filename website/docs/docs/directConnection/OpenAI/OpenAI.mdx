@@ -823,21 +823,25 @@ chatElementRef.directConnection = {
       tools: [
         {
           type: 'function',
-          function: {
-            name: 'get_current_weather',
-            description: 'Get the current weather in a given location',
-            parameters: {
-              type: 'object',
-              properties: {
-                location: {
-                  type: 'string',
-                  description: 'The city and state, e.g. San Francisco, CA',
-                },
-                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'City and country e.g. Bogotá, Colombia',
               },
-              required: ['location'],
+              units: {
+                type: 'string',
+                enum: ['celsius', 'fahrenheit'],
+                description: 'Units the temperature will be returned in.',
+              },
             },
+            required: ['location', 'units'],
+            additionalProperties: false,
           },
+          strict: true,
         },
       ],
       function_handler: (functionsDetails) => {
@@ -865,21 +869,25 @@ chatElementRef.directConnection = {
       tools: [
         {
           type: 'function',
-          function: {
-            name: 'get_current_weather',
-            description: 'Get the current weather in a given location',
-            parameters: {
-              type: 'object',
-              properties: {
-                location: {
-                  type: 'string',
-                  description: 'The city and state, e.g. San Francisco, CA',
-                },
-                unit: {type: 'string', enum: ['celsius', 'fahrenheit']},
+          name: 'get_current_weather',
+          description: 'Get the current weather in a given location',
+          parameters: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'string',
+                description: 'City and country e.g. Bogotá, Colombia',
               },
-              required: ['location'],
+              units: {
+                type: 'string',
+                enum: ['celsius', 'fahrenheit'],
+                description: 'Units the temperature will be returned in.',
+              },
             },
+            required: ['location', 'units'],
+            additionalProperties: false,
           },
+          strict: true,
         },
       ],
       function_handler: (functionsDetails) => {
@@ -914,19 +922,20 @@ function getCurrentWeather(location) {
 #### `Tools` {#Tools}
 
 - Type: \{<br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function" | "object"`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `function:` \{`name: string`, `description?: string`, [`parameters: JSONSchema`](https://json-schema.org/learn/miscellaneous-examples)\} <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`parameters: JSONSchema`](https://json-schema.org/learn/miscellaneous-examples), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `strict: true` <br />
   \}[]
 
 An array describing tools that the model may call. <br />
+`type` should be set to _"function"_. <br />
 `name` is the name of a function. <br />
 `description` is used by the model to understand what the function does and when it should be called. <br />
 `parameters` are arguments that the function accepts defined in a [JSON Schema](https://json-schema.org/learn/miscellaneous-examples) (see example above). <br />
+`strict` enables strict mode for function calling. <br />
 Checkout the following [guide](https://platform.openai.com/docs/guides/function-calling) for more about function calling.
-
-:::tip
-If your function accepts arguments - the `type` property should be set to _"function"_, otherwise use the following object `{"type": "object", "properties": {}}`.
-:::
 
 <LineBreak></LineBreak>
 
