@@ -44,5 +44,5 @@ export interface DirectConnection {
   perplexity?: Perplexity & APIKey;
   ollama?: Ollama;
   openWebUI?: OpenWebUI & APIKey;
-  dify?: Dify; 
+  dify?: Dify & APIKey;
 }
