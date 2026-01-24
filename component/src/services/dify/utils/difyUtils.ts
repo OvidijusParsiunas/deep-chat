@@ -1,19 +1,54 @@
-import {DifyBlockingResponse, DifyFileInput, DifyStreamEvent, DifyUploadConfig} from '../../../types/dify';
+import {
+  DifyBlockingResponse,
+  DifyFileInput,
+  DifyFileType,
+  DifyRequestBody,
+  DifyStreamEvent,
+  DifyStreamPayload,
+  DifyUploadConfig,
+  PreprocessBodyParams,
+  UploadResponse,
+} from '../../../types/dify';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {MessageContentI} from '../../../types/messagesInternal';
 import {Response as ResponseI} from '../../../types/response';
-import { ERROR } from '../../../utils/consts/messageConstants';
+import {ERROR} from '../../../utils/consts/messageConstants';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {APPLICATION_JSON, BEARER_PREFIX, CONTENT_TYPE_H_KEY} from '../../utils/serviceConstants';
+
+const IMAGE_MIME_PREFIX = 'image/';
+const SSE_DATA_PREFIX = 'data:';
+const DEFAULT_QUERY = ' ';
+
+const isImageFile = (mimeType: string): boolean => mimeType.startsWith(IMAGE_MIME_PREFIX);
+
+const createDifyFileInput = (fileId: string, type: DifyFileType): DifyFileInput => ({
+  type,
+  transfer_method: 'local_file',
+  upload_file_id: fileId,
+});
+
+const parseSSEEventBlock = (eventBlock: string): DifyStreamPayload | null => {
+  const trimmedBlock = eventBlock.trim();
+  if (!trimmedBlock.startsWith(SSE_DATA_PREFIX)) return null;
+
+  const jsonStr = trimmedBlock.replace(/^data:\s*/, '').trim();
+  if (!jsonStr) return null;
+
+  try {
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.warn('[Dify] Error parsing stream chunk:', jsonStr, e);
+    return null;
+  }
+};
 
 export async function uploadFileToDify(file: File, config: DifyUploadConfig): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('user', config.user);
 
-  // Remove Content-Type to let browser set boundary for FormData
-  const requestHeaders = {...config.headers};
-  delete requestHeaders[CONTENT_TYPE_H_KEY];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {[CONTENT_TYPE_H_KEY]: _, ...requestHeaders} = config.headers;
 
   try {
     const response = await fetch(config.url, {
@@ -24,31 +59,32 @@ export async function uploadFileToDify(file: File, config: DifyUploadConfig): Pr
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Upload failed with status ${response.status}: ${errorText}`);
+      throw new Error(`[Dify] Upload failed (${response.status}): ${errorText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as UploadResponse;
+
+    if (!data.id) {
+      throw new Error('[Dify] Upload response missing file ID');
+    }
+
     return data.id;
-  } catch (e) {
-    console[ERROR]('[Dify] File upload network error:');
-    console[ERROR](e);
-    throw e;
+  } catch (error) {
+    console[ERROR]('[Dify] File upload error:', error);
+    throw error;
   }
 }
 
 export async function uploadFilesToDify(files: File[], config: DifyUploadConfig): Promise<DifyFileInput[]> {
-  const uploadPromises = files.map(async (file) => {
+  if (files.length === 0) return [];
+
+  const uploadPromises = files.map(async (file): Promise<DifyFileInput | null> => {
     try {
       const fileId = await uploadFileToDify(file, config);
-
-      const type = file.type.startsWith('image/') ? 'image' : 'file';
-
-      return {
-        type: type,
-        transfer_method: 'local_file',
-        upload_file_id: fileId,
-      } as DifyFileInput;
-    } catch (_e) {
+      const fileType = isImageFile(file.type) ? 'image' : 'file';
+      return createDifyFileInput(fileId, fileType);
+    } catch (error) {
+      console.warn(`[Dify] Failed to upload file: ${file.name}`, error);
       return null;
     }
   });
@@ -56,8 +92,9 @@ export async function uploadFilesToDify(files: File[], config: DifyUploadConfig)
   const results = await Promise.all(uploadPromises);
   const successfulUploads = results.filter((item): item is DifyFileInput => item !== null);
 
-  if (successfulUploads.length !== files.length) {
-    console.warn(`[Dify] Only ${successfulUploads.length}/${files.length} files uploaded successfully.`);
+  if (successfulUploads.length < files.length) {
+    const failedCount = files.length - successfulUploads.length;
+    console.warn(`[Dify] ${failedCount}/${files.length} files failed to upload`);
   }
 
   return successfulUploads;
@@ -70,18 +107,52 @@ export function parseDifyBlockingResponse(
   if (result.conversation_id) {
     onConversationIdUpdate(result.conversation_id);
   }
-  // Check for error in response body
+
   if (result.code && result.message && !result.answer) {
     return {error: result.message};
   }
+
   return {text: result.answer || ''};
 }
 
-/**
- * Parse streaming response (SSE)
- * Note: Since DirectServiceIO passes a Blob (completed request), this parses the
- * accumulated SSE events.
- */
+const processStreamEvent = (
+  payload: DifyStreamPayload,
+  state: {fullAnswer: string; conversationIdSet: boolean; errorMessage: string},
+  onConversationIdUpdate: (id: string) => void
+): void => {
+  if (!state.conversationIdSet && payload.conversation_id) {
+    onConversationIdUpdate(payload.conversation_id);
+    state.conversationIdSet = true;
+  }
+
+  switch (payload.event) {
+    case DifyStreamEvent.MESSAGE:
+    case DifyStreamEvent.AGENT_MESSAGE:
+      state.fullAnswer += payload.answer || '';
+      break;
+
+    case DifyStreamEvent.WORKFLOW_FINISHED:
+      if (!state.fullAnswer && payload.data?.outputs?.answer) {
+        state.fullAnswer = payload.data.outputs.answer;
+      }
+      break;
+
+    case DifyStreamEvent.ERROR:
+      console[ERROR]('[Dify] API Error Event:', payload);
+      state.errorMessage = payload.message || 'Unknown Dify API Error';
+      break;
+
+    case DifyStreamEvent.PING:
+    case DifyStreamEvent.AGENT_THOUGHT:
+    case DifyStreamEvent.MESSAGE_END:
+    case DifyStreamEvent.MESSAGE_REPLACE:
+      break;
+
+    default:
+      break;
+  }
+};
+
 export async function parseDifyStreamingResponse(
   result: Blob,
   onConversationIdUpdate: (id: string) => void
@@ -89,63 +160,30 @@ export async function parseDifyStreamingResponse(
   const text = await result.text();
   const events = text.split(/\r?\n\r?\n/);
 
-  let fullAnswer = '';
-  let conversationIdSet = false;
-  let errorMessage = '';
+  const state = {
+    fullAnswer: '',
+    conversationIdSet: false,
+    errorMessage: '',
+  };
 
   for (const eventBlock of events) {
-    const trimmedBlock = eventBlock.trim();
-    if (!trimmedBlock.startsWith('data:')) continue;
+    const payload = parseSSEEventBlock(eventBlock);
+    if (!payload) continue;
 
-    const jsonStr = trimmedBlock.replace(/^data:\s*/, '').trim();
-    if (!jsonStr) continue;
-
-    try {
-      const payload = JSON.parse(jsonStr);
-
-      if (!conversationIdSet && payload.conversation_id) {
-        onConversationIdUpdate(payload.conversation_id);
-        conversationIdSet = true;
-      }
-
-      switch (payload.event) {
-        case DifyStreamEvent.MESSAGE:
-        case DifyStreamEvent.AGENT_MESSAGE:
-          fullAnswer += payload.answer || '';
-          break;
-
-        case DifyStreamEvent.WORKFLOW_FINISHED:
-          if (!fullAnswer && payload.data?.outputs?.answer) {
-            fullAnswer = payload.data.outputs.answer;
-          }
-          break;
-
-        case DifyStreamEvent.ERROR:
-          console[ERROR]('[Dify API Error Event]', payload);
-          errorMessage = payload.message || 'Unknown Dify API Error';
-          break;
-
-        case DifyStreamEvent.PING:
-          break;
-      }
-    } catch (e) {
-      console.warn('Error parsing Dify stream chunk:', jsonStr, e);
-    }
+    processStreamEvent(payload, state, onConversationIdUpdate);
   }
 
-  if (errorMessage) {
-    return {error: errorMessage};
+  if (state.errorMessage) {
+    return {error: state.errorMessage};
   }
 
-  return {text: fullAnswer};
+  return {text: state.fullAnswer};
 }
 
-export const DIFY_BUILD_HEADERS = (key: string) => {
-  return {
-    Authorization: `${BEARER_PREFIX}${key}`,
-    [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
-  };
-};
+export const DIFY_BUILD_HEADERS = (key: string): Record<string, string> => ({
+  Authorization: `${BEARER_PREFIX}${key}`,
+  [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
+});
 
 export const DIFY_BUILD_KEY_VERIFICATION_DETAILS = (baseUrl: string): KeyVerificationDetails => {
   return BUILD_KEY_VERIFICATION_DETAILS(`${baseUrl}/parameters`, 'GET', (result: object): boolean => {
@@ -160,23 +198,24 @@ export const preprocessBody = ({
   user,
   mode,
   inputs,
-}: {
-  msgs: MessageContentI[];
-  files?: DifyFileInput[];
-  conversationId: string;
-  user: string;
-  mode: string;
-  inputs: Record<string, unknown>;
-}) => {
+}: PreprocessBodyParams): DifyRequestBody => {
   const lastMessage = msgs[msgs.length - 1];
-  const query = lastMessage?.text || ' ';
+  const query = lastMessage?.text || DEFAULT_QUERY;
 
-  return {
-    inputs: inputs,
+  const body: DifyRequestBody = {
+    inputs,
     query,
     response_mode: mode,
-    user: user,
-    ...(conversationId ? {conversation_id: conversationId} : {}),
-    ...(files && files.length > 0 ? {files} : {}),
+    user,
   };
+
+  if (conversationId) {
+    body.conversation_id = conversationId;
+  }
+
+  if (files && files.length > 0) {
+    body.files = files;
+  }
+
+  return body;
 };

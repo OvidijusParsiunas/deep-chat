@@ -1,3 +1,5 @@
+import {MessageContentI} from '../types/messagesInternal';
+
 export interface DifyChat {
   inputs?: Record<string, unknown>;
   user?: string;
@@ -17,8 +19,22 @@ export interface DifyBlockingResponse {
   message?: string;
 }
 
+export interface DifyStreamPayload {
+  event: DifyStreamEvent;
+  answer?: string;
+  conversation_id?: string;
+  message?: string;
+  data?: {
+    outputs?: {
+      answer?: string;
+    };
+  };
+}
+
+export type DifyFileType = 'image' | 'document' | 'audio' | 'video' | 'file';
+
 export interface DifyFileInput {
-  type: 'image' | 'document' | 'audio' | 'video';
+  type: DifyFileType;
   transfer_method: 'local_file' | 'remote_url';
   upload_file_id: string;
 }
@@ -29,9 +45,9 @@ export enum DifyResponseMode {
 }
 
 export enum DifyStreamEvent {
-  MESSAGE = 'message', // Standard text chunk
-  AGENT_MESSAGE = 'agent_message', // Text chunk when using Agent mode
-  AGENT_THOUGHT = 'agent_thought', // Reasoning steps (COT)
+  MESSAGE = 'message',
+  AGENT_MESSAGE = 'agent_message',
+  AGENT_THOUGHT = 'agent_thought',
   MESSAGE_END = 'message_end',
   MESSAGE_REPLACE = 'message_replace',
   WORKFLOW_FINISHED = 'workflow_finished',
@@ -43,4 +59,26 @@ export interface DifyUploadConfig {
   url: string;
   user: string;
   headers: Record<string, string>;
+}
+
+export interface UploadResponse {
+  id: string;
+}
+
+export interface PreprocessBodyParams {
+  msgs: MessageContentI[];
+  files?: DifyFileInput[];
+  conversationId: string;
+  user: string;
+  mode: string;
+  inputs: Record<string, unknown>;
+}
+
+export interface DifyRequestBody {
+  inputs: Record<string, unknown>;
+  query: string;
+  response_mode: string;
+  user: string;
+  conversation_id?: string;
+  files?: DifyFileInput[];
 }

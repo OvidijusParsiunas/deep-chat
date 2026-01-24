@@ -65,8 +65,7 @@ export class DifyIO extends DirectServiceIO {
           headers: this.connectSettings.headers as Record<string, string>,
         });
       } catch (e) {
-        console[ERROR]('Dify file upload error:');
-        console[ERROR](e);
+        console[ERROR]('[Dify] File upload error:', e);
         throw new Error('Failed to upload files to Dify.');
       }
     }
