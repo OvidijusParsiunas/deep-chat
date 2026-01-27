@@ -177,9 +177,10 @@ export class MessageStream {
   }
 
   public finaliseStreamedMessage(hasStreamEnded = true) {
-    if (this._endStreamAfterOperation || !this._message) return;
+    if (this._endStreamAfterOperation) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements) throw Error(NO_VALID_STREAM_EVENTS_SENT);
+    if (!this._message) return;
     if (!this._elements.bubbleElement?.[CLASS_LIST].contains(MessageStream.MESSAGE_CLASS)) return;
     if (this._streamType === TEXT) {
       if (this._messages.textToSpeech) TextToSpeech.speak(this._message[TEXT] || '', this._messages.textToSpeech);
