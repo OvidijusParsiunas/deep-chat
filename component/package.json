@@ -6,6 +6,7 @@
   "module": "./dist/deepChat.js",
   "type": "module",
   "scripts": {
+    "prepack": "cp ../LICENSE .",
     "start": "vite",
     "build": "vite build",
     "build:watch": "vite build --watch",
@@ -67,7 +68,8 @@
   "files": [
     "dist/**/*",
     "assets/**/*",
-    "custom-elements.json"
+    "custom-elements.json",
+    "LICENSE"
   ],
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
