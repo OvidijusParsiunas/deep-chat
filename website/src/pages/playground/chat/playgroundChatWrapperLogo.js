@@ -14,6 +14,7 @@ import cohereLogo from '/img/cohereLogo.png';
 import ollamaLogo from '/img/ollamaLogo.png';
 import openAILogo from '/img/openAILogo.png';
 import azureLogo from '/img/azureLogo.png';
+import difyLogo from '/img/difyLogo.png';
 import groqLogo from '/img/groqLogo.png';
 import kimiLogo from '/img/kimiLogo.png';
 import qwenLogo from '/img/qwenLogo.png';
@@ -64,6 +65,9 @@ function Icon({connect}) {
     }
     if (connect.deepSeek) {
       return <img src={deepSeekLogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
+    }
+    if (connect.dify) {
+      return <img src={difyLogo} width="15" style={{paddingTop: '6px', marginRight: '6px'}} />;
     }
     if (connect.gemini) {
       return <img src={geminiLogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;

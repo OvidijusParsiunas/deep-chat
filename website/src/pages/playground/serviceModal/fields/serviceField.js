@@ -16,6 +16,7 @@ import cohereLogo from '/img/cohereLogo.png';
 import ollamaLogo from '/img/ollamaLogo.png';
 import openAILogo from '/img/openAILogo.png';
 import azureLogo from '/img/azureLogo.png';
+import difyLogo from '/img/difyLogo.png';
 import groqLogo from '/img/groqLogo.png';
 import kimiLogo from '/img/kimiLogo.png';
 import qwenLogo from '/img/qwenLogo.png';
@@ -140,6 +141,17 @@ const services = {
         src={deepSeekLogo}
         className="playground-service-modal-service-icon"
         style={{marginTop: '-1px', transform: 'scale(1.3)'}}
+      />
+    ),
+  },
+  dify: {
+    value: 'dify',
+    text: 'Dify',
+    icon: (
+      <img
+        src={difyLogo}
+        className="playground-service-modal-service-icon"
+        style={{marginTop: '-1px', transform: 'scale(1.1)'}}
       />
     ),
   },
@@ -320,6 +332,7 @@ const SERVICE_TO_LINK = {
   claude: 'https://console.anthropic.com/',
   cohere: 'https://docs.cohere.com/docs',
   deepSeek: 'https://www.deepseek.com/',
+  dify: 'https://dify.ai/',
   gemini: 'https://ai.google.dev/',
   groq: 'https://groq.com/',
   huggingFace: 'https://huggingface.co/docs/api-inference/index',

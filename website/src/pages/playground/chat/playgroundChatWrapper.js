@@ -184,6 +184,7 @@ const SERVICE_TO_NAME = {
   claude: 'Claude',
   cohere: 'Cohere',
   deepSeek: 'DeepSeek',
+  dify: 'Dify',
   gemini: 'Gemini',
   groq: {
     chat: 'Groq: Chat',

@@ -1,0 +1,184 @@
+---
+sidebar_position: 8
+---
+
+# Dify
+
+import difyLogo from '/img/difyLogo.png';
+
+# <img src={difyLogo} width="40" style={{float: 'left', marginRight: '12px', marginTop: '8px'}} /><span className="direct-service-title">Dify</span>
+
+Properties used to connect to [Dify](https://dify.ai/).
+
+### `dify` {#dify}
+
+- Type: `true` | \{ `inputs?: object`, `user?: string`, `files?: {type: "file"|"collection", id: string}[]`\}
+
+- Default: _\{user: "user"\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to [Dify's Chat API](https://docs.dify.ai/en/guides/application-publishing/developing-with-apis). You can set this property to _true_ or configure it using an object: <br />
+`inputs` is an object containing custom input variables defined in your Dify application. <br />
+`user` is the user identifier for the conversation. <br />
+`files` is an array of pre-uploaded file references to include in the conversation. Each object requires a `type` ("file" or "collection") and an `id` referencing the uploaded file. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: {
+          key: 'placeholder key',
+          user: 'deep-chat-user',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: {
+          user: 'deep-chat-user',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "dify": {
+      "key": "placeholder key",
+      "user": "deep-chat-user"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "dify": {
+      "key": "placeholder key",
+      "user": "deep-chat-user"
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### File Upload Example
+
+Upload files (images, documents, audio, video) alongside your messages:
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: {
+          key: 'placeholder key',
+        },
+      }}
+      images={true}
+      mixedFiles={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        dify: true,
+      }}
+      images={true}
+      mixedFiles={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "dify": {"key": "placeholder key"}
+  }'
+  images="true"
+  mixedFiles="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "dify": {"key": "placeholder key"}
+  }'
+  images="true"
+  mixedFiles="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+Files are automatically uploaded to Dify's file upload endpoint before being included in the chat message. Supported file types include images, documents, audio, and video.
+:::
+
+<LineBreak></LineBreak>
+
+### Getting Your API Key
+
+To use Dify with Deep Chat, you need to:
+
+1. **Create a Dify account** at [dify.ai](https://dify.ai/) or set up a [self-hosted instance](https://docs.dify.ai/en/getting-started/install-self-hosted)
+2. **Create an application** (Chatbot, Agent, or Workflow)
+3. **Get your API key** from the application's API Access page
+
+:::tip
+Your API key can be found in your Dify application under **API Access** in the left sidebar. See the [Dify API documentation](https://docs.dify.ai/en/guides/application-publishing/developing-with-apis) for more details.
+:::

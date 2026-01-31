@@ -37,7 +37,7 @@ Request body: `{messages: MessageContent[]}` for text-only, or FormData with `fi
 ### `directConnection`
 Prototyping only - API keys in client code are visible in browser. Use `connect` with server proxy for production.
 
-Supports: AssemblyAI, Azure, BigModel, Claude, Cohere, DeepSeek, Gemini, Groq, HuggingFace, Kimi, MiniMax, Mistral, Ollama, OpenAI, OpenRouter, OpenWebUI, Perplexity, Qwen, StabilityAI, Together, X
+Supports: AssemblyAI, Azure, BigModel, Claude, Cohere, DeepSeek, Dify, Gemini, Groq, HuggingFace, Kimi, MiniMax, Mistral, Ollama, OpenAI, OpenRouter, OpenWebUI, Perplexity, Qwen, StabilityAI, Together, X
 
 ```html
 <deep-chat directConnection='{"openAI": {"key": "sk-...", "chat": {"model": "gpt-4"}}}'></deep-chat>

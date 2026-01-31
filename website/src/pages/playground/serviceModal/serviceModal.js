@@ -67,6 +67,7 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
       service === 'openRouter' ||
       service === 'qwen' ||
       service === 'deepSeek' ||
+      service === 'dify' ||
       service === 'miniMax' ||
       service === 'perplexity' ||
       service === 'ollama'
@@ -505,6 +506,12 @@ const SERVICE_MODAL_FORM_CONFIG = {
     stop: 'constructable object',
     system_prompt: 'string',
   },
+  dify: {
+    user: 'string',
+    inputs: 'constructable object',
+    allowImages: ['true', 'false'],
+    allowMixedFiles: ['true', 'false'],
+  },
   gemini: {
     model: 'string',
     system_prompt: 'string',
@@ -837,6 +844,7 @@ const SERVICE_TYPE_TO_API_KEY_LINK = {
   claude: 'https://console.anthropic.com/',
   cohere: 'https://dashboard.cohere.ai/api-keys',
   deepSeek: 'https://platform.deepseek.com/',
+  dify: 'https://docs.dify.ai/en/guides/application-publishing/developing-with-apis',
   gemini: 'https://aistudio.google.com/app/apikey',
   groq: 'https://console.groq.com/keys',
   huggingFace: 'https://huggingface.co/settings/tokens',
@@ -943,6 +951,12 @@ const OPTIONAL_PARAM_TO_LINK = {
     presence_penalty: 'https://api-docs.deepseek.com/api/create-chat-completion',
     stop: 'https://api-docs.deepseek.com/api/create-chat-completion',
     system_prompt: 'https://api-docs.deepseek.com/api/create-chat-completion',
+  },
+  dify: {
+    user: 'https://deepchat.dev/docs/directConnection/Dify#dify',
+    inputs: 'https://deepchat.dev/docs/directConnection/Dify#dify',
+    allowImages: 'https://deepchat.dev/docs/files#images',
+    allowMixedFiles: 'https://deepchat.dev/docs/files/#mixedFiles',
   },
   gemini: {
     model: 'https://ai.google.dev/models/gemini',
