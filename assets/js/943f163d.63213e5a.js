@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkwebsite=globalThis.webpackChunkwebsite||[]).push([[5571],{52429(e,i,s){s.r(i),s.d(i,{default:()=>r});s(96540);var c=s(74848);function r({code:e}){return(0,c.jsx)("pre",{id:"service-code",children:e})}}}]);
