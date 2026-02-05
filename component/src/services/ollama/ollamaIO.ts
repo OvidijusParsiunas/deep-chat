@@ -14,6 +14,7 @@ import {OllamaChat} from '../../types/ollama';
 import {DeepChat} from '../../deepChat';
 
 export class OllamaIO extends DirectServiceIO {
+  private static readonly THINK_END = '</think>';
   override insertKeyPlaceholderText = '';
   override keyHelpUrl = '';
   override validateKeyProperty = false;
@@ -67,24 +68,11 @@ export class OllamaIO extends DirectServiceIO {
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {readable: true});
   }
 
-  parseMessage(message: string): OllamaStreamResult[] {
-    const result: OllamaStreamResult[] = [];
-    let index = 0, next = -1;
-    do {
-      next = message.indexOf('\n', next + 1);
-      if (next === -1) {
-        const value = message.substring(index).trim();
-        if (value) {
-          result.push(JSON.parse(value) as OllamaStreamResult);
-        }
-      } else {
-        try {
-          result.push(JSON.parse(message.substring(index, next)) as OllamaStreamResult);
-          index = next + 1;
-        } catch (_) { /* empty */ }
-      }
-    } while (next !== -1);
-    return result;
+  private parseMessage(message: string): OllamaStreamResult[] {
+    return message
+      .split('\n')
+      .filter((line) => line.trim())
+      .map((line) => JSON.parse(line) as OllamaStreamResult);
   }
 
   override async extractResultData(result: OllamaConverseResult, prevBody?: OllamaChat): Promise<ResponseI> {
@@ -99,17 +87,12 @@ export class OllamaIO extends DirectServiceIO {
         }
         responses.push({[TEXT]: parsedStreamBody.message?.content || ''});
       }
-      const texts = responses.map(r => r[TEXT]);
-      const thinkIndex = texts.lastIndexOf('</think>');
+      const texts = responses.map((r) => r[TEXT]);
+      const thinkIndex = texts.lastIndexOf(OllamaIO.THINK_END);
       if (thinkIndex === -1 || prevBody?.think) {
-        return {
-          [TEXT]: texts.join(''),
-        };
+        return {[TEXT]: texts.join('')};
       } else {
-        return {
-          [TEXT]: `💡${texts.slice(thinkIndex + 1).join('')}`,
-          overwrite: true
-        };
+        return {[TEXT]: texts.slice(thinkIndex + 1).join(''), overwrite: true};
       }
     }
 
