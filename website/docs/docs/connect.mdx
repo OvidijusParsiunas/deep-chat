@@ -454,8 +454,8 @@ chatElementRef.connect = {
 <TabItem value="py" label="Stream">
 
 ```js
-chatElementRef.stream = true;
 chatElementRef.connect = {
+  stream: true,
   handler: (body, signals) => {
     try {
       // this is PSEUDO CODE for creating a stream
