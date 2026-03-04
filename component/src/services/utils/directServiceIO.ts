@@ -2,12 +2,12 @@ import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {ChatFunctionHandler, FunctionsDetails} from '../../types/openAI';
 import {KeyVerificationHandlers, ServiceFileTypes} from '../serviceIO';
 import {MessageContentI} from '../../types/messagesInternal';
+import {IMAGE_URL, OBJECT, SYSTEM} from './serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {BuildHeadersFunc} from '../../types/headers';
-import {IMAGE_URL, OBJECT} from './serviceConstants';
 import {MessageFile} from '../../types/messageFile';
 import {MessageContent} from '../../types/messages';
 import {StreamConfig} from '../../types/stream';
@@ -118,7 +118,7 @@ export class DirectServiceIO extends BaseServiceIO {
   }
 
   protected addSystemMessage(processedMessages: (MessageContent & {content: unknown})[]) {
-    if (this.systemMessage) processedMessages.unshift({[ROLE]: 'system', content: this.systemMessage});
+    if (this.systemMessage) processedMessages.unshift({[ROLE]: SYSTEM, content: this.systemMessage});
   }
 
   async callDirectServiceServiceAPI(
@@ -289,7 +289,7 @@ export class DirectServiceIO extends BaseServiceIO {
 
     if (system) {
       bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
-      if (system.message) bodyCp.messages.unshift({[ROLE]: 'system', content: system.message});
+      if (system.message) bodyCp.messages.unshift({[ROLE]: SYSTEM, content: system.message});
     }
     bodyCp.messages.push({tool_calls: tools.tool_calls, [ROLE]: ASSISTANT, content: null});
     if (!responses.find(({response}) => typeof response !== STRING) && functions.length === responses.length) {

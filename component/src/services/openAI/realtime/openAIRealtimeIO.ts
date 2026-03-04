@@ -34,6 +34,7 @@ import {
   BEARER_PREFIX,
   FUNCTION_CALL,
   OBJECT,
+  SYSTEM,
   POST,
 } from '../../utils/serviceConstants';
 import {
@@ -53,6 +54,7 @@ import {
   AI,
 } from '../../../utils/consts/messageConstants';
 
+// WORK - "deep-chat-openai-realtime"
 export class OpenAIRealtimeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenAI');
   override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
@@ -219,8 +221,8 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       },
       sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
-        const messageRole = role || 'system';
-        const content = [{[TYPE]: messageRole === 'system' || messageRole === USER ? INPUT_TEXT : TEXT, text}];
+        const messageRole = role || SYSTEM;
+        const content = [{[TYPE]: messageRole === SYSTEM || messageRole === USER ? INPUT_TEXT : TEXT, text}];
         const item = {[ROLE]: messageRole, [TYPE]: 'message', content};
         this.sendMessage(item);
       },

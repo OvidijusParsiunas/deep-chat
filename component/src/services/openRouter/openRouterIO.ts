@@ -22,6 +22,7 @@ import {
   INPUT_AUDIO,
   IMAGE_URL,
   OBJECT,
+  SYSTEM,
 } from '../utils/serviceConstants';
 
 // https://openrouter.ai/docs/api-reference/overview
@@ -85,7 +86,7 @@ export class OpenRouterIO extends DirectServiceIO {
     });
 
     const messages: OpenRouterMessage[] = [];
-    if (this.systemMessage) messages.push({[ROLE]: 'system', content: this.systemMessage});
+    if (this.systemMessage) messages.push({[ROLE]: SYSTEM, content: this.systemMessage});
     messages.push(...processedMessages);
 
     bodyCopy.messages = messages;

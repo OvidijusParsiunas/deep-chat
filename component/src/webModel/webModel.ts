@@ -5,6 +5,7 @@ import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {WebModelIntroMessage} from './webModelIntroMessage';
 import {ElementUtils} from '../utils/element/elementUtils';
+import {SYSTEM} from '../services/utils/serviceConstants';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
 import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
@@ -176,7 +177,7 @@ export class WebModel extends BaseServiceIO {
     try {
       const {model, appConfig} = this.getConfig();
       const chatOpts: ChatOptions = {};
-      if (this._webModel.instruction) chatOpts.conv_config = {system: this._webModel.instruction};
+      if (this._webModel.instruction) chatOpts.conv_config = {[SYSTEM]: this._webModel.instruction};
       if (this._conversationHistory.length > 0) chatOpts.conversation_history = this._conversationHistory;
       // considered creating funcitonality to stop/pause loading, but there is
       // no real way to stop a fetch request in the same session

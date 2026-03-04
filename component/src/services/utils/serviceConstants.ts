@@ -39,3 +39,5 @@ export const FUNCTION_CALL = 'function_call';
 export const INPUT_AUDIO = 'input_audio';
 
 export const IMAGE_URL = 'image_url';
+
+export const SYSTEM = 'system';
