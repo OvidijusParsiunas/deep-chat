@@ -64,7 +64,7 @@ export class MessageStream {
     }
     if (response?._sessionId) this._sessionId = response?._sessionId;
     if (response?.custom && this._message) this._message.custom = response.custom;
-    if (isScrollbarAtBottomOfElement) ElementUtils.scrollToBottom(this._messages);
+    if (isScrollbarAtBottomOfElement && this._messages.autoScrollAllowed) ElementUtils.scrollToBottom(this._messages);
   }
 
   private setInitialState(streamType: 'text' | 'html', content: string, role?: string) {
