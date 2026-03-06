@@ -32,7 +32,7 @@
   border-radius: 10px;
   padding: 0.42em 0.55em;
   height: fit-content;
-  line-height: 1.26em;
+  line-height: 1.26;
 }
 
 .user-message-text {
