@@ -17,3 +17,5 @@ export const CLICK = 'click';
 export const ACTIVE = 'active';
 
 export const DISABLED = 'disabled';
+
+export const SVG = 'svg';

@@ -1,4 +1,4 @@
-import {DEFAULT, DISABLED} from '../../../../../utils/consts/inputConstants';
+import {DEFAULT, DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
 import {DEEP_COPY, TEXT} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
@@ -21,7 +21,7 @@ export class SubmitButtonStateStyle {
     const newStyle = DEEP_COPY(styles[style] || {}) as ButtonStyles;
     ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['container', DEFAULT]);
     ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, [TEXT, 'styles', DEFAULT]);
-    ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, ['svg', 'styles', DEFAULT]);
+    ObjectUtils.overwritePropertyObjectFromAnother(newStyle, styles.submit, [SVG, 'styles', DEFAULT]);
     (styles[style] as ButtonStyles) = newStyle;
   }
 
@@ -29,8 +29,8 @@ export class SubmitButtonStateStyle {
   private static setUpDisabledButton(styles: SubmitButtonStyles) {
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', DEFAULT, 'backgroundColor'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, [DISABLED, 'container', DEFAULT, 'backgroundColor'], UNSET);
-    ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, ['svg', 'styles', DEFAULT, 'filter'], '');
-    ObjectUtils.setPropertyValueIfDoesNotExist(styles[DISABLED], ['svg', 'styles', DEFAULT, 'filter'],
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, [SVG, 'styles', DEFAULT, 'filter'], '');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles[DISABLED], [SVG, 'styles', DEFAULT, 'filter'],
       'brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(5564%)' +
       ' hue-rotate(207deg) brightness(100%) contrast(97%)');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles[DISABLED], [TEXT, 'styles', DEFAULT, 'color'], 'grey');

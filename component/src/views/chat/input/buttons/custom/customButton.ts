@@ -1,5 +1,5 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
-import {ACTIVE, DEFAULT, DISABLED} from '../../../../../utils/consts/inputConstants';
+import {ACTIVE, DEFAULT, DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
@@ -128,8 +128,8 @@ export class CustomButton extends InputButton<Styles> {
     // replacing item to reapply event listeners in stateful events
     this.elementRef = HTMLUtils.replaceElementWithNewClone(this.elementRef, this._originalElementRef);
     this.elementRef.innerHTML = '';
-    const emptySVG = buttonStyles?.svg?.content === '';
-    if (!emptySVG) this.elementRef.appendChild(DropupItem.createItemIcon(this.svg, this._menuStyles?.iconContainer));
+    const emptySVG = buttonStyles?.[SVG]?.content === '';
+    if (!emptySVG) this.elementRef.appendChild(DropupItem.createItemIcon(this[SVG], this._menuStyles?.iconContainer));
     this.elementRef.appendChild(DropupItem.createItemText(this.dropupText, this._menuStyles?.[TEXT]));
   }
 
@@ -200,7 +200,7 @@ export class CustomButton extends InputButton<Styles> {
 
   private genStateInnerElements(iconId: string, state: keyof Styles, defaultElements: Element[], customStyles?: Styles) {
     let stateElements = this.createInnerElements(iconId, state, customStyles);
-    const SVGContent = customStyles?.[state]?.svg?.content;
+    const SVGContent = customStyles?.[state]?.[SVG]?.content;
     const textContent = customStyles?.[state]?.[TEXT]?.content;
     if (SVGContent === undefined || textContent === undefined) {
       const {svg: defaultSVG, [TEXT]: defaultText} = ButtonUtils.parseSVGTextElements(defaultElements);

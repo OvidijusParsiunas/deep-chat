@@ -1,5 +1,5 @@
+import {ACTIVE, DEFAULT, DROPUP_MENU, OUTSIDE_END, SVG} from '../../../../../utils/consts/inputConstants';
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
-import {ACTIVE, DEFAULT, DROPUP_MENU, OUTSIDE_END} from '../../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
 import {MicrophoneStyles} from '../../../../../types/microphone';
@@ -70,7 +70,7 @@ export class MicrophoneButton extends InputButton<Styles> {
 
   private toggleIconFilter(mode: 'default' | 'active' | 'command') {
     const iconElement = this.elementRef.children[0];
-    if (iconElement.tagName.toLocaleLowerCase() === 'svg') {
+    if (iconElement.tagName.toLocaleLowerCase() === SVG) {
       switch (mode) {
         case DEFAULT:
           iconElement[CLASS_LIST].remove('active-microphone-icon', 'command-microphone-icon');

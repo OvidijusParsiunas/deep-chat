@@ -1,4 +1,4 @@
-import {CLICK, DEFAULT, DROPUP_MENU, HOVER} from '../../../../utils/consts/inputConstants';
+import {CLICK, DEFAULT, DROPUP_MENU, HOVER, SVG} from '../../../../utils/consts/inputConstants';
 import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInternal';
 import {ButtonPosition as ButtonPositionT} from '../../../../types/button';
 import {ActiveTooltip, Tooltip} from '../../../../types/tooltip';
@@ -23,7 +23,7 @@ export class InputButton<T extends Styles = Styles> {
   protected readonly _mouseState: MouseState = {state: 'default'};
   private readonly _tooltipSettings?: Tooltip;
   private _activeTooltip?: ActiveTooltip;
-  readonly svg: SVGGraphicsElement;
+  readonly [SVG]: SVGGraphicsElement;
   readonly customStyles?: T;
   readonly position?: ButtonPositionT;
   readonly dropupText?: string;
@@ -34,7 +34,7 @@ export class InputButton<T extends Styles = Styles> {
       tooltip?: Tooltip, customStyles?: T, dropupText?: string) {
     ButtonAccessibility.addAttributes(buttonElement);
     this.elementRef = buttonElement;
-    this.svg = SVGIconUtils.createSVGElement(svg);
+    this[SVG] = SVGIconUtils.createSVGElement(svg);
     this.customStyles = customStyles;
     this.position = Legacy.processPosition<ButtonPositionT>(position);
     this._tooltipSettings = tooltip;
@@ -101,18 +101,18 @@ export class InputButton<T extends Styles = Styles> {
   }
 
   protected buildDefaultIconElement(iconId: string) {
-    const iconClone = this.svg.cloneNode(true) as SVGGraphicsElement;
+    const iconClone = this[SVG].cloneNode(true) as SVGGraphicsElement;
     iconClone.id = iconId;
     return [iconClone];
   }
 
   protected createInnerElements(iconId: string, state: keyof T, customStyles?: ButtonStateStyles<T>) {
-    const elements = ButtonInnerElements.createCustomElements(state, this.svg, customStyles);
+    const elements = ButtonInnerElements.createCustomElements(state, this[SVG], customStyles);
     if (elements && elements.length > 0) {
       if (this.position === DROPUP_MENU) {
         const iconClone = elements[0].cloneNode(true) as SVGGraphicsElement;
         // if original svg - add original id, if custom use the custom id
-        iconClone.id = elements[0] === this.svg ? iconId : 'dropup-menu-item-icon-element-custom';
+        iconClone.id = elements[0] === this[SVG] ? iconId : 'dropup-menu-item-icon-element-custom';
         elements[0] = iconClone;
       }
       return elements;

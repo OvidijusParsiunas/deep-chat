@@ -4,8 +4,8 @@ import {SPEECH_SESSION_STARTED, SPEECH_SESSION_STOPPED} from '../../utils/speech
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
+import {ACTIVE, DEFAULT, SVG} from '../../../utils/consts/inputConstants';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
-import {ACTIVE, DEFAULT} from '../../../utils/consts/inputConstants';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
 import {ElementUtils} from '../../../utils/element/elementUtils';
@@ -240,17 +240,17 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     if (!newConfig[MICROPHONE]?.[DEFAULT]?.[TEXT]?.content) {
       newConfig[MICROPHONE] ??= {};
       newConfig[MICROPHONE][DEFAULT] ??= {};
-      newConfig[MICROPHONE][DEFAULT].svg ??= {};
-      newConfig[MICROPHONE][DEFAULT].svg.content ??= MICROPHONE_ICON_STRING;
+      newConfig[MICROPHONE][DEFAULT][SVG] ??= {};
+      newConfig[MICROPHONE][DEFAULT][SVG].content ??= MICROPHONE_ICON_STRING;
     }
     if (!newConfig.toggle?.[DEFAULT]?.[TEXT]?.content) {
       newConfig.toggle ??= {};
       newConfig.toggle[DEFAULT] ??= {};
-      newConfig.toggle[DEFAULT].svg ??= {};
-      newConfig.toggle[DEFAULT].svg.content ??= PLAY_ICON_STRING;
+      newConfig.toggle[DEFAULT][SVG] ??= {};
+      newConfig.toggle[DEFAULT][SVG].content ??= PLAY_ICON_STRING;
       newConfig.toggle[ACTIVE] ??= {};
-      newConfig.toggle[ACTIVE].svg ??= {};
-      newConfig.toggle[ACTIVE].svg.content ??= STOP_ICON_STRING;
+      newConfig.toggle[ACTIVE][SVG] ??= {};
+      newConfig.toggle[ACTIVE][SVG].content ??= STOP_ICON_STRING;
     }
     return newConfig;
   }

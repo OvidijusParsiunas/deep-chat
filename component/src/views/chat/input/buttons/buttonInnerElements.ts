@@ -2,6 +2,7 @@ import {ButtonInnerElement, ButtonStateStyles} from '../../../../types/buttonInt
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {SVGIconUtils} from '../../../../utils/svg/svgIconUtils';
 import {TEXT} from '../../../../utils/consts/messageConstants';
+import {SVG} from '../../../../utils/consts/inputConstants';
 
 export class ButtonInnerElements {
   private static readonly INPUT_BUTTON_SVG_TEXT_CLASS = 'input-button-svg-text';
@@ -27,7 +28,7 @@ export class ButtonInnerElements {
   public static createCustomElements<T>(state: keyof T, base: SVGGraphicsElement, customStyles?: ButtonStateStyles<T>) {
     const stateStyle = customStyles?.[state];
     const text = stateStyle?.[TEXT]?.content;
-    const svg = stateStyle?.svg?.content;
+    const svg = stateStyle?.[SVG]?.content;
     const elements: ButtonInnerElement[] = [];
     ButtonInnerElements.tryAddSVGElement(elements, base, svg, text);
     if (text) elements.push(ButtonInnerElements.createTextElement(text));

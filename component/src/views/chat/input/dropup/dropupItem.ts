@@ -1,6 +1,6 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
+import {CLICK, DEFAULT, SVG} from '../../../../utils/consts/inputConstants';
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
-import {CLICK, DEFAULT} from '../../../../utils/consts/inputConstants';
 import {CustomStyle, StatefulStyles} from '../../../../types/styles';
 import {ButtonInnerElements} from '../buttons/buttonInnerElements';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
@@ -52,7 +52,7 @@ export class DropupItem {
   private static populateItem(inputButton: InputButton, item: HTMLElement, styles?: DropupMenuStyles) {
     const {elementRef, dropupText, svg, customStyles} = inputButton;
     const buttonInnerElement = elementRef.children[0];
-    const emptySVG = customStyles && Object.values(customStyles).find((style) => style.svg?.content === '');
+    const emptySVG = customStyles && Object.values(customStyles).find((style) => style[SVG]?.content === '');
     if (buttonInnerElement[CLASS_LIST].contains(ButtonInnerElements.INPUT_BUTTON_INNER_TEXT_CLASS)) {
       if (!emptySVG) item.appendChild(DropupItem.createItemIcon(svg, styles?.iconContainer));
       item.appendChild(DropupItem.createItemText(buttonInnerElement.textContent as string, styles?.[TEXT]));

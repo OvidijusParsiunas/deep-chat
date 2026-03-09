@@ -3,12 +3,12 @@ import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fil
 import {FILE, FILES, ROLE, TEXT, USER} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
+import {DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {SpeechToText} from '../microphone/speechToText/speechToText';
-import {DISABLED} from '../../../../../utils/consts/inputConstants';
 import {SUBMIT_ICON_STRING} from '../../../../../icons/submitIcon';
 import {UserContentI} from '../../../../../types/messagesInternal';
 import {SubmitButtonStateStyle} from './submitButtonStateStyle';
@@ -85,11 +85,11 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createCustomElements() {
-    const submit = ButtonInnerElements.createCustomElements('submit', this.svg, this.customStyles);
+    const submit = ButtonInnerElements.createCustomElements('submit', this[SVG], this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
-      const elements = ButtonInnerElements.createCustomElements(styleState, this.svg, this.customStyles);
+      const elements = ButtonInnerElements.createCustomElements(styleState, this[SVG], this.customStyles);
       if (elements) states[styleState] = elements;
     });
     states.submit = submit || this.buildDefaultIconElement('submit-icon');
@@ -115,14 +115,14 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createDisabledIconElement(submitElement: ButtonInnerElement[]) {
-    const elements = ButtonInnerElements.createCustomElements(DISABLED, this.svg, this.customStyles);
+    const elements = ButtonInnerElements.createCustomElements(DISABLED, this[SVG], this.customStyles);
     return elements || [submitElement[0].cloneNode(true) as ButtonInnerElement];
   }
 
   // prettier-ignore
   private attemptOverwriteLoadingStyle(deepChat: DeepChat) {
-    if (this.customStyles?.submit?.svg
-        || this.customStyles?.loading?.svg?.content || this.customStyles?.loading?.[TEXT]?.content) return;
+    if (this.customStyles?.submit?.[SVG]
+        || this.customStyles?.loading?.[SVG]?.content || this.customStyles?.loading?.[TEXT]?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
       const styleElement = CREATE_ELEMENT('style');
