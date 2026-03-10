@@ -1,6 +1,6 @@
 import {COHERE_BUILD_HEADERS, COHERE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/cohereUtils';
+import {DEEP_COPY, ERROR, ROLE, TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {CohereChatResult, CohereStreamEventBody} from '../../types/cohereResult';
-import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
@@ -88,7 +88,7 @@ export class CohereIO extends DirectServiceIO {
 
   private static aggregateBundledEventsText(bundledEvents: CohereStreamEventBody[]) {
     return bundledEvents
-      .filter((obj) => obj.type === 'content-delta' && obj.delta?.message?.content?.[TEXT])
+      .filter((obj) => obj[TYPE] === 'content-delta' && obj.delta?.message?.content?.[TEXT])
       .map((obj) => obj.delta?.message?.content?.[TEXT])
       .join('');
   }

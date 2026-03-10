@@ -1,5 +1,5 @@
 import {AudioFileAttachmentType} from '../../fileAttachments/fileAttachmentTypes/audioFileAttachmentType';
-import {AUDIO, ERROR, FILES, START} from '../../../../../utils/consts/messageConstants';
+import {AUDIO, ERROR, FILES, START, TYPE} from '../../../../../utils/consts/messageConstants';
 import {MicrophoneFilesServiceConfig} from '../../../../../types/fileServiceConfigs';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {NewFileName} from '../../fileAttachments/newFileName';
@@ -71,7 +71,7 @@ export class RecordAudio extends MicrophoneButton {
   private createFile(event: BlobEvent) {
     const blob = new Blob([event.data], {type: `audio/${this._extension}`});
     const filename = NewFileName.getFileName(this._newFilePrefix || AUDIO, this._extension);
-    const file = new File([blob], filename, {type: blob.type});
+    const file = new File([blob], filename, {type: blob[TYPE]});
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event) => {

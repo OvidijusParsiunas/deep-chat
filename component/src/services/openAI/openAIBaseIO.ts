@@ -39,7 +39,7 @@ export abstract class OpenAIBaseIO extends DirectServiceIO {
 
   protected static getBaseFileContent(files: MessageFile[]) {
     return files.map((file) => {
-      if (file.type === AUDIO) {
+      if (file[TYPE] === AUDIO) {
         const base64Data = file[SRC]?.split(',')[1];
         const format = file.name?.split('.').pop()?.toLowerCase() || 'wav';
         return {[TYPE]: INPUT_AUDIO, [INPUT_AUDIO]: {data: base64Data, format}};

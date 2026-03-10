@@ -1,6 +1,7 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../utils/consts/htmlConstants';
 import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
 import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
+import {TYPE} from '../../utils/consts/messageConstants';
 import {VisibilityIcon} from './visibilityIcon';
 
 export class InsertKeyView {
@@ -99,7 +100,7 @@ export class InsertKeyView {
     const inputElement = CREATE_ELEMENT('input') as HTMLInputElement;
     inputElement.id = 'insert-key-input';
     inputElement.placeholder = placeholderText || 'API Key';
-    inputElement.type = 'password';
+    inputElement[TYPE] = 'password';
     inputElement[CLASS_LIST].add('insert-key-input-valid');
     inputElement.onfocus = InsertKeyView.onInputFocus;
     inputContainer.appendChild(inputElement);

@@ -1,7 +1,7 @@
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {ERROR} from '../../../utils/consts/messageConstants';
+import {ERROR, TYPE} from '../../../utils/consts/messageConstants';
 import {
   INVALID_REQUEST_ERROR_PREFIX,
   CONTENT_TYPE_H_KEY,
@@ -34,7 +34,7 @@ const handleVerificationResult = (
 ) => {
   const qwenResult = result as QwenErrorResponse;
   if (qwenResult[ERROR]) {
-    if (qwenResult[ERROR].type === INVALID_REQUEST_ERROR_PREFIX) {
+    if (qwenResult[ERROR][TYPE] === INVALID_REQUEST_ERROR_PREFIX) {
       onFail(INVALID_KEY);
     } else {
       onFail(CONNECTION_FAILED);

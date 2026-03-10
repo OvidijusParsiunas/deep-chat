@@ -22,6 +22,7 @@ import {
   IMAGE,
   ROLE,
   TEXT,
+  TYPE,
   SRC,
 } from '../../utils/consts/messageConstants';
 
@@ -47,7 +48,7 @@ export class OllamaIO extends DirectServiceIO {
 
   private static getImageData(files: MessageFile[]): string[] {
     return files
-      .filter((file) => file.type === IMAGE)
+      .filter((file) => file[TYPE] === IMAGE)
       .map((file) => {
         const base64Data = file[SRC]?.split(',')[1];
         return base64Data || '';

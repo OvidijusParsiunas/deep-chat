@@ -36,6 +36,7 @@ import {
   IMAGE,
   GIFS,
   TEXT,
+  TYPE,
 } from '../../utils/consts/messageConstants';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -94,11 +95,11 @@ export class BaseServiceIO implements ServiceIO {
   }
 
   private getServiceIOByType(file: File) {
-    if (file.type.startsWith(AUDIO) && this.fileTypes[AUDIO]) {
+    if (file[TYPE].startsWith(AUDIO) && this.fileTypes[AUDIO]) {
       return this.fileTypes[AUDIO];
     }
-    if (file.type.startsWith(IMAGE)) {
-      if (this.fileTypes[GIFS] && file.type.endsWith('/gif')) return this.fileTypes[GIFS];
+    if (file[TYPE].startsWith(IMAGE)) {
+      if (this.fileTypes[GIFS] && file[TYPE].endsWith('/gif')) return this.fileTypes[GIFS];
       if (this.fileTypes[IMAGES]) return this.fileTypes[IMAGES];
       if (this[CAMERA]) return this[CAMERA];
     }

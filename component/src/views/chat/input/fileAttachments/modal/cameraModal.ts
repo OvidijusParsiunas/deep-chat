@@ -1,7 +1,7 @@
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
+import {ERROR, START, TYPE} from '../../../../../utils/consts/messageConstants';
 import {FileAttachmentsType} from '../fileAttachmentTypes/fileAttachmentsType';
 import {CameraDimensions, CameraFiles} from '../../../../../types/camera';
-import {ERROR, START} from '../../../../../utils/consts/messageConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {REFRESH_ICON_STRING} from '../../../../../icons/refreshIcon';
 import {CAPTURE_ICON_STRING} from '../../../../../icons/captureIcon';
@@ -132,7 +132,7 @@ export class CameraModal extends Modal {
       const blob = new Blob([byteArray], {type: this._format});
       const extension = this._format === 'image/jpeg' ? 'jpeg' : 'png';
       const filename = NewFileName.getFileName(this._newFilePrefix || 'photo', extension);
-      return new File([blob], filename, {type: blob.type});
+      return new File([blob], filename, {type: blob[TYPE]});
     }
     return undefined;
   }

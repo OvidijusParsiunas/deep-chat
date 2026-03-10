@@ -1,8 +1,8 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../utils/consts/htmlConstants';
 import {NOT_VISIBLE_ICON_STRING} from '../../icons/notVisibilityIcon';
+import {TEXT, TYPE} from '../../utils/consts/messageConstants';
 import {VISIBLE_ICON_STRING} from '../../icons/visibleIcon';
 import {SVGIconUtils} from '../../utils/svg/svgIconUtils';
-import {TEXT} from '../../utils/consts/messageConstants';
 
 export class VisibilityIcon {
   private static readonly VISIBLE_ICON_ID = 'visible-icon';
@@ -14,11 +14,11 @@ export class VisibilityIcon {
     if (iconElement.id === VisibilityIcon.VISIBLE_ICON_ID) {
       visibleIcon[STYLE].display = 'none';
       notVisibleIcon[STYLE].display = 'block';
-      inputElement.type = 'password';
+      inputElement[TYPE] = 'password';
     } else {
       visibleIcon[STYLE].display = 'block';
       notVisibleIcon[STYLE].display = 'none';
-      inputElement.type = TEXT;
+      inputElement[TYPE] = TEXT;
     }
   }
 

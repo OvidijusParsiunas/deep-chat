@@ -47,12 +47,12 @@ export class ClaudeIO extends DirectServiceIO {
   }
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
     return files.map((file) => {
-      if (file.type === IMAGE) {
+      if (file[TYPE] === IMAGE) {
         const base64Data = file[SRC]?.split(',')[1];
         const mediaType = file[SRC]?.match(/data:([^;]+)/)?.[1] || 'image/jpeg';
         return {[TYPE]: IMAGE, source: {[TYPE]: 'base64', media_type: mediaType, data: base64Data || ''}};
       }
-      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} ${TYPE}: ${file[TYPE]}]`};
     });
   }
 
@@ -83,31 +83,31 @@ export class ClaudeIO extends DirectServiceIO {
     // Handle non-streaming response (final response)
     if (result.content && result.content.length > 0) {
       // Check for tool use in the response
-      const toolUseContent = result.content.find((item): item is ClaudeToolUse => item.type === 'tool_use');
+      const toolUseContent = result.content.find((item): item is ClaudeToolUse => item[TYPE] === 'tool_use');
       if (toolUseContent) {
         return this.handleTools([toolUseContent], prevBody);
       }
 
-      const textContent = result.content.find((item): item is ClaudeTextContent => item.type === TEXT);
+      const textContent = result.content.find((item): item is ClaudeTextContent => item[TYPE] === TEXT);
       if (textContent) {
         return {[TEXT]: textContent[TEXT]};
       }
     }
 
     // Handle streaming events
-    if (result.type === 'content_block_delta') {
-      if (result.delta && result.delta.type === 'text_delta') {
+    if (result[TYPE] === 'content_block_delta') {
+      if (result.delta && result.delta[TYPE] === 'text_delta') {
         return {[TEXT]: result.delta[TEXT] || ''};
       }
     }
 
     // Handle streaming response
-    if (result.type === 'content_block_start' && result.content_block?.type === 'tool_use') {
+    if (result[TYPE] === 'content_block_start' && result.content_block?.[TYPE] === 'tool_use') {
       this._streamToolCalls = result.content_block;
       this._streamToolCalls.input = '';
-    } else if (result.type === 'content_block_delta' && result.delta?.type === 'input_json_delta') {
+    } else if (result[TYPE] === 'content_block_delta' && result.delta?.[TYPE] === 'input_json_delta') {
       this._streamToolCalls.input += result.delta.partial_json || '';
-    } else if (result.type === 'message_delta' && result.delta?.stop_reason === 'tool_use') {
+    } else if (result[TYPE] === 'message_delta' && result.delta?.stop_reason === 'tool_use') {
       this._streamToolCalls.input = JSON.parse(this._streamToolCalls.input);
       return this.handleTools([this._streamToolCalls], prevBody);
     }

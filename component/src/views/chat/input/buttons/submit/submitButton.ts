@@ -1,6 +1,6 @@
 import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/classConstants';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
-import {FILE, FILES, ROLE, TEXT, USER} from '../../../../../utils/consts/messageConstants';
+import {FILE, FILES, ROLE, TEXT, TYPE, USER} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
@@ -183,7 +183,7 @@ export class SubmitButton extends InputButton<Styles> {
     const newContent: UserContentI = {[TEXT]: content[TEXT]};
     if (content[FILES]) {
       newContent[FILES] = Array.from(content[FILES]).map((file) => {
-        return {file, type: FileAttachmentsType.getTypeFromBlob(file)};
+        return {file, [TYPE]: FileAttachmentsType.getTypeFromBlob(file)};
       });
     }
     if (content.custom) newContent.custom = content.custom;

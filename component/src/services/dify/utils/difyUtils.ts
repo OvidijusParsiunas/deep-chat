@@ -1,7 +1,7 @@
 import {DifyBlockingResponse, DifyStreamPayload, DifyStreamEvent, UploadResponse} from '../../../types/difyResult';
+import {ERROR, FILE, IMAGE, TEXT, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {DifyUploadConfig, DifyFileInput, DifyFileType} from '../../../types/difyInternal';
-import {ERROR, FILE, IMAGE, TEXT, USER} from '../../../utils/consts/messageConstants';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
 import {Response as ResponseI} from '../../../types/response';
@@ -66,7 +66,7 @@ export async function uploadFiles(files: File[], config: DifyUploadConfig): Prom
 
   const uploadPromises = files.map(async (file): Promise<DifyFileInput | null> => {
     const fileId = await uploadFile(file, config);
-    const fileType = file.type.startsWith(IMAGE_MIME_PREFIX) ? IMAGE : FILE;
+    const fileType = file[TYPE].startsWith(IMAGE_MIME_PREFIX) ? IMAGE : FILE;
     return createFileInput(fileId, fileType);
   });
 

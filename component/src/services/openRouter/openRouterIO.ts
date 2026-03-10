@@ -47,7 +47,7 @@ export class OpenRouterIO extends DirectServiceIO {
 
   private static getAudioContent(files: MessageFile[]): OpenRouterContent[] {
     return files
-      .filter((file) => file.type === AUDIO)
+      .filter((file) => file[TYPE] === AUDIO)
       .map((file) => {
         const base64Data = file[SRC]?.split(',')[1];
         const format = file[SRC]?.match(/data:audio\/([^;]+)/)?.[1] as 'wav' | 'mp3';

@@ -1,4 +1,4 @@
-import {ANY, AUDIO, FILE, IMAGE, SRC, USER} from '../../../utils/consts/messageConstants';
+import {ANY, AUDIO, FILE, IMAGE, SRC, TYPE, USER} from '../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {MessageFile, MessageFiles} from '../../../types/messageFile';
 import {SVGIconUtils} from '../../../utils/svg/svgIconUtils';
@@ -27,7 +27,7 @@ export class FileMessages {
     const imageEl = FileMessages.createImage(image, asyncScroll);
     elements.bubbleElement.appendChild(imageEl);
     elements.bubbleElement[CLASS_LIST].add(FileMessages.IMAGE_BUBBLE_CLASS);
-    return {type: IMAGE, elements};
+    return {[TYPE]: IMAGE, elements};
   }
 
   private static createAudioElement(audioData: MessageFile, role: string) {
@@ -55,7 +55,7 @@ export class FileMessages {
     const elements = messages.createMessageElementsOnOrientation('', role, isTop);
     elements.bubbleElement.appendChild(audioElement);
     elements.bubbleElement[CLASS_LIST].add(FileMessages.AUDIO_BUBBLE_CLASS);
-    return {type: AUDIO, elements, audioElement};
+    return {[TYPE]: AUDIO, elements, audioElement};
   }
 
   private static createAnyFile(imageData: MessageFile) {
@@ -79,7 +79,7 @@ export class FileMessages {
     const anyFile = FileMessages.createAnyFile(data);
     elements.bubbleElement[CLASS_LIST].add(FileMessages.ANY_FILE_BUBBLE_CLASS);
     elements.bubbleElement.appendChild(anyFile);
-    return {type: FILE, elements};
+    return {[TYPE]: FILE, elements};
   }
 
   public static createMessages(msg: MessagesBase, files: MessageFiles, role: string, scroll: boolean, isTop = false) {
@@ -108,7 +108,7 @@ export class FileMessages {
     const typeToElements = FileMessages.createMessages(messages, files, role, scroll, isTop);
     typeToElements
       .filter((element) => element !== undefined)
-      .forEach(({type, elements}) => {
+      .forEach(({[TYPE]: type, elements}) => {
         FileMessageUtils.addMessage(messages, elements, type as keyof MessageStyles, role, isTop);
       });
   }

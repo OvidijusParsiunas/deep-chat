@@ -185,7 +185,7 @@ export class DirectServiceIO extends BaseServiceIO {
     };
   }[] {
     return files
-      .filter((file) => file.type === IMAGE)
+      .filter((file) => file[TYPE] === IMAGE)
       .map((file) => ({
         [TYPE]: IMAGE_URL as 'image_url',
         [IMAGE_URL]: {

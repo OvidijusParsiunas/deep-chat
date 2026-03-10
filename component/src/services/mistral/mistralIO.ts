@@ -33,10 +33,10 @@ export class MistralIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): MistralContentItem[] {
     return files.map((file) => {
-      if (file.type === IMAGE) {
+      if (file[TYPE] === IMAGE) {
         return {[TYPE]: IMAGE_URL, [IMAGE_URL]: file[SRC] || ''};
       }
-      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} type: ${file.type}]`};
+      return {[TYPE]: TEXT, [TEXT]: `[Unsupported ${FILE} ${TYPE}: ${file[TYPE]}]`};
     });
   }
 

@@ -43,6 +43,7 @@ import {
   TEXT,
   HTML,
   ROLE,
+  TYPE,
   ANY,
   SRC,
   AI,
@@ -419,15 +420,15 @@ export class Messages extends MessagesBase {
     return Promise.all<MessageFile>(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
-          if (!fileData.type || fileData.type === ANY) {
+          if (!fileData[TYPE] || fileData[TYPE] === ANY) {
             const name = fileData[FILE].name || FILE;
-            resolve({name, type: ANY, ref: fileData[FILE]});
+            resolve({name, [TYPE]: ANY, ref: fileData[FILE]});
           } else {
             const reader = new FileReader();
             reader.readAsDataURL(fileData[FILE]);
             reader.onload = () => {
               const name = fileData[FILE].name;
-              resolve({[SRC]: reader.result as string, name, type: fileData.type, ref: fileData[FILE]});
+              resolve({[SRC]: reader.result as string, name, [TYPE]: fileData[TYPE], ref: fileData[FILE]});
             };
           }
         });

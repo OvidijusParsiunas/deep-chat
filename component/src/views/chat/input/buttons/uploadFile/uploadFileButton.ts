@@ -1,7 +1,7 @@
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
+import {FILE, FILES, TEXT, TYPE} from '../../../../../utils/consts/messageConstants';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
-import {FILE, FILES, TEXT} from '../../../../../utils/consts/messageConstants';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {CLICK} from '../../../../../utils/consts/inputConstants';
@@ -56,7 +56,7 @@ export class UploadFileButton extends InputButton<Styles> {
 
   private static createInputElement(acceptedFormats?: string) {
     const inputElement = CREATE_ELEMENT('input') as HTMLInputElement;
-    inputElement.type = FILE;
+    inputElement[TYPE] = FILE;
     inputElement.accept = acceptedFormats || '';
     inputElement.hidden = true;
     inputElement.multiple = true;

@@ -89,7 +89,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   private static getFileContent(files: MessageFile[]): OpenAIFileContent {
     const baseContent = OpenAIBaseIO.getBaseFileContent(files);
     return baseContent.map((file) => {
-      if (file.type === INPUT_AUDIO) {
+      if (file[TYPE] === INPUT_AUDIO) {
         return file;
       }
       return {detail: 'auto', [TYPE]: INPUT_IMAGE, [IMAGE_URL]: (file as MessageFile)[SRC]};
@@ -131,18 +131,18 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     if (!conversationData.data || !Array.isArray(conversationData.data)) return [];
     const messages: ResponseI[] = [];
     for (const item of OpenAIChatIO.filterCompleted(conversationData.data.reverse())) {
-      if (item.type === 'message' && item.content && Array.isArray(item.content)) {
+      if (item[TYPE] === 'message' && item.content && Array.isArray(item.content)) {
         for (const content of item.content) {
-          if ((content.type === INPUT_TEXT || content.type === OUTPUT_TEXT) && content[TEXT]) {
+          if ((content[TYPE] === INPUT_TEXT || content[TYPE] === OUTPUT_TEXT) && content[TEXT]) {
             messages.push({[ROLE]: item[ROLE], [TEXT]: content[TEXT]});
-          } else if (content.type === INPUT_IMAGE) {
+          } else if (content[TYPE] === INPUT_IMAGE) {
             messages.push({
               [ROLE]: item[ROLE],
               [FILES]: OpenAIChatIO.generateImageFile(content[IMAGE_URL] || ''),
             });
           }
         }
-      } else if (item.type === IMAGE_GENERATION_CALL) {
+      } else if (item[TYPE] === IMAGE_GENERATION_CALL) {
         messages.push({
           [ROLE]: AI,
           [FILES]: OpenAIChatIO.generateImageFile((item as ResponsesImageGenerationCall).result),
@@ -208,25 +208,25 @@ export class OpenAIChatIO extends OpenAIBaseIO {
       }
       return {[TEXT]: ''};
     }
-    if (result.item?.type === FUNCTION_CALL && result.type) {
+    if (result.item?.[TYPE] === FUNCTION_CALL && result[TYPE]) {
       return this.handleStreamedResponsesFunctionCall(result, prevBody);
     }
-    if (result.type === `${RESPONSE}.${IMAGE_GENERATION_CALL}.partial_image` && result.partial_image_b64) {
+    if (result[TYPE] === `${RESPONSE}.${IMAGE_GENERATION_CALL}.partial_image` && result.partial_image_b64) {
       return {[FILES]: [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${result.partial_image_b64}`, [TYPE]: IMAGE}]};
     }
-    if (result.delta && !this._functionStreamInProgress && result.type === `${RESPONSE}.${OUTPUT_TEXT}.delta`) {
+    if (result.delta && !this._functionStreamInProgress && result[TYPE] === `${RESPONSE}.${OUTPUT_TEXT}.delta`) {
       return {[TEXT]: result.delta};
     }
     return {[TEXT]: ''};
   }
 
   private async handleStreamedResponsesFunctionCall(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
-    if (result.type === `${RESPONSE}.output_item.done`) {
+    if (result[TYPE] === `${RESPONSE}.output_item.done`) {
       this._functionStreamInProgress = false;
-      if (result.item?.type === FUNCTION_CALL) {
+      if (result.item?.[TYPE] === FUNCTION_CALL) {
         return this.handleResponsesFunctionCalls([result.item], prevBody) as ResponseI;
       }
-    } else if (result.type === `${RESPONSE}.output_item.added`) {
+    } else if (result[TYPE] === `${RESPONSE}.output_item.added`) {
       this._functionStreamInProgress = true;
     }
     return {[TEXT]: ''};
@@ -234,7 +234,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
 
   private handleFileGenerationResponse(completetdOutputs: OpenAIOutput, text?: string) {
     const imageMessage = completetdOutputs.find(
-      (output) => output.type === IMAGE_GENERATION_CALL
+      (output) => output[TYPE] === IMAGE_GENERATION_CALL
     ) as ResponsesImageGenerationCall;
     if (imageMessage) {
       return {
@@ -250,7 +250,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   }
 
   private async handleResponsesFunctionCalls(completetdOutputs: OpenAIOutput, prevBody?: OpenAIChat, text?: string) {
-    const functionCalls = completetdOutputs.filter((call) => call.type === FUNCTION_CALL) as ResponsesFunctionCall[];
+    const functionCalls = completetdOutputs.filter((call) => call[TYPE] === FUNCTION_CALL) as ResponsesFunctionCall[];
     if (functionCalls.length === 0) return null;
     if (!prevBody || !this.functionHandler) throw Error(DEFINE_FUNCTION_HANDLER);
 
@@ -270,7 +270,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
       if (!responses.find(({response}) => typeof response !== STRING) && functions.length === responses.length) {
         responses.forEach((resp, index) => {
           const functionCall = functionCalls[index];
-          bodyCp.input.push({type: FUNCTION_CALL_OUTPUT, call_id: functionCall.call_id, output: resp[RESPONSE]});
+          bodyCp.input.push({[TYPE]: FUNCTION_CALL_OUTPUT, call_id: functionCall.call_id, output: resp[RESPONSE]});
         });
         return this.makeAnotherRequest(bodyCp, this.messages, text);
       }

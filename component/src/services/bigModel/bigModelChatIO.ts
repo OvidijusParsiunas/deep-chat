@@ -38,7 +38,7 @@ export class BigModelChatIO extends DirectServiceIO {
 
   private static getFileContent(files: MessageFile[]): BigModelContentItem[] {
     return files.map((file) => {
-      if (file.type === IMAGE) {
+      if (file[TYPE] === IMAGE) {
         return {[TYPE]: IMAGE_URL, [IMAGE_URL]: {url: file[SRC] || ''}};
       }
       return {[TYPE]: FILE, file_url: {url: file[SRC] || ''}};

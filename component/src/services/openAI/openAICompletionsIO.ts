@@ -26,7 +26,7 @@ export class OpenAICompletionsIO extends OpenAIBaseIO {
   private static getFileContent(files: MessageFile[]): FileContent {
     const baseContent = OpenAIBaseIO.getBaseFileContent(files);
     return baseContent.map((file) => {
-      if (file.type === INPUT_AUDIO) {
+      if (file[TYPE] === INPUT_AUDIO) {
         return file;
       }
       return {[TYPE]: IMAGE_URL, [IMAGE_URL]: {url: (file as MessageFile)[SRC]}};

@@ -1,4 +1,4 @@
-import {ANY, AUDIO, FILE, IMAGE, SRC} from '../../../../../utils/consts/messageConstants';
+import {ANY, AUDIO, FILE, IMAGE, SRC, TYPE} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {FileAttachments} from '../../../../../types/fileAttachments';
@@ -54,7 +54,7 @@ export class FileAttachmentsType {
     const validTypes = accept.split(',');
     for (let i = 0; i < validTypes.length; i++) {
       const validType = validTypes[i].trim();
-      if (file.type === validType) {
+      if (file[TYPE] === validType) {
         return true;
       } else if (validType.startsWith('.')) {
         const extension = validType.slice(1);
@@ -63,7 +63,7 @@ export class FileAttachmentsType {
         }
       } else if (file.name.endsWith(validType)) {
         return true;
-      } else if (validType.endsWith('/*') && file.type.startsWith(validType.slice(0, -2))) {
+      } else if (validType.endsWith('/*') && file[TYPE].startsWith(validType.slice(0, -2))) {
         return true;
       }
     }
@@ -165,7 +165,7 @@ export class FileAttachmentsType {
   }
 
   getFiles() {
-    return Array.from(this._attachments).map((attachment) => ({[FILE]: attachment[FILE], type: attachment.fileType}));
+    return Array.from(this._attachments).map((attachment) => ({[FILE]: attachment[FILE], [TYPE]: attachment.fileType}));
   }
 
   hideAttachments() {

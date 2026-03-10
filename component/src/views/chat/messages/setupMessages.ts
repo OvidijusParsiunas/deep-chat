@@ -1,4 +1,4 @@
-import {DOCS_BASE_URL} from '../../../utils/consts/messageConstants';
+import {DOCS_BASE_URL, TYPE} from '../../../utils/consts/messageConstants';
 import {ServiceIO} from '../../../services/serviceIO';
 import {DeepChat} from '../../../deepChat';
 
@@ -20,7 +20,7 @@ export class SetupMessages {
           the [directConnection](${DOCS_BASE_URL}directConnection/#directConnection) object.`;
       }
       const chat = deepChat.directConnection.openAI?.chat;
-      if (typeof chat === 'object' && chat.tools?.find((tool) => tool.type === 'function') && !chat.function_handler) {
+      if (typeof chat === 'object' && chat.tools?.find((tool) => tool[TYPE] === 'function') && !chat.function_handler) {
         return (
           'Please define the `function_handler` property inside' +
           ` the openAI [chat](${DOCS_BASE_URL}directConnection/openAI#Chat) object.`

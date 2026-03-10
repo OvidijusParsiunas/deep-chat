@@ -417,7 +417,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
     this._dc.addEventListener('message', async (e) => {
       // Realtime server events appear here!
       const response = JSON.parse(e.data);
-      if (response.type === 'session.created') {
+      if (response[TYPE] === 'session.created') {
         this.removeUnavailable();
         if (this._toggleButton) {
           ButtonAccessibility.removeAriaAttributes(this._toggleButton.elementRef);
@@ -426,10 +426,10 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         this._events?.started?.();
         this._deepChat.dispatchEvent(new CustomEvent(SPEECH_SESSION_STARTED));
         this.hideLoading();
-      } else if (response.type === 'response.done') {
+      } else if (response[TYPE] === 'response.done') {
         const message = JSON.parse(e.data);
         const output = message.response.output?.[0];
-        if (output?.type === FUNCTION_CALL) {
+        if (output?.[TYPE] === FUNCTION_CALL) {
           const {name, call_id} = output;
           try {
             await this.handleTool(name, output.arguments, call_id);
@@ -438,18 +438,18 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
           }
         }
         // https://platform.openai.com/docs/api-reference/realtime-server-events/error
-      } else if (response.type === ERROR) {
+      } else if (response[TYPE] === ERROR) {
         this.stopOnError(response[ERROR].message);
         // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
-      } else if (response.type === INVALID_REQUEST_ERROR_PREFIX) {
+      } else if (response[TYPE] === INVALID_REQUEST_ERROR_PREFIX) {
         this.stopOnError(response.message);
-      } else if (response.type === 'response.audio_transcript.delta') {
+      } else if (response[TYPE] === 'response.audio_transcript.delta') {
         // console.log(response.delta);
-      } else if (response.type === 'response.audio_transcript.done') {
+      } else if (response[TYPE] === 'response.audio_transcript.done') {
         if (response.transcript) {
           FireEvents.onMessage(this._deepChat, {[ROLE]: AI, [TEXT]: response.transcript}, false);
         }
-      } else if (response.type === 'conversation.item.input_audio_transcription.completed') {
+      } else if (response[TYPE] === 'conversation.item.input_audio_transcription.completed') {
         if (response.transcript) {
           FireEvents.onMessage(this._deepChat, {[ROLE]: USER, [TEXT]: response.transcript}, false);
         }
