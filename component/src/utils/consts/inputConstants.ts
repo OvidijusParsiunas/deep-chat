@@ -19,3 +19,5 @@ export const ACTIVE = 'active';
 export const DISABLED = 'disabled';
 
 export const SVG = 'svg';
+
+export const UNAVAILABLE = 'unavailable';

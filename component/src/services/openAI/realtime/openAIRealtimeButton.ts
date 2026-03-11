@@ -1,9 +1,9 @@
 import {DefinedButtonStateStyles, DefinedButtonInnerElements, ButtonInnerElement} from '../../../types/buttonInternal';
 import {OpenAIRealtimeButton as OpenAIRealtimeButtonT} from '../../../types/openAIRealtime';
 import {ButtonInnerElements} from '../../../views/chat/input/buttons/buttonInnerElements';
+import {ACTIVE, DEFAULT, SVG, UNAVAILABLE} from '../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../utils/consts/htmlConstants';
 import {InputButton} from '../../../views/chat/input/buttons/inputButton';
-import {ACTIVE, DEFAULT, SVG} from '../../../utils/consts/inputConstants';
 import {ButtonCSS} from '../../../views/chat/input/buttons/buttonCSS';
 
 type Styles = DefinedButtonStateStyles<OpenAIRealtimeButtonT>;
@@ -24,7 +24,7 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
     return {
       [DEFAULT]: this.createInnerButtonElements(DEFAULT, customStyles),
       [ACTIVE]: this.createInnerButtonElements(ACTIVE, customStyles),
-      unavailable: this.createInnerButtonElements('unavailable', customStyles),
+      [UNAVAILABLE]: this.createInnerButtonElements(UNAVAILABLE, customStyles),
     };
   }
 
@@ -39,23 +39,23 @@ export class OpenAIRealtimeButton extends InputButton<Styles> {
 
   public changeToActive() {
     this.changeState(this._innerElements[ACTIVE]);
-    this.reapplyStateStyle(ACTIVE, ['unavailable', DEFAULT]);
+    this.reapplyStateStyle(ACTIVE, [UNAVAILABLE, DEFAULT]);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.changeState(this._innerElements[DEFAULT]);
     if (this.customStyles?.[ACTIVE]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[ACTIVE]);
-    if (this.customStyles?.unavailable) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.unavailable);
-    this.reapplyStateStyle(DEFAULT, [ACTIVE, 'unavailable']);
+    if (this.customStyles?.[UNAVAILABLE]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[UNAVAILABLE]);
+    this.reapplyStateStyle(DEFAULT, [ACTIVE, UNAVAILABLE]);
     this.isActive = false;
   }
 
   public changeToUnavailable() {
-    this.changeState(this._innerElements.unavailable);
+    this.changeState(this._innerElements[UNAVAILABLE]);
     if (this.customStyles?.[ACTIVE]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[ACTIVE]);
     if (this.customStyles?.[DEFAULT]) ButtonCSS.unsetAllCSS(this.elementRef, this.customStyles?.[DEFAULT]);
-    this.reapplyStateStyle('unavailable', [DEFAULT, ACTIVE]);
+    this.reapplyStateStyle(UNAVAILABLE, [DEFAULT, ACTIVE]);
     this.isActive = false;
   }
 }
