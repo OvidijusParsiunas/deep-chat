@@ -1,4 +1,4 @@
-import {CLICK, DEFAULT, HOVER} from '../../../../utils/consts/inputConstants';
+import {CLICK, DEFAULT, HOVER, STYLES} from '../../../../utils/consts/inputConstants';
 import {DEEP_COPY, TEXT} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST} from '../../../../utils/consts/htmlConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
@@ -63,13 +63,13 @@ export class HTMLDeepChatElements {
 
   private static getProcessedStyles(utilities: HTMLClassUtilities, element: Element, className: string) {
     const customStyles = Array.from(element[CLASS_LIST]).reduce<StatefulStyles[]>((styles, className) => {
-      const statefulStyles = utilities[className]?.styles as StatefulStyles;
-      if (statefulStyles && utilities[className].styles) {
+      const statefulStyles = utilities[className]?.[STYLES] as StatefulStyles;
+      if (statefulStyles && utilities[className][STYLES]) {
         styles.push(statefulStyles);
       }
       return styles;
     }, []);
-    const deepChatStyles = DEEP_CHAT_ELEMENTS[className].styles;
+    const deepChatStyles = DEEP_CHAT_ELEMENTS[className][STYLES];
     if (deepChatStyles) {
       const stylesCp = DEEP_COPY(deepChatStyles);
       if (stylesCp[DEFAULT]) StyleUtils.overwriteDefaultWithAlreadyApplied(stylesCp, element as HTMLElement);

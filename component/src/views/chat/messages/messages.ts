@@ -2,13 +2,13 @@ import {MessageBody, MessageContentI, Overwrite} from '../../../types/messagesIn
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {HiddenFileAttachments} from '../input/fileAttachments/fileAttachments';
 import {MessageFile, MessageFileType} from '../../../types/messageFile';
+import {DEFAULT, STYLES} from '../../../utils/consts/inputConstants';
 import {CustomErrors, ServiceIO} from '../../../services/serviceIO';
 import {IntroMessage, LoadingStyles} from '../../../types/messages';
 import {LoadingStyle} from '../../../utils/loading/loadingStyle';
 import {HTMLDeepChatElements} from './html/htmlDeepChatElements';
 import {ElementUtils} from '../../../utils/element/elementUtils';
 import {OBJECT} from '../../../services/utils/serviceConstants';
-import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {FireEvents} from '../../../utils/events/fireEvents';
 import {MessageStyleUtils} from './utils/messageStyleUtils';
 import {ErrorMessageOverrides} from '../../../types/error';
@@ -394,7 +394,7 @@ export class Messages extends MessagesBase {
       : this.addDefaultLoadingMessage(style, role);
     this.appendOuterContainerElemet(messageElements.outerContainer);
     messageElements.bubbleElement[CLASS_LIST].add(LoadingStyle.BUBBLE_CLASS);
-    this.applyCustomStyles(messageElements, role, false, style?.styles);
+    this.applyCustomStyles(messageElements, role, false, style?.[STYLES]);
     this.avatar?.getAvatarContainer(messageElements.innerContainer)?.[CLASS_LIST].add('loading-avatar-container');
     const allowScroll = !this.focusMode && ElementUtils.isScrollbarAtBottomOfElement(this.elementRef);
     if (allowScroll) ElementUtils.scrollToBottom(this);

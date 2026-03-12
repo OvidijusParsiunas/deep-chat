@@ -2,6 +2,7 @@ import {AI, DEEP_COPY, HTML, MESSAGES_ID} from '../../../../utils/consts/message
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {LoadingStyle} from '../../../../utils/loading/loadingStyle';
 import {MessageElementsStyles} from '../../../../types/messages';
+import {STYLES} from '../../../../utils/consts/inputConstants';
 import {MessageElements, Messages} from '../messages';
 import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
@@ -36,8 +37,8 @@ export class LoadingHistory {
     const viewClass = isInitial ? LoadingHistory.FULL_VIEW_CLASS : LoadingHistory.SMALL_CLASS;
     messageElements.outerContainer[CLASS_LIST].add(viewClass);
     const styles = isInitial
-      ? messages.messageStyles?.loading?.history?.full?.styles
-      : messages.messageStyles?.loading?.history?.small?.styles;
+      ? messages.messageStyles?.loading?.history?.full?.[STYLES]
+      : messages.messageStyles?.loading?.history?.small?.[STYLES];
     LoadingHistory.apply(messages, messageElements, styles);
     let messagesElement = messages.elementRef;
     if (isInitial && messages.elementRef.id !== MESSAGES_ID) {
@@ -67,7 +68,7 @@ export class LoadingHistory {
   private static tryChangeViewToSmall(messages: MessagesBase, messageElements?: MessageElements) {
     if (messageElements?.outerContainer[CLASS_LIST].contains(LoadingHistory.FULL_VIEW_CLASS)) {
       messageElements.outerContainer[CLASS_LIST].replace(LoadingHistory.FULL_VIEW_CLASS, LoadingHistory.SMALL_CLASS);
-      const styles = messages.messageStyles?.loading?.history?.small?.styles;
+      const styles = messages.messageStyles?.loading?.history?.small?.[STYLES];
       if (styles) LoadingHistory.apply(messages, messageElements, styles);
       const html = messages.messageStyles?.loading?.history?.small?.[HTML];
       if (html) messageElements.bubbleElement.innerHTML = html;

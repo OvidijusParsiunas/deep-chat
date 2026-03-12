@@ -3,8 +3,8 @@ import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConsta
 import {FILE, FILES, TEXT, TYPE} from '../../../../../utils/consts/messageConstants';
 import {GenericInputButtonStyles} from '../../../../../types/genericInputButton';
 import {DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
+import {CLICK, STYLES} from '../../../../../utils/consts/inputConstants';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
-import {CLICK} from '../../../../../utils/consts/inputConstants';
 import {FileServiceIO} from '../../../../../services/serviceIO';
 import {ButtonPosition} from '../../../../../types/button';
 import {Legacy} from '../../../../../utils/legacy/legacy';
@@ -23,7 +23,7 @@ export class UploadFileButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType,
       fileService: FileServiceIO, iconId: string, iconSVGString: string, dropupText?: string) {
     const buttonPosition = Legacy.processPosition<ButtonPosition>(fileService?.button?.position);
-    const dropupItemText = fileService?.button?.styles?.[TEXT]?.content || dropupText;
+    const dropupItemText = fileService?.button?.[STYLES]?.[TEXT]?.content || dropupText;
     const tooltip = TooltipUtils.tryCreateConfig('Upload File', fileService?.button?.tooltip);
     super(
       UploadFileButton.createButtonElement(), iconSVGString, buttonPosition,
@@ -31,8 +31,8 @@ export class UploadFileButton extends InputButton<Styles> {
     const innerElements = this.createInnerElementsForStates(iconId, this.customStyles);
     this._inputElement = UploadFileButton.createInputElement(fileService?.[FILES]?.acceptedFormats);
     this.addClickEvent(containerElement, fileService);
-    this.changeElementsByState(innerElements.styles);
-    this.reapplyStateStyle('styles');
+    this.changeElementsByState(innerElements[STYLES]);
+    this.reapplyStateStyle(STYLES);
     this._fileAttachmentsType = fileAttachmentsType;
     this._openModalOnce = fileService[FILES]?.infoModal?.openModalOnce === false
       ? undefined : fileService[FILES]?.infoModal?.openModalOnce;
@@ -40,7 +40,7 @@ export class UploadFileButton extends InputButton<Styles> {
 
   private createInnerElementsForStates(iconId: string, customStyles?: Styles) {
     return {
-      styles: this.createInnerElements(iconId, 'styles', customStyles),
+      [STYLES]: this.createInnerElements(iconId, STYLES, customStyles),
     };
   }
 

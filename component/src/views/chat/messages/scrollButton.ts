@@ -2,8 +2,8 @@ import {HiddenMessages as HiddenMessagesT, ScrollButton as ScrollButtonT} from '
 import {DEEP_COPY, ONE, ZERO} from '../../../utils/consts/messageConstants';
 import {CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {StatefulEvents} from '../../../utils/element/statefulEvents';
+import {DEFAULT, STYLES} from '../../../utils/consts/inputConstants';
 import {ElementUtils} from '../../../utils/element/elementUtils';
-import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../utils/element/styleUtils';
 import {StatefulStyles} from '../../../types/styles';
 import {MessagesBase} from './messagesBase';
@@ -27,16 +27,16 @@ export class ScrollButton {
         config = DEEP_COPY(hiddenMessages);
         config.onUpdate = hiddenMessages.onUpdate;
       }
-      config.styles ??= {};
+      config[STYLES] ??= {};
       const fitContent = 'fit-content';
-      config.styles.default = {borderRadius: '10px', width: fitContent, height: fitContent, ...config.styles.default};
+      config[STYLES].default = {borderRadius: '10px', width: fitContent, height: fitContent, ...config[STYLES].default};
       this.hiddenMessagesConfig = config;
       this.io = this.initIntersectionObserver(this._messages.elementRef);
     }
     if (scrollButton) {
       const config: ScrollButtonT = typeof scrollButton === 'object' ? DEEP_COPY(scrollButton) : {};
-      config.styles ??= {};
-      config.styles.default = {borderRadius: '50%', width: '1.4rem', height: '1.4rem', ...config.styles.default};
+      config[STYLES] ??= {};
+      config[STYLES].default = {borderRadius: '50%', width: '1.4rem', height: '1.4rem', ...config[STYLES].default};
       this.scrollButtonConfig = config;
     }
     this.element = this.createElement();
@@ -123,7 +123,7 @@ export class ScrollButton {
       } else {
         this.element.innerHTML = content;
       }
-      if (this.hiddenMessagesConfig?.styles) this.assignStyles(this.hiddenMessagesConfig.styles);
+      if (this.hiddenMessagesConfig?.[STYLES]) this.assignStyles(this.hiddenMessagesConfig[STYLES]);
       ScrollButton.displayElement(this.element);
     }
   }
@@ -153,7 +153,7 @@ export class ScrollButton {
       ScrollButton.displayElement(this.element);
       this.element.innerHTML =
         this.scrollButtonConfig?.content || '<span style="font-size: 1.2rem; user-select: none;">&darr;</span>';
-      if (this.scrollButtonConfig?.styles) this.assignStyles(this.scrollButtonConfig.styles);
+      if (this.scrollButtonConfig?.[STYLES]) this.assignStyles(this.scrollButtonConfig[STYLES]);
     }
   }
 

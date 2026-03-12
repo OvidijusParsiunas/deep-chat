@@ -1,9 +1,9 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
 import {BrowserStorage} from '../../messages/browserStorage/browserStorage';
 import {FILES, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
+import {DISABLED, STYLES} from '../../../../utils/consts/inputConstants';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {FileAttachments} from '../fileAttachments/fileAttachments';
-import {DISABLED} from '../../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {Browser} from '../../../../utils/browser/browser';
 import {ServiceIO} from '../../../../services/serviceIO';
@@ -29,7 +29,7 @@ export class TextInputEl {
 
   constructor(deepChat: DeepChat, serviceIO: ServiceIO, fileAttachments: FileAttachments, storage?: BrowserStorage) {
     const processedConfig = TextInputEl.processConfig(serviceIO, deepChat.textInput);
-    this.elementRef = TextInputEl.createContainerElement(processedConfig?.styles?.container);
+    this.elementRef = TextInputEl.createContainerElement(processedConfig?.[STYLES]?.container);
     this._config = processedConfig;
     this.inputElementRef = this.createInputElement(deepChat.defaultInput?.[TEXT], storage);
     TextInputEl.addFilesToAnyType(fileAttachments, deepChat.defaultInput?.[FILES]);
@@ -106,7 +106,7 @@ export class TextInputEl {
       inputElement.removeAttribute(`aria-${DISABLED}`);
       this.addEventListeners(inputElement);
     }
-    Object.assign(inputElement[STYLE], this._config.styles?.[TEXT]);
+    Object.assign(inputElement[STYLE], this._config[STYLES]?.[TEXT]);
     Object.assign(inputElement[STYLE], this._config.placeholder?.[STYLE]);
     if (!this._config.placeholder?.[STYLE]?.color) inputElement.setAttribute('textcolor', '');
     return inputElement;
@@ -119,14 +119,14 @@ export class TextInputEl {
   public removePlaceholderStyle() {
     if (!this.inputElementRef[CLASS_LIST].contains(`text-input-${DISABLED}`) && this._config.placeholder?.[STYLE]) {
       StyleUtils.unsetStyle(this.inputElementRef, this._config.placeholder?.[STYLE]);
-      Object.assign(this.inputElementRef[STYLE], this._config?.styles?.[TEXT]);
+      Object.assign(this.inputElementRef[STYLE], this._config?.[STYLES]?.[TEXT]);
     }
   }
 
   private addEventListeners(inputElement: HTMLElement) {
-    if (this._config.styles?.focus) {
-      inputElement.onfocus = () => Object.assign(this.elementRef[STYLE], this._config.styles?.focus);
-      inputElement.onblur = this.onBlur.bind(this, this._config.styles.focus, this._config.styles?.container);
+    if (this._config[STYLES]?.focus) {
+      inputElement.onfocus = () => Object.assign(this.elementRef[STYLE], this._config[STYLES]?.focus);
+      inputElement.onblur = this.onBlur.bind(this, this._config[STYLES].focus, this._config[STYLES]?.container);
     }
     inputElement.addEventListener('keydown', this.onKeydown.bind(this));
     inputElement.addEventListener('input', this.onInput.bind(this));

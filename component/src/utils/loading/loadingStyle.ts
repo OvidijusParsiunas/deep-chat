@@ -1,5 +1,6 @@
 import {CREATE_ELEMENT, STYLE} from '../consts/htmlConstants';
 import {LoadingStyles} from '../../types/messages';
+import {STYLES} from '../consts/inputConstants';
 import {CustomStyle} from '../../types/styles';
 
 export class LoadingStyle {
@@ -18,8 +19,8 @@ export class LoadingStyle {
   }
 
   public static setDots(bubbleElement: HTMLElement, styles?: LoadingStyles) {
-    if (styles?.styles?.bubble?.color) {
-      const color = LoadingStyle.colorToHex(styles.styles.bubble.color);
+    if (styles?.[STYLES]?.bubble?.color) {
+      const color = LoadingStyle.colorToHex(styles[STYLES].bubble.color);
       bubbleElement[STYLE].setProperty('--loading-message-color', color);
       bubbleElement[STYLE].setProperty('--loading-message-color-fade', `${color}33`);
     } else {

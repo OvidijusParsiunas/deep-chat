@@ -6,6 +6,7 @@ import {FILES, TEXT} from '../../../../../utils/consts/messageConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {CameraModal} from '../../fileAttachments/modal/cameraModal';
 import {CAMERA_ICON_STRING} from '../../../../../icons/cameraIcon';
+import {STYLES} from '../../../../../utils/consts/inputConstants';
 import {ServiceIO} from '../../../../../services/serviceIO';
 import {ButtonPosition} from '../../../../../types/button';
 import {Legacy} from '../../../../../utils/legacy/legacy';
@@ -19,21 +20,21 @@ type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 export class CameraButton extends InputButton<Styles> {
   constructor(containerElement: HTMLElement, fileAttachmentsType: FileAttachmentsType, fileService: ServiceIO['camera']) {
     const buttonPosition = Legacy.processPosition<ButtonPosition>(fileService?.button?.position);
-    const dropupText = fileService?.button?.styles?.[TEXT]?.content || 'Photo';
+    const dropupText = fileService?.button?.[STYLES]?.[TEXT]?.content || 'Photo';
     const tooltip = TooltipUtils.tryCreateConfig('Camera', fileService?.button?.tooltip);
-    const styles = (fileService?.button?.styles as Styles) || {};
+    const styles = (fileService?.button?.[STYLES] as Styles) || {};
     super(CameraButton.createButtonElement(), CAMERA_ICON_STRING, buttonPosition, tooltip, styles, dropupText);
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     if (fileService) {
       this.addClickEvent(containerElement, fileAttachmentsType, fileService.modalContainerStyle, fileService[FILES]);
     }
-    this.changeElementsByState(innerElements.styles);
-    this.reapplyStateStyle('styles');
+    this.changeElementsByState(innerElements[STYLES]);
+    this.reapplyStateStyle(STYLES);
   }
 
   private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: this.createInnerElements('camera-icon', 'styles', customStyles),
+      [STYLES]: this.createInnerElements('camera-icon', STYLES, customStyles),
     };
   }
 

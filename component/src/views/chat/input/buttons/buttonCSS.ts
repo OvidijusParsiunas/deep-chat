@@ -1,4 +1,4 @@
-import {CLICK, DEFAULT, HOVER, SVG} from '../../../../utils/consts/inputConstants';
+import {CLICK, DEFAULT, HOVER, STYLES, SVG} from '../../../../utils/consts/inputConstants';
 import {StyleUtils} from '../../../../utils/element/styleUtils';
 import {TEXT} from '../../../../utils/consts/messageConstants';
 import {STYLE} from '../../../../utils/consts/htmlConstants';
@@ -10,22 +10,22 @@ export class ButtonCSS {
   public static unsetAllCSS(button: HTMLElement, styles: ButtonStyles) {
     if (styles.container) StyleUtils.unsetAllCSSMouseStates(button, styles.container);
     const {svg, text} = ButtonUtils.parseSVGTextElements(Array.from(button.children));
-    if (styles[SVG]?.styles && svg) StyleUtils.unsetAllCSSMouseStates(svg as HTMLElement, styles[SVG].styles);
-    if (styles[TEXT]?.styles && text) StyleUtils.unsetAllCSSMouseStates(text as HTMLElement, styles[TEXT].styles);
+    if (styles[SVG]?.[STYLES] && svg) StyleUtils.unsetAllCSSMouseStates(svg as HTMLElement, styles[SVG][STYLES]);
+    if (styles[TEXT]?.[STYLES] && text) StyleUtils.unsetAllCSSMouseStates(text as HTMLElement, styles[TEXT][STYLES]);
   }
 
   public static unsetActionCSS(button: HTMLElement, styles: ButtonStyles) {
     if (styles.container) StyleUtils.unsetActivityCSSMouseStates(button, styles.container);
     const {svg, text} = ButtonUtils.parseSVGTextElements(Array.from(button.children));
-    if (styles[SVG]?.styles && svg) StyleUtils.unsetActivityCSSMouseStates(svg as HTMLElement, styles[SVG].styles);
-    if (styles[TEXT]?.styles && text) StyleUtils.unsetActivityCSSMouseStates(text as HTMLElement, styles[TEXT].styles);
+    if (styles[SVG]?.[STYLES] && svg) StyleUtils.unsetActivityCSSMouseStates(svg as HTMLElement, styles[SVG][STYLES]);
+    if (styles[TEXT]?.[STYLES] && text) StyleUtils.unsetActivityCSSMouseStates(text as HTMLElement, styles[TEXT][STYLES]);
   }
 
   public static setElementsCSS(button: HTMLElement, styles: ButtonStyles, style: keyof StatefulStyles) {
     Object.assign(button[STYLE], styles.container?.[style]);
     const {svg, text} = ButtonUtils.parseSVGTextElements(Array.from(button.children));
-    if (svg) Object.assign((svg as HTMLElement)[STYLE], styles[SVG]?.styles?.[style]);
-    if (text) Object.assign((text as HTMLElement)[STYLE], styles[TEXT]?.styles?.[style]);
+    if (svg) Object.assign((svg as HTMLElement)[STYLE], styles[SVG]?.[STYLES]?.[style]);
+    if (text) Object.assign((text as HTMLElement)[STYLE], styles[TEXT]?.[STYLES]?.[style]);
   }
 
   public static setElementCssUpToState(button: HTMLElement, styles: ButtonStyles, style: keyof StatefulStyles) {

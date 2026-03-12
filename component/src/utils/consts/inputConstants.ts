@@ -21,3 +21,5 @@ export const DISABLED = 'disabled';
 export const SVG = 'svg';
 
 export const UNAVAILABLE = 'unavailable';
+
+export const STYLES = 'styles';

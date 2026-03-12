@@ -4,7 +4,7 @@ import {SPEECH_SESSION_STARTED, SPEECH_SESSION_STOPPED} from '../../utils/speech
 import {ButtonAccessibility} from '../../../views/chat/input/buttons/buttonAccessility';
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {DEFINE_FUNCTION_HANDLER} from '../../../utils/errorMessages/errorMessages';
-import {ACTIVE, DEFAULT, SVG} from '../../../utils/consts/inputConstants';
+import {ACTIVE, DEFAULT, STYLES, SVG} from '../../../utils/consts/inputConstants';
 import {SpeechToSpeechEvents} from '../../../types/speechToSpeechEvents';
 import {DirectConnection} from '../../../types/directConnection';
 import {MICROPHONE_ICON_STRING} from '../../../icons/microphone';
@@ -267,7 +267,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private createAvatarContainer() {
     const avatarContainer = CREATE_ELEMENT();
     avatarContainer.id = 'deep-chat-openai-realtime-avatar-container';
-    Object.assign(avatarContainer[STYLE], this._avatarConfig?.styles?.container);
+    Object.assign(avatarContainer[STYLE], this._avatarConfig?.[STYLES]?.container);
     avatarContainer.appendChild(this._avatarEl);
     return avatarContainer;
   }
@@ -275,7 +275,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private static createAvatar(config?: OpenAIRealtime['avatar']) {
     const avatar = CREATE_ELEMENT('img') as HTMLImageElement;
     avatar.id = 'deep-chat-openai-realtime-avatar';
-    Object.assign(avatar[STYLE], config?.styles?.[IMAGE]);
+    Object.assign(avatar[STYLE], config?.[STYLES]?.[IMAGE]);
     avatar[SRC] = config?.[SRC] || avatarUrl;
     return avatar;
   }

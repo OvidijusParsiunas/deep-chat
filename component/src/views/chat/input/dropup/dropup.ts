@@ -1,4 +1,4 @@
-import {CLICK, OUTSIDE_START, OUTSIDE_END} from '../../../../utils/consts/inputConstants';
+import {CLICK, OUTSIDE_START, OUTSIDE_END, STYLES} from '../../../../utils/consts/inputConstants';
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
@@ -22,16 +22,16 @@ export class Dropup extends InputButton<Styles> {
 
   constructor(containerElement: HTMLElement, styles?: DropupStyles) {
     const tooltip = TooltipUtils.tryCreateConfig('Options', styles?.button?.tooltip);
-    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, tooltip, {styles: styles?.button?.styles});
+    super(Dropup.createButtonElement(), PLUS_ICON_STRING, undefined, tooltip, {[STYLES]: styles?.button?.[STYLES]});
     const innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menu = new DropupMenu(containerElement, styles?.menu);
     this.addClickEvent();
     this.buttonContainer = Dropup.createButtonContainer();
-    this.changeElementsByState(innerElements.styles);
+    this.changeElementsByState(innerElements[STYLES]);
     this.buttonContainer.appendChild(this.elementRef);
     this.elementRef[CLASS_LIST].add(Dropup.BUTTON_ICON_CLASS);
     this.buttonContainer.appendChild(this._menu.elementRef);
-    this.reapplyStateStyle('styles');
+    this.reapplyStateStyle(STYLES);
     this.addContainerEvents(containerElement);
   }
 
@@ -43,7 +43,7 @@ export class Dropup extends InputButton<Styles> {
 
   private createInnerElementsForStates(customStyles?: Styles) {
     return {
-      styles: this.createInnerElements('dropup-icon', 'styles', customStyles),
+      [STYLES]: this.createInnerElements('dropup-icon', STYLES, customStyles),
     };
   }
 

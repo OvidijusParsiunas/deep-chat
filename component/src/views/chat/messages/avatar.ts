@@ -1,9 +1,9 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../utils/consts/htmlConstants';
 import {AI, END, SRC, START, USER} from '../../../utils/consts/messageConstants';
 import {Avatars, AvatarStyles, CustomAvatars} from '../../../types/avatars';
+import {DEFAULT, STYLES} from '../../../utils/consts/inputConstants';
 import aiLogoUrl from '../../../../assets/machine-learning.svg';
 import avatarUrl from '../../../../assets/person-avatar.png';
-import {DEFAULT} from '../../../utils/consts/inputConstants';
 import {Legacy} from '../../../utils/legacy/legacy';
 import {Role} from './role';
 
@@ -42,9 +42,9 @@ export class Avatar extends Role {
   }
 
   private getPosition(role: string, avatars?: CustomAvatars) {
-    let position = Legacy.processPosition<AvatarStyles['position'] | undefined>(avatars?.[role]?.styles?.position);
-    if (role !== USER) position ??= avatars?.ai?.styles?.position;
-    position ??= avatars?.[DEFAULT]?.styles?.position;
+    let position = Legacy.processPosition<AvatarStyles['position'] | undefined>(avatars?.[role]?.[STYLES]?.position);
+    if (role !== USER) position ??= avatars?.ai?.[STYLES]?.position;
+    position ??= avatars?.[DEFAULT]?.[STYLES]?.position;
     position ??= role === USER ? END : START;
     return position;
   }
@@ -61,12 +61,12 @@ export class Avatar extends Role {
   }
 
   private static applyCustomStyles(container: HTMLElement, avatar: HTMLElement, avatars: CustomAvatars, role: string) {
-    if (avatars[DEFAULT]?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars[DEFAULT].styles);
+    if (avatars[DEFAULT]?.[STYLES]) Avatar.applyCustomStylesToElements(container, avatar, avatars[DEFAULT][STYLES]);
     if (role === USER) {
-      if (avatars.user?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars.user.styles);
+      if (avatars.user?.[STYLES]) Avatar.applyCustomStylesToElements(container, avatar, avatars.user[STYLES]);
     } else {
-      if (avatars.ai?.styles) Avatar.applyCustomStylesToElements(container, avatar, avatars.ai.styles);
-      const customRoleStyles = avatars[role]?.styles;
+      if (avatars.ai?.[STYLES]) Avatar.applyCustomStylesToElements(container, avatar, avatars.ai[STYLES]);
+      const customRoleStyles = avatars[role]?.[STYLES];
       if (customRoleStyles) Avatar.applyCustomStylesToElements(container, avatar, customRoleStyles);
     }
   }

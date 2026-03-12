@@ -1,5 +1,5 @@
+import {ACTIVE, DEFAULT, DISABLED, STYLES, SVG} from '../../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../../utils/consts/htmlConstants';
-import {ACTIVE, DEFAULT, DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
 import {StatefulEvents} from '../../../../../utils/element/statefulEvents';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {DropupMenuStyles} from '../../../../../types/dropupStyles';
@@ -50,15 +50,15 @@ export class CustomButton extends InputButton<Styles> {
 
   // prettier-ignore
   constructor(customButton: CustomButtonT, index: number, focusInput?: () => void, menuStyles?: DropupMenuStyles) {
-    const dropupText = customButton?.styles?.button?.[DEFAULT]?.[TEXT]?.content || `Custom ${index}`;
+    const dropupText = customButton?.[STYLES]?.button?.[DEFAULT]?.[TEXT]?.content || `Custom ${index}`;
     const svg = CUSTOM_ICON_STRING;
-    const tooltip = TooltipUtils.tryCreateConfig(`Custom ${index}`, customButton?.tooltip);  
+    const tooltip = TooltipUtils.tryCreateConfig(`Custom ${index}`, customButton?.tooltip);
     super(CustomButton.createButtonElement(), svg, customButton?.position,
-      tooltip, customButton?.styles?.button || (tooltip && {}), dropupText);
+      tooltip, customButton?.[STYLES]?.button || (tooltip && {}), dropupText);
     this._innerElements = this.createInnerElementsForStates(this.customStyles);
     this._menuStyles = menuStyles;
     this._onClick = customButton.onClick;
-    this._dropupStyles = customButton.styles?.dropup;
+    this._dropupStyles = customButton[STYLES]?.dropup;
     this.setSetState(customButton);
     this.addClickListener(focusInput);
     this.changeState(customButton.initialState, true);
