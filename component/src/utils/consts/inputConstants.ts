@@ -23,3 +23,5 @@ export const SVG = 'svg';
 export const UNAVAILABLE = 'unavailable';
 
 export const STYLES = 'styles';
+
+export const MOUSEENTER = 'mouseenter';

@@ -1,4 +1,4 @@
-import {CLICK, OUTSIDE_START, OUTSIDE_END, STYLES} from '../../../../utils/consts/inputConstants';
+import {CLICK, MOUSEENTER, OUTSIDE_START, OUTSIDE_END, STYLES} from '../../../../utils/consts/inputConstants';
 import {PositionToButtons} from '../buttons/styleAdjustments/inputButtonPositions';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {GenericInputButtonStyles} from '../../../../types/genericInputButton';
@@ -55,7 +55,7 @@ export class Dropup extends InputButton<Styles> {
           this._menu.toggle();
           const firstItem = this._menu.elementRef.children[0] as HTMLElement;
           firstItem.focus();
-          firstItem.dispatchEvent(new MouseEvent('mouseenter'));
+          firstItem.dispatchEvent(new MouseEvent(MOUSEENTER));
         });
       }
     };

@@ -1,5 +1,5 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
-import {CLICK, DEFAULT, SVG} from '../../../../utils/consts/inputConstants';
+import {CLICK, DEFAULT, MOUSEENTER, SVG} from '../../../../utils/consts/inputConstants';
 import {StatefulEvents} from '../../../../utils/element/statefulEvents';
 import {CustomStyle, StatefulStyles} from '../../../../types/styles';
 import {ButtonInnerElements} from '../buttons/buttonInnerElements';
@@ -17,7 +17,7 @@ export class DropupItem {
   public static ICON_CLASS = 'dropup-menu-item-icon';
 
   public static addHighlightEvents(menu: DropupMenu, item: HTMLElement) {
-    item.addEventListener('mouseenter', (event) => {
+    item.addEventListener(MOUSEENTER, (event) => {
       menu.highlightedItem = event.target as HTMLElement;
     });
     item.addEventListener('mouseleave', () => {
