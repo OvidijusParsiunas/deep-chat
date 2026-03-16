@@ -1,5 +1,5 @@
+import {CLICK, DROPUP_MENU, MOUSELEAVE} from '../../../../utils/consts/inputConstants';
 import {CREATE_ELEMENT, STYLE} from '../../../../utils/consts/htmlConstants';
-import {CLICK, DROPUP_MENU} from '../../../../utils/consts/inputConstants';
 import {KEYBOARD_KEY} from '../../../../utils/buttons/keyboardKeys';
 import {DropupMenuStyles} from '../../../../types/dropupStyles';
 import {DropupItemNavigation} from './dropupItemNavigation';
@@ -77,10 +77,10 @@ export class DropupMenu {
     } else if (this._isOpen) {
       if (event.key === KEYBOARD_KEY.ESCAPE) {
         this.close();
-        this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
+        this.highlightedItem?.dispatchEvent(new MouseEvent(MOUSELEAVE));
       } else if (event.key === KEYBOARD_KEY.ENTER) {
         this.highlightedItem?.[CLICK]();
-        this.highlightedItem?.dispatchEvent(new MouseEvent('mouseleave'));
+        this.highlightedItem?.dispatchEvent(new MouseEvent(MOUSELEAVE));
       } else if (event.key === KEYBOARD_KEY.ARROW_DOWN) {
         DropupItemNavigation.focusSiblingItem(
           this,

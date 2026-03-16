@@ -1,4 +1,4 @@
-import {MOUSEENTER} from '../../../../utils/consts/inputConstants';
+import {MOUSEENTER, MOUSELEAVE} from '../../../../utils/consts/inputConstants';
 import {DropupMenu} from './dropupMenu';
 
 export class DropupItemNavigation {
@@ -14,10 +14,10 @@ export class DropupItemNavigation {
       ? focusedItem
       : (focusedItem[isNext ? 'nextSibling' : 'previousSibling'] as HTMLElement);
     if (!siblingElement) {
-      focusedItem.dispatchEvent(new MouseEvent('mouseleave'));
+      focusedItem.dispatchEvent(new MouseEvent(MOUSELEAVE));
       DropupItemNavigation.focusItemWhenOnEdge(menu, isNext);
     } else {
-      focusedItem.dispatchEvent(new MouseEvent('mouseleave'));
+      focusedItem.dispatchEvent(new MouseEvent(MOUSELEAVE));
       siblingElement.dispatchEvent(new MouseEvent(MOUSEENTER));
       siblingElement.focus();
     }

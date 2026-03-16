@@ -25,3 +25,5 @@ export const UNAVAILABLE = 'unavailable';
 export const STYLES = 'styles';
 
 export const MOUSEENTER = 'mouseenter';
+
+export const MOUSELEAVE = 'mouseleave';

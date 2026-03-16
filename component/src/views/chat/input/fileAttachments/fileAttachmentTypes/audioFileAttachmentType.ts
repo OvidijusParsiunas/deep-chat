@@ -1,6 +1,6 @@
+import {CLICK, MOUSEENTER, MOUSELEAVE} from '../../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {AUDIO, FILE, SRC} from '../../../../../utils/consts/messageConstants';
-import {CLICK, MOUSEENTER} from '../../../../../utils/consts/inputConstants';
 import {AttachmentObject, FileAttachmentsType} from './fileAttachmentsType';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {FileAttachments} from '../../../../../types/fileAttachments';
@@ -104,7 +104,7 @@ export class AudioFileAttachmentType extends FileAttachmentsType {
     const mouseEnter = () => container.replaceChildren(stop);
     container.addEventListener(MOUSEENTER, mouseEnter);
     const mouseLeave = () => container.replaceChildren(textContainer);
-    container.addEventListener('mouseleave', mouseLeave);
+    container.addEventListener(MOUSELEAVE, mouseLeave);
     const click = () => this.stopPlaceholderCallback?.();
     container.addEventListener(CLICK, click);
   }
