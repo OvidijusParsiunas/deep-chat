@@ -27,3 +27,7 @@ export const STYLES = 'styles';
 export const MOUSEENTER = 'mouseenter';
 
 export const MOUSELEAVE = 'mouseleave';
+
+export const MOUSEDOWN = 'mousedown';
+
+export const MOUSEUP = 'mouseup';
