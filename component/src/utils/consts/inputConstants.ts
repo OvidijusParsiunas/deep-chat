@@ -31,3 +31,5 @@ export const MOUSELEAVE = 'mouseleave';
 export const MOUSEDOWN = 'mousedown';
 
 export const MOUSEUP = 'mouseup';
+
+export const SUBMIT = 'submit';

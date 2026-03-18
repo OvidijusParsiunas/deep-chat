@@ -1,4 +1,4 @@
-import {DEFAULT, DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
+import {DEFAULT, DISABLED, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
 import {DEEP_COPY, TEXT} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
@@ -9,11 +9,11 @@ import {SubmitButton} from './submitButton';
 export class SubmitButtonStateStyle {
   public static resetSubmit(submitButton: SubmitButton, wasLoading: boolean) {
     if (wasLoading) {
-      submitButton.unsetCustomStateStyles(['loading', 'submit']);
+      submitButton.unsetCustomStateStyles(['loading', SUBMIT]);
     } else {
-      submitButton.unsetCustomStateStyles(['stop', 'loading', 'submit']);
+      submitButton.unsetCustomStateStyles(['stop', 'loading', SUBMIT]);
     }
-    submitButton.reapplyStateStyle('submit');
+    submitButton.reapplyStateStyle(SUBMIT);
   }
 
   private static overwriteDefaultStyleWithSubmit(styles: SubmitButtonStyles, style: keyof SubmitButtonStyles) {
@@ -27,7 +27,7 @@ export class SubmitButtonStateStyle {
 
   // prettier-ignore
   private static setUpDisabledButton(styles: SubmitButtonStyles) {
-    ObjectUtils.setPropertyValueIfDoesNotExist(styles, ['submit', 'container', DEFAULT, 'backgroundColor'], '');
+    ObjectUtils.setPropertyValueIfDoesNotExist(styles, [SUBMIT, 'container', DEFAULT, 'backgroundColor'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles, [DISABLED, 'container', DEFAULT, 'backgroundColor'], UNSET);
     ObjectUtils.setPropertyValueIfDoesNotExist(styles.submit, [SVG, 'styles', DEFAULT, 'filter'], '');
     ObjectUtils.setPropertyValueIfDoesNotExist(styles[DISABLED], [SVG, 'styles', DEFAULT, 'filter'],

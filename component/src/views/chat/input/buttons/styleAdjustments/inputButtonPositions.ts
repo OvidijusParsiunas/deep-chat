@@ -14,6 +14,7 @@ import {
   OUTSIDE_END,
   DROPUP_MENU,
   INSIDE_END,
+  SUBMIT,
 } from '../../../../../utils/consts/inputConstants';
 
 export type PositionToButtons = {[key in ButtonPosition]: ButtonProps[]};
@@ -81,12 +82,12 @@ export class InputButtonPositions {
     });
     // if nothing set to be on inside right and submit is not set -> place submit
     if (pToBs[INSIDE_END].length === 0 && buttonsObj.submit) {
-      InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[INSIDE_END]);
+      InputButtonPositions.setPosition(buttonsObj, SUBMIT, pToBs[INSIDE_END]);
     }
     // if nothing set to be on outside right -> place submit/microphone/camera
     if (pToBs[OUTSIDE_END].length === 0) {
       if (buttonsObj.submit) {
-        InputButtonPositions.setPosition(buttonsObj, 'submit', pToBs[OUTSIDE_END]);
+        InputButtonPositions.setPosition(buttonsObj, SUBMIT, pToBs[OUTSIDE_END]);
       } else if (buttonsObj.microphone) {
         InputButtonPositions.setPosition(buttonsObj, MICROPHONE, pToBs[OUTSIDE_END]);
       } else if (buttonsObj.camera) {
@@ -97,7 +98,7 @@ export class InputButtonPositions {
     }
     // if submit still without a position - check if anything on outside-start - otherwise set outside-end
     if (buttonsObj.submit) {
-      InputButtonPositions.setPosition(buttonsObj, 'submit',
+      InputButtonPositions.setPosition(buttonsObj, SUBMIT,
         pToBs[OUTSIDE_START].length === 0 ? pToBs[OUTSIDE_START] : pToBs[INSIDE_END]);
     }
     // if microphone still without a position - attempt outside-start - otherwise set outside-end

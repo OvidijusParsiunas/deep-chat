@@ -2,8 +2,8 @@ import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FILE, FILES, ROLE, TEXT, TYPE, USER} from '../../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
+import {DISABLED, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
-import {DISABLED, SVG} from '../../../../../utils/consts/inputConstants';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
 import {FileAttachments} from '../../fileAttachments/fileAttachments';
 import {FocusModeUtils} from '../../../messages/utils/focusModeUtils';
@@ -85,7 +85,7 @@ export class SubmitButton extends InputButton<Styles> {
   }
 
   private createCustomElements() {
-    const submit = ButtonInnerElements.createCustomElements('submit', this[SVG], this.customStyles);
+    const submit = ButtonInnerElements.createCustomElements(SUBMIT, this[SVG], this.customStyles);
     const states: {[key in keyof Styles]: ButtonInnerElement[]} = {loading: undefined, stop: undefined};
     Object.keys(states).forEach((state) => {
       const styleState = state as keyof Styles;
@@ -232,7 +232,7 @@ export class SubmitButton extends InputButton<Styles> {
     this.elementRef[CLASS_LIST].remove(LOADING_CLASS, DISABLED_CLASS, SUBMIT_CLASS);
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
     this.changeElementsByState(this._innerElements.stop);
-    this.reapplyStateStyle('stop', ['loading', 'submit']);
+    this.reapplyStateStyle('stop', ['loading', SUBMIT]);
     ElementUtils.assignButtonEvents(this.elementRef, this.stopStream.bind(this));
     this.status.loadingActive = false;
   }
@@ -244,7 +244,7 @@ export class SubmitButton extends InputButton<Styles> {
     ButtonAccessibility.removeAriaDisabled(this.elementRef);
     this.elementRef[CLASS_LIST].add(LOADING_CLASS);
     ButtonAccessibility.addAriaBusy(this.elementRef);
-    this.reapplyStateStyle('loading', ['submit']);
+    this.reapplyStateStyle('loading', [SUBMIT]);
     ElementUtils.assignButtonEvents(this.elementRef, () => {});
     this.status.requestInProgress = true;
     this.status.loadingActive = true;
@@ -278,7 +278,7 @@ export class SubmitButton extends InputButton<Styles> {
       this.elementRef[CLASS_LIST].add(DISABLED_CLASS);
       ButtonAccessibility.addAriaDisabled(this.elementRef);
       this.changeElementsByState(this._innerElements[DISABLED]);
-      this.reapplyStateStyle(DISABLED, ['submit']);
+      this.reapplyStateStyle(DISABLED, [SUBMIT]);
       ElementUtils.assignButtonEvents(this.elementRef, () => {});
     }
   }
