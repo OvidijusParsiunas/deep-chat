@@ -1,6 +1,7 @@
 import {CLASS_LIST, CREATE_ELEMENT, STYLE} from '../../utils/consts/htmlConstants';
 import {KeyVerificationHandlers, ServiceIO} from '../../services/serviceIO';
 import {KEYBOARD_KEY} from '../../utils/buttons/keyboardKeys';
+import {LOADING} from '../../utils/consts/inputConstants';
 import {TYPE} from '../../utils/consts/messageConstants';
 import {VisibilityIcon} from './visibilityIcon';
 
@@ -53,11 +54,11 @@ export class InsertKeyView {
     failTextEl.innerText = message;
     failTextEl[STYLE].display = 'block';
     startEl.innerText = 'Start';
-    inputEl[CLASS_LIST].remove('loading');
+    inputEl[CLASS_LIST].remove(LOADING);
   }
 
   private static onLoad(inputEl: HTMLInputElement, startEl: HTMLElement) {
-    inputEl[CLASS_LIST].add('loading');
+    inputEl[CLASS_LIST].add(LOADING);
     startEl.innerHTML = '<div id="loading-key"></div>';
   }
 
@@ -79,7 +80,7 @@ export class InsertKeyView {
     const verifyKeyFunc = InsertKeyView.verifyKey.bind(this, inputEl, keyVerificationHandlers, serviceIO);
     startEl.onclick = verifyKeyFunc;
     inputEl.onkeydown = (event) => {
-      if (!inputEl[CLASS_LIST].contains('loading') && event.key === KEYBOARD_KEY.ENTER) verifyKeyFunc();
+      if (!inputEl[CLASS_LIST].contains(LOADING) && event.key === KEYBOARD_KEY.ENTER) verifyKeyFunc();
     };
   }
 

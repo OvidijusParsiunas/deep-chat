@@ -2,6 +2,7 @@ import {ANY, AUDIO, FILE, FILE_BUBBLE_CLASS, FILES, IMAGE} from '../../../../uti
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {MessageFile, MessageFileType} from '../../../../types/messageFile';
 import {MessageContent, MessageStyles} from '../../../../types/messages';
+import {LOADING} from '../../../../utils/consts/inputConstants';
 import {MessagesBase} from '../messagesBase';
 import {MessageElements} from '../messages';
 
@@ -9,7 +10,7 @@ export class FileMessageUtils {
   // prettier-ignore
   public static setElementProps(
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string) {
-    if (styles === 'loading') return;
+    if (styles === LOADING) return;
     messages.applyCustomStyles(elements, role, true, messages.messageStyles?.[styles]);
     elements.bubbleElement[CLASS_LIST].add(FILE_BUBBLE_CLASS);
   }

@@ -33,3 +33,5 @@ export const MOUSEDOWN = 'mousedown';
 export const MOUSEUP = 'mouseup';
 
 export const SUBMIT = 'submit';
+
+export const LOADING = 'loading';

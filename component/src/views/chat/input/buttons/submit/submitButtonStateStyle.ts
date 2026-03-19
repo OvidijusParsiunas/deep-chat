@@ -1,4 +1,4 @@
-import {DEFAULT, DISABLED, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
+import {DEFAULT, DISABLED, LOADING, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
 import {DEEP_COPY, TEXT} from '../../../../../utils/consts/messageConstants';
 import {SubmitButtonStyles} from '../../../../../types/submitButton';
 import {ObjectUtils} from '../../../../../utils/data/objectUtils';
@@ -9,9 +9,9 @@ import {SubmitButton} from './submitButton';
 export class SubmitButtonStateStyle {
   public static resetSubmit(submitButton: SubmitButton, wasLoading: boolean) {
     if (wasLoading) {
-      submitButton.unsetCustomStateStyles(['loading', SUBMIT]);
+      submitButton.unsetCustomStateStyles([LOADING, SUBMIT]);
     } else {
-      submitButton.unsetCustomStateStyles(['stop', 'loading', SUBMIT]);
+      submitButton.unsetCustomStateStyles(['stop', LOADING, SUBMIT]);
     }
     submitButton.reapplyStateStyle(SUBMIT);
   }
@@ -39,7 +39,7 @@ export class SubmitButtonStateStyle {
 
   public static process(submitButtonStyles?: SubmitButtonStyles) {
     const styles = DEEP_COPY(submitButtonStyles || {}) as SubmitButtonStyles;
-    SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'loading');
+    SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, LOADING);
     SubmitButtonStateStyle.overwriteDefaultStyleWithSubmit(styles, 'stop');
     if (submitButtonStyles?.alwaysEnabled) return styles;
     SubmitButtonStateStyle.setUpDisabledButton(styles);
