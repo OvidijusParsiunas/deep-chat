@@ -1,7 +1,7 @@
 import {SUBMIT_CLASS, DISABLED_CLASS, LOADING_CLASS} from '../../../../../utils/consts/classConstants';
 import {FileAttachmentsType} from '../../fileAttachments/fileAttachmentTypes/fileAttachmentsType';
 import {FILE, FILES, ROLE, TEXT, TYPE, USER} from '../../../../../utils/consts/messageConstants';
-import {DISABLED, LOADING, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
+import {DISABLED, LOADING, STOP, SUBMIT, SVG} from '../../../../../utils/consts/inputConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {ValidationHandler} from '../../../../../types/validationHandler';
 import {ElementUtils} from '../../../../../utils/element/elementUtils';
@@ -232,7 +232,7 @@ export class SubmitButton extends InputButton<Styles> {
     this.elementRef[CLASS_LIST].remove(LOADING_CLASS, DISABLED_CLASS, SUBMIT_CLASS);
     ButtonAccessibility.removeAriaAttributes(this.elementRef);
     this.changeElementsByState(this._innerElements.stop);
-    this.reapplyStateStyle('stop', [LOADING, SUBMIT]);
+    this.reapplyStateStyle(STOP, [LOADING, SUBMIT]);
     ElementUtils.assignButtonEvents(this.elementRef, this.stopStream.bind(this));
     this.status.loadingActive = false;
   }
