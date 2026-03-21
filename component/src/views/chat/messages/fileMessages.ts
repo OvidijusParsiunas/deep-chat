@@ -21,9 +21,9 @@ export class FileMessages {
   }
 
   // WORK - image still does not scroll down when loaded
-  private static createImageMessage(msg: MessagesBase, image: MessageFile, role: string, scrollAllowed: boolean) {
-    const elements = msg.createNewMessageElement('', role);
-    const asyncScroll = scrollAllowed ? msg.scrollToFirstElement.bind(msg, role, scrollAllowed) : undefined;
+  private static createImageMessage(msg: MessagesBase, image: MessageFile, role: string, isTop: boolean, scroll: boolean) {
+    const elements = msg.createNewMessageElement('', role, isTop);
+    const asyncScroll = !isTop && scroll ? msg.scrollToFirstElement.bind(msg, role, scroll) : undefined;
     const imageEl = FileMessages.createImage(image, asyncScroll);
     elements.bubbleElement.appendChild(imageEl);
     elements.bubbleElement[CLASS_LIST].add(FileMessages.IMAGE_BUBBLE_CLASS);
@@ -96,7 +96,7 @@ export class FileMessages {
           return audioMessage;
         }
         if (FileMessageUtils.isImageFile(fileData)) {
-          return FileMessages.createImageMessage(msg, fileData, role, !isTop && scroll && index === 0);
+          return FileMessages.createImageMessage(msg, fileData, role, isTop, scroll && index === 0);
         }
         return FileMessages.createNewAnyFileMessage(msg, fileData, role, isTop);
       })

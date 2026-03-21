@@ -19,7 +19,11 @@ export class FileMessageUtils {
   public static addMessage(
       messages: MessagesBase, elements: MessageElements, styles: keyof MessageStyles, role: string, isTop: boolean) {
     FileMessageUtils.setElementProps(messages, elements, styles, role);
-    if (!isTop) messages.appendOuterContainerElemet(elements.outerContainer);
+    if (isTop) {
+      messages.elementRef.insertBefore(elements.outerContainer, messages.elementRef.firstChild);
+    } else {
+      messages.appendOuterContainerElemet(elements.outerContainer);
+    }
   }
 
   private static wrapInLink(element: HTMLElement, url: string, name?: string) {
