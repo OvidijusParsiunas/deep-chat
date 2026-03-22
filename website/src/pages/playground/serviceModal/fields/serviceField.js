@@ -337,7 +337,7 @@ const SERVICE_TO_LINK = {
   groq: 'https://groq.com/',
   huggingFace: 'https://huggingface.co/docs/api-inference/index',
   kimi: 'https://platform.moonshot.ai/',
-  miniMax: 'https://www.minimax.io/',
+  miniMax: 'https://platform.minimaxi.com/',
   mistral: 'https://mistral.ai/',
   ollama: 'https://ollama.com/',
   openAI: 'https://openai.com/blog/openai-api',

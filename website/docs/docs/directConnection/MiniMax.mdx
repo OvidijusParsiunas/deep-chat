@@ -22,7 +22,7 @@ Properties used to connect to [MiniMax](https://www.minimax.io/).
   &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]` <br />
   \}
-- Default: _\{model: "MiniMax-M1"\}_
+- Default: _\{model: "MiniMax-M2.7"\}_
 
 import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
 import ComponentContainer from '@site/src/components/table/componentContainer';
@@ -34,8 +34,8 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to MiniMax's [ChatCompletion v2 API](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek). You can set this property to _true_ or configure it using an object:<br />
-`model` is the name of the MiniMax model to be used by the API. Check [available models](https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model) for more. <br />
+Connect to MiniMax's [Chat Completions API](https://platform.minimaxi.com/document/chat-completion-v2) (OpenAI-compatible). You can set this property to _true_ or configure it using an object:<br />
+`model` is the name of the MiniMax model to be used by the API. Available models include `MiniMax-M2.7`, `MiniMax-M2.7-highspeed`, `MiniMax-M2.5`, and `MiniMax-M2.5-highspeed`. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 `max_tokens` limits the maximum number of tokens in the generated response. <br />
 `temperature` controls the randomness/creativity of responses (0.0-2.0). Higher values produce more diverse outputs. <br />

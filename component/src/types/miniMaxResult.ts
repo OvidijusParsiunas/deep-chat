@@ -23,10 +23,6 @@ export interface MiniMaxResult {
   model: string;
   choices: MiniMaxChoice[];
   usage?: MiniMaxUsage;
-  base_resp?: {
-    status_code: number;
-    status_msg: string;
-  };
   error?: {
     message: string;
     type: string;

@@ -12,11 +12,11 @@ import {MiniMax} from '../../types/miniMax';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 
-// https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek
+// https://platform.minimaxi.com/document/chat-completion-v2
 export class MiniMaxIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('MiniMax');
-  override keyHelpUrl = 'https://www.minimaxi.com';
-  url = 'https://api.minimax.io/v1/text/chatcompletion_v2';
+  override keyHelpUrl = 'https://platform.minimaxi.com';
+  url = 'https://api.minimax.io/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX, 'insufficient balance'];
 
   constructor(deepChat: DeepChat) {
@@ -25,7 +25,7 @@ export class MiniMaxIO extends DirectServiceIO {
     super(deepChat, MINI_MAX_BUILD_KEY_VERIFICATION_DETAILS(), MINI_MAX_BUILD_HEADERS, config);
     if (typeof config === OBJECT) this.completeConfig(config);
     this.maxMessages ??= -1;
-    this.rawBody.model ??= 'MiniMax-M1';
+    this.rawBody.model ??= 'MiniMax-M2.7';
   }
 
   private preprocessBody(body: MiniMaxRequestBody, pMessages: MessageContentI[]) {
@@ -60,10 +60,6 @@ export class MiniMaxIO extends DirectServiceIO {
       if (choice.message && choice.message.content) {
         return {[TEXT]: choice.message.content};
       }
-    }
-
-    if (typeof result.base_resp?.status_code === 'number' && result.base_resp.status_code > 0) {
-      throw result.base_resp.status_msg;
     }
 
     return {[TEXT]: ''};

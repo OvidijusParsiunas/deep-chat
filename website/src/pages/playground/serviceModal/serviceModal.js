@@ -849,7 +849,7 @@ const SERVICE_TYPE_TO_API_KEY_LINK = {
   groq: 'https://console.groq.com/keys',
   huggingFace: 'https://huggingface.co/settings/tokens',
   kimi: 'https://platform.moonshot.ai/',
-  miniMax: 'https://www.minimax.io/',
+  miniMax: 'https://platform.minimaxi.com/',
   mistral: 'https://console.mistral.ai/',
   ollama: '',
   openWebUI: 'https://docs.openwebui.com/getting-started/api-endpoints/',
@@ -1071,20 +1071,14 @@ const OPTIONAL_PARAM_TO_LINK = {
     allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
   miniMax: {
-    model: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model',
-    system_prompt:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    max_tokens:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    temperature:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    top_p:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    frequency_penalty:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    presence_penalty:
-      'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
-    stop: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#QklxsNSbaf6kM4j6wjO5eEek',
+    model: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    system_prompt: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    max_tokens: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    temperature: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    top_p: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    frequency_penalty: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    presence_penalty: 'https://platform.minimaxi.com/document/chat-completion-v2',
+    stop: 'https://platform.minimaxi.com/document/chat-completion-v2',
   },
   mistral: {
     model: 'https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post',

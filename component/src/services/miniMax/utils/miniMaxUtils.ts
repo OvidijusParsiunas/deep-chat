@@ -1,16 +1,21 @@
-import {APPLICATION_JSON, AUTHORIZATION_H, BEARER_PREFIX, CONTENT_TYPE_H_KEY, POST} from '../../utils/serviceConstants';
+import {INVALID_KEY, CONNECTION_FAILED} from '../../../utils/errorMessages/errorMessages';
 import {BUILD_KEY_VERIFICATION_DETAILS} from '../../utils/directServiceUtils';
 import {KeyVerificationDetails} from '../../../types/keyVerificationDetails';
-import {INVALID_KEY} from '../../../utils/errorMessages/errorMessages';
+import {ERROR, TYPE} from '../../../utils/consts/messageConstants';
+import {
+  AUTHENTICATION_ERROR_PREFIX,
+  CONTENT_TYPE_H_KEY,
+  APPLICATION_JSON,
+  AUTHORIZATION_H,
+  BEARER_PREFIX,
+  GET,
+} from '../../utils/serviceConstants';
 
 type MiniMaxErrorResponse = {
   error?: {
     message: string;
     type: string;
     code?: string;
-  };
-  base_resp?: {
-    status_code: number;
   };
 };
 
@@ -28,17 +33,17 @@ const MINI_MAX_HANDLE_VERIFICATION_RESULT = (
   onFail: (message: string) => void
 ) => {
   const miniMaxResult = result as MiniMaxErrorResponse;
-  if (miniMaxResult.base_resp?.status_code === 1004) {
-    onFail(INVALID_KEY);
+  if (miniMaxResult[ERROR]) {
+    if (miniMaxResult[ERROR][TYPE] === AUTHENTICATION_ERROR_PREFIX) {
+      onFail(INVALID_KEY);
+    } else {
+      onFail(CONNECTION_FAILED);
+    }
   } else {
     onSuccess(key);
   }
 };
 
 export const MINI_MAX_BUILD_KEY_VERIFICATION_DETAILS = (): KeyVerificationDetails => {
-  return BUILD_KEY_VERIFICATION_DETAILS(
-    'https://api.minimax.io/v1/files/delete',
-    POST,
-    MINI_MAX_HANDLE_VERIFICATION_RESULT
-  );
+  return BUILD_KEY_VERIFICATION_DETAILS('https://api.minimax.io/v1/models', GET, MINI_MAX_HANDLE_VERIFICATION_RESULT);
 };
