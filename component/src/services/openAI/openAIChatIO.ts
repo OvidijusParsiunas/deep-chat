@@ -48,6 +48,11 @@ import {
   AI,
 } from '../../utils/consts/messageConstants';
 
+interface URLSegments {
+  responsesUrl: string;
+  conversationsUrl: string;
+}
+
 export class OpenAIChatIO extends OpenAIBaseIO {
   override keyHelpUrl = OPEN_AI_KEY_HELP_URL;
   // https://platform.openai.com/docs/api-reference/responses
@@ -57,6 +62,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   private _conversationId?: string;
   private readonly _useConversation: boolean = false;
   private readonly _conversationLoadLimit?: number = 50;
+  private readonly _urlSegments: URLSegments;
   fetchHistory?: () => Promise<ResponseI[]>;
 
   // https://platform.openai.com/docs/models/gpt-4o-audio-preview
@@ -66,6 +72,8 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     super(deepChat, keyVerificationDetailsArg, buildHeadersFuncArg, apiKeyArg, configArg);
 
     const config = configArg || deepChat.directConnection?.openAI?.chat;
+    this._urlSegments = OpenAIChatIO.buildUrlSegments(config);
+    this.url = this._urlSegments.responsesUrl;
     if (typeof config === OBJECT && config !== true && config) {
       if (config.conversation) {
         this._useConversation = true;
@@ -81,9 +89,18 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     super.processConfig(config, deepChat);
   }
 
+  private static buildUrlSegments(config: true | OpenAIChat | undefined): URLSegments {
+    const baseUrl = (typeof config === 'object' && config?.custom_base_url) || OPEN_AI_BASE_URL;
+    return {
+      responsesUrl: `${baseUrl}responses`,
+      conversationsUrl: `${baseUrl}conversations`,
+    };
+  }
+
   private cleanConfig(config: OpenAIChat) {
     delete config.conversation;
     delete config.conversationLoadLimit;
+    delete config.custom_base_url;
   }
 
   private static getFileContent(files: MessageFile[]): OpenAIFileContent {
@@ -111,7 +128,8 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     setTimeout(() => this.deepChat.disableSubmitButton(), 2);
     try {
       const originalUrl = this.url;
-      this.url = `${OPEN_AI_BASE_URL}conversations/${this._conversationId}/items?limit=${this._conversationLoadLimit}`;
+      const {conversationsUrl} = this._urlSegments;
+      this.url = `${conversationsUrl}/${this._conversationId}/items?limit=${this._conversationLoadLimit}`;
       const conversationData = await OPEN_AI_DIRECT_FETCH(this, {}, GET);
       this.connectSettings.method = POST;
       this.url = originalUrl;
@@ -168,7 +186,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   private async createConversation(): Promise<string> {
     try {
       const originalUrl = this.url;
-      this.url = `${OPEN_AI_BASE_URL}conversations`;
+      this.url = this._urlSegments.conversationsUrl;
       const result = await OPEN_AI_DIRECT_FETCH(this, {}, POST);
       this.url = originalUrl;
       return result.id;

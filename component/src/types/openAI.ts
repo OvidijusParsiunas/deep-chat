@@ -129,6 +129,7 @@ export type OpenAIChat = {
   truncation?: string;
   conversation?: boolean | string;
   conversationLoadLimit?: number;
+  custom_base_url?: string;
 } & OpenAIChatFunctions;
 
 export interface OpenAI {
