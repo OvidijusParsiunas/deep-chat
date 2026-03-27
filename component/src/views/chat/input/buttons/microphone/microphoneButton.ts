@@ -1,4 +1,4 @@
-import {ACTIVE, DEFAULT, DROPUP_MENU, OUTSIDE_END, SVG} from '../../../../../utils/consts/inputConstants';
+import {ACTIVE, DEFAULT, DROPUP_MENU, OUTSIDE_END, SVG, UNSUPPORTED} from '../../../../../utils/consts/inputConstants';
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
@@ -30,7 +30,7 @@ export class MicrophoneButton extends InputButton<Styles> {
     return {
       [DEFAULT]: this.createInnerElements(iconId, DEFAULT, customStyles),
       [ACTIVE]: this.createInnerElements(iconId, ACTIVE, customStyles),
-      unsupported: this.createInnerElements(iconId, 'unsupported', customStyles),
+      [UNSUPPORTED]: this.createInnerElements(iconId, UNSUPPORTED, customStyles),
       commandMode: this.createInnerElements(iconId, 'commandMode', customStyles),
     };
   }
@@ -63,9 +63,9 @@ export class MicrophoneButton extends InputButton<Styles> {
   }
 
   public changeToUnsupported() {
-    this.changeElementsByState(this._innerElements.unsupported);
-    this.elementRef[CLASS_LIST].add('unsupported-microphone');
-    this.reapplyStateStyle('unsupported', [ACTIVE]);
+    this.changeElementsByState(this._innerElements[UNSUPPORTED]);
+    this.elementRef[CLASS_LIST].add(`${UNSUPPORTED}-microphone`);
+    this.reapplyStateStyle(UNSUPPORTED, [ACTIVE]);
   }
 
   private toggleIconFilter(mode: 'default' | 'active' | 'command') {

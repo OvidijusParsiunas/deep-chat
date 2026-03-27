@@ -37,3 +37,5 @@ export const SUBMIT = 'submit';
 export const LOADING = 'loading';
 
 export const STOP = 'stop';
+
+export const UNSUPPORTED = 'unsupported';
