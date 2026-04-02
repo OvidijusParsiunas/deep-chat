@@ -21,7 +21,7 @@
 - Communicate with Speech to Speech models
 - Support for all major ui frameworks/libraries
 - Host a model on the browser
-- Focus mode to display only the latest messages
+- Focus mode to only display the latest messages
 - Everything is customizable!
 
 ### :tada: Latest Updates
