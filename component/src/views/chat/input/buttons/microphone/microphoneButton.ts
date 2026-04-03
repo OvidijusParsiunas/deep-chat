@@ -1,4 +1,3 @@
-import {ACTIVE, DEFAULT, DROPUP_MENU, OUTSIDE_END, SVG, UNSUPPORTED} from '../../../../../utils/consts/inputConstants';
 import {DefinedButtonInnerElements, DefinedButtonStateStyles} from '../../../../../types/buttonInternal';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../../utils/consts/htmlConstants';
 import {MICROPHONE_ICON_STRING} from '../../../../../icons/microphone';
@@ -6,6 +5,15 @@ import {MicrophoneStyles} from '../../../../../types/microphone';
 import {ButtonStyles} from '../../../../../types/button';
 import {TooltipUtils} from '../tooltip/tooltipUtils';
 import {InputButton} from '../inputButton';
+import {
+  COMMAND_MODE,
+  DROPUP_MENU,
+  OUTSIDE_END,
+  UNSUPPORTED,
+  DEFAULT,
+  ACTIVE,
+  SVG,
+} from '../../../../../utils/consts/inputConstants';
 
 // commandMode is used for speech to text
 // the reason why its called that instead of command is because it is used in SpeechToTextConfig
@@ -31,7 +39,7 @@ export class MicrophoneButton extends InputButton<Styles> {
       [DEFAULT]: this.createInnerElements(iconId, DEFAULT, customStyles),
       [ACTIVE]: this.createInnerElements(iconId, ACTIVE, customStyles),
       [UNSUPPORTED]: this.createInnerElements(iconId, UNSUPPORTED, customStyles),
-      commandMode: this.createInnerElements(iconId, 'commandMode', customStyles),
+      [COMMAND_MODE]: this.createInnerElements(iconId, COMMAND_MODE, customStyles),
     };
   }
 
@@ -45,21 +53,21 @@ export class MicrophoneButton extends InputButton<Styles> {
   public changeToActive() {
     this.changeElementsByState(this._innerElements[ACTIVE]);
     this.toggleIconFilter(ACTIVE);
-    this.reapplyStateStyle(ACTIVE, [DEFAULT, 'commandMode']);
+    this.reapplyStateStyle(ACTIVE, [DEFAULT, COMMAND_MODE]);
     this.isActive = true;
   }
 
   public changeToDefault() {
     this.changeElementsByState(this._innerElements[DEFAULT]);
     this.toggleIconFilter(DEFAULT);
-    this.reapplyStateStyle(DEFAULT, [ACTIVE, 'commandMode']);
+    this.reapplyStateStyle(DEFAULT, [ACTIVE, COMMAND_MODE]);
     this.isActive = false;
   }
 
   public changeToCommandMode() {
-    this.changeElementsByState(this._innerElements.commandMode);
+    this.changeElementsByState(this._innerElements[COMMAND_MODE]);
     this.toggleIconFilter('command');
-    this.reapplyStateStyle('commandMode', [ACTIVE]);
+    this.reapplyStateStyle(COMMAND_MODE, [ACTIVE]);
   }
 
   public changeToUnsupported() {

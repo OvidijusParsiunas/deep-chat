@@ -39,3 +39,5 @@ export const LOADING = 'loading';
 export const STOP = 'stop';
 
 export const UNSUPPORTED = 'unsupported';
+
+export const COMMAND_MODE = 'commandMode';
