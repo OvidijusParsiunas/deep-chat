@@ -8,6 +8,7 @@ import {OpenAI, OpenAITextToSpeech} from '../../types/openAI';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
@@ -34,7 +35,7 @@ export class OpenAITextToSpeechIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenAITextToSpeech, messages: MessageContentI[]) {
     const bodyCopy = DEEP_COPY(body);
-    const lastMessage = messages[messages.length - 1]?.[TEXT]?.trim();
+    const lastMessage = messages[messages[LENGTH] - 1]?.[TEXT]?.trim();
     if (lastMessage && lastMessage !== '') {
       bodyCopy.input = lastMessage;
     }

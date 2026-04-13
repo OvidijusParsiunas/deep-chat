@@ -6,6 +6,7 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {MessageFile} from '../../types/messageFile';
 import {OPEN_AI_BASE_URL} from './openAIConsts';
 import {OpenAIChat} from '../../types/openAI';
@@ -34,9 +35,9 @@ export class OpenAICompletionsIO extends OpenAIBaseIO {
   }
 
   private static getContent(message: MessageContentI) {
-    if (message[FILES] && message[FILES].length > 0) {
+    if (message[FILES] && message[FILES][LENGTH] > 0) {
       const content: FileContent = OpenAICompletionsIO.getFileContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
+      if (message[TEXT] && message[TEXT].trim()[LENGTH] > 0) content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       return content;
     }
     return message[TEXT];

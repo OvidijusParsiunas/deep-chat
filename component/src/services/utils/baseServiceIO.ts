@@ -6,6 +6,7 @@ import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {ValidateInput} from '../../types/validateInput';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {Stream as StreamI} from '../../types/stream';
@@ -73,7 +74,7 @@ export class BaseServiceIO implements ServiceIO {
 
   private static canSendMessage(text?: string, files?: File[], isProgrammatic?: boolean) {
     if (isProgrammatic) return true;
-    return !!(text && text.trim() !== '') || !!(files && files.length > 0);
+    return !!(text && text.trim() !== '') || !!(files && files[LENGTH] > 0);
   }
 
   verifyKey(_key: string, _keyVerificationHandlers: KeyVerificationHandlers) {}
@@ -83,10 +84,10 @@ export class BaseServiceIO implements ServiceIO {
     files.forEach((file) => formData.append('files', file));
     Object.keys(body).forEach((key) => formData.append(key, String(body[key])));
     let textMessageIndex = 0;
-    messages.slice(0, messages.length - 1).forEach((message) => {
+    messages.slice(0, messages[LENGTH] - 1).forEach((message) => {
       formData.append(`message${(textMessageIndex += 1)}`, STRINGIFY(message));
     });
-    const lastMessage = messages[messages.length - 1];
+    const lastMessage = messages[messages[LENGTH] - 1];
     if (lastMessage[TEXT]) {
       delete lastMessage[FILES]; // no need to have files prop as we are sending the message
       formData.append(`message${(textMessageIndex += 1)}`, STRINGIFY(lastMessage));

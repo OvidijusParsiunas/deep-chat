@@ -6,6 +6,7 @@ import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {OPEN_AI_DIRECT_FETCH} from './utils/openAIUtils';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
 import {OpenAIChat} from '../../types/openAI';
@@ -116,9 +117,9 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   private static getContent(message: MessageContentI) {
     // Attaching history files only allowed for user
     const shouldIncludeFiles = message[ROLE] === USER;
-    if (shouldIncludeFiles && message[FILES] && message[FILES].length > 0) {
+    if (shouldIncludeFiles && message[FILES] && message[FILES][LENGTH] > 0) {
       const content: OpenAIFileContent = OpenAIChatIO.getFileContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) content.unshift({[TYPE]: INPUT_TEXT, [TEXT]: message[TEXT]});
+      if (message[TEXT] && message[TEXT].trim()[LENGTH] > 0) content.unshift({[TYPE]: INPUT_TEXT, [TEXT]: message[TEXT]});
       return content;
     }
     return message[TEXT];
@@ -173,7 +174,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   private preprocessBody(body: OpenAIConverseBodyInternal, pMessages: MessageContentI[]) {
     const bodyCopy = DEEP_COPY(body);
     pMessages = this.processMessages(pMessages);
-    pMessages = this._useConversation ? [pMessages[pMessages.length - 1]] : pMessages;
+    pMessages = this._useConversation ? [pMessages[pMessages[LENGTH] - 1]] : pMessages;
     const processedMessages = pMessages.map((message) => ({
       content: OpenAIChatIO.getContent(message),
       [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
@@ -215,7 +216,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     if (result[ERROR]) throw result[ERROR].message;
     if (result.status) {
       const completedOutputs = OpenAIChatIO.filterCompleted(result.output);
-      if (completedOutputs.length > 0) {
+      if (completedOutputs[LENGTH] > 0) {
         const text = (completedOutputs as OpenAIMessage[]).find((output) => typeof output.content?.[0]?.[TEXT] === STRING)
           ?.content?.[0]?.[TEXT];
         const functionResponse = await this.handleResponsesFunctionCalls(completedOutputs, prevBody, text);
@@ -269,7 +270,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
 
   private async handleResponsesFunctionCalls(completetdOutputs: OpenAIOutput, prevBody?: OpenAIChat, text?: string) {
     const functionCalls = completetdOutputs.filter((call) => call[TYPE] === FUNCTION_CALL) as ResponsesFunctionCall[];
-    if (functionCalls.length === 0) return null;
+    if (functionCalls[LENGTH] === 0) return null;
     if (!prevBody || !this.functionHandler) throw Error(DEFINE_FUNCTION_HANDLER);
 
     const functions = functionCalls.map((call) => ({name: call.name, arguments: call.arguments}));
@@ -285,7 +286,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
       // https://community.openai.com/t/issue-with-new-responses-api-400-no-tool-call-found-for-function-call-output-with-call-id/1142327
       functionCalls.forEach((functionCall) => bodyCp.input.push(functionCall));
       // Then add the function call outputs
-      if (!responses.find(({response}) => typeof response !== STRING) && functions.length === responses.length) {
+      if (!responses.find(({response}) => typeof response !== STRING) && functions[LENGTH] === responses[LENGTH]) {
         responses.forEach((resp, index) => {
           const functionCall = functionCalls[index];
           bodyCp.input.push({[TYPE]: FUNCTION_CALL_OUTPUT, call_id: functionCall.call_id, output: resp[RESPONSE]});

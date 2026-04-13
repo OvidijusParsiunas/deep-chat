@@ -5,6 +5,7 @@ import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {DirectServiceIO} from '../utils/directServiceIO';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
 import {OpenAIChat} from '../../types/openAI';
@@ -49,10 +50,10 @@ export abstract class OpenAIBaseIO extends DirectServiceIO {
   }
 
   protected static getBaseContent(message: MessageContentI, includeFilesForRole: boolean = true) {
-    const shouldIncludeFiles = includeFilesForRole && message[FILES] && message[FILES].length > 0;
+    const shouldIncludeFiles = includeFilesForRole && message[FILES] && message[FILES][LENGTH] > 0;
     if (shouldIncludeFiles) {
       const content: object[] = this.getBaseFileContent(message[FILES]!);
-      if (message[TEXT] && message[TEXT].trim().length > 0) {
+      if (message[TEXT] && message[TEXT].trim()[LENGTH] > 0) {
         content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       }
       return content;

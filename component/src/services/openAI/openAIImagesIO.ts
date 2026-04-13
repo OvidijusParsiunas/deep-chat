@@ -11,6 +11,7 @@ import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIImageResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {MessageFiles} from '../../types/messageFile';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
@@ -63,7 +64,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
   // prettier-ignore
   private callApiWithImage(messages: Messages, pMessages: MessageContentI[], files: File[]) {
     let formData: FormData;
-    const lastMessage = pMessages[pMessages.length - 1]?.[TEXT]?.trim();
+    const lastMessage = pMessages[pMessages[LENGTH] - 1]?.[TEXT]?.trim();
     // if there is a mask image or text, call edit
     if (files[1] || (lastMessage && lastMessage !== '')) {
       this.url = OpenAIImagesIO.IMAGE_EDIT_URL;
@@ -85,7 +86,7 @@ export class OpenAIImagesIO extends DirectServiceIO {
     } else {
       if (!this.connectSettings) throw new Error(REQUEST_SETTINGS_ERROR);
       this.url = OpenAIImagesIO.IMAGE_GENERATION_URL;
-      const body = this.preprocessBody(this.rawBody, pMessages[pMessages.length - 1][TEXT]);
+      const body = this.preprocessBody(this.rawBody, pMessages[pMessages[LENGTH] - 1][TEXT]);
       HTTPRequest.request(this, body, messages);
     }
   }

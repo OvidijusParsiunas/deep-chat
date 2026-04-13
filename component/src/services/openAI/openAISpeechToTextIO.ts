@@ -10,6 +10,7 @@ import {RequestUtils} from '../../utils/HTTP/requestUtils';
 import {OpenAIAudioResult} from '../../types/openAIResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
@@ -65,7 +66,7 @@ export class OpenAISpeechToTextIO extends DirectServiceIO {
 
   private preprocessBody(body: OpenAISpeechToText, messages: MessageContentI[]) {
     const bodyCopy = DEEP_COPY(body);
-    const lastMessage = messages[messages.length - 1]?.[TEXT]?.trim();
+    const lastMessage = messages[messages[LENGTH] - 1]?.[TEXT]?.trim();
     if (lastMessage && lastMessage !== '') bodyCopy.prompt = lastMessage;
     return bodyCopy;
   }

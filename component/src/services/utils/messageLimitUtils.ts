@@ -1,17 +1,18 @@
 import {DEEP_COPY, TEXT} from '../../utils/consts/messageConstants';
 import {MessageContentI} from '../../types/messagesInternal';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 
 export class MessageLimitUtils {
   public static getCharacterLimitMessages(messages: MessageContentI[], limit: number) {
     if (limit === -1) return messages;
     let totalCharacters = 0;
-    let i = messages.length - 1;
+    let i = messages[LENGTH] - 1;
     for (i; i >= 0; i -= 1) {
       const text = messages[i]?.[TEXT];
       if (text !== undefined) {
-        totalCharacters += text.length;
+        totalCharacters += text[LENGTH];
         if (totalCharacters > limit) {
-          messages[i][TEXT] = text.substring(0, text.length - (totalCharacters - limit));
+          messages[i][TEXT] = text.substring(0, text[LENGTH] - (totalCharacters - limit));
           break;
         }
       }
@@ -20,7 +21,7 @@ export class MessageLimitUtils {
   }
 
   private static getMaxMessages(messages: MessageContentI[], maxMessages: number) {
-    return messages.slice(Math.max(messages.length - maxMessages, 0));
+    return messages.slice(Math.max(messages[LENGTH] - maxMessages, 0));
   }
 
   // if maxMessages is not defined we send all messages
@@ -30,7 +31,7 @@ export class MessageLimitUtils {
     if (maxMessages !== undefined) {
       if (maxMessages > 0) messages = MessageLimitUtils.getMaxMessages(messages, maxMessages);
     } else {
-      messages = [messages[messages.length - 1]]; // last message
+      messages = [messages[messages[LENGTH] - 1]]; // last message
     }
     messages = DEEP_COPY(messages);
     if (totalMessagesMaxCharLength === undefined) return messages;

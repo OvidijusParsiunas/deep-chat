@@ -6,6 +6,7 @@ import {IMAGE_URL, OBJECT, SYSTEM} from './serviceConstants';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {HTTPRequest} from '../../utils/HTTP/HTTPRequest';
+import {LENGTH} from '../../utils/consts/htmlConstants';
 import {MessageLimitUtils} from './messageLimitUtils';
 import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
@@ -113,7 +114,7 @@ export class DirectServiceIO extends BaseServiceIO {
   protected processMessages(pMessages: MessageContentI[]) {
     return MessageLimitUtils.getCharacterLimitMessages(
       pMessages,
-      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this.systemMessage.length : -1
+      this.totalMessagesMaxCharLength ? this.totalMessagesMaxCharLength - this.systemMessage[LENGTH] : -1
     );
   }
 
@@ -192,24 +193,24 @@ export class DirectServiceIO extends BaseServiceIO {
           url: file[SRC] || '',
         },
       }))
-      .filter((content) => content[IMAGE_URL].url.length > 0);
+      .filter((content) => content[IMAGE_URL].url[LENGTH] > 0);
   }
 
   protected static getTextWImagesContent(message: MessageContentI) {
-    if (message[FILES] && message[FILES].length > 0) {
+    if (message[FILES] && message[FILES][LENGTH] > 0) {
       const content = this.getImageContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) {
+      if (message[TEXT] && message[TEXT].trim()[LENGTH] > 0) {
         content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
       }
-      return content.length > 0 ? content : message[TEXT] || '';
+      return content[LENGTH] > 0 ? content : message[TEXT] || '';
     }
     return message[TEXT] || '';
   }
 
   protected static getTextWFilesContent<T>(message: MessageContentI, getFileContent: (files: MessageFile[]) => T[]) {
-    if (message[FILES] && message[FILES].length > 0) {
+    if (message[FILES] && message[FILES][LENGTH] > 0) {
       const content = getFileContent(message[FILES]);
-      if (message[TEXT] && message[TEXT].trim().length > 0) {
+      if (message[TEXT] && message[TEXT].trim()[LENGTH] > 0) {
         content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]} as T);
       }
       return content;
@@ -288,11 +289,11 @@ export class DirectServiceIO extends BaseServiceIO {
     if (processedResponse) return processedResponse;
 
     if (system) {
-      bodyCp.messages = bodyCp.messages.slice(bodyCp.messages.length - 1);
+      bodyCp.messages = bodyCp.messages.slice(bodyCp.messages[LENGTH] - 1);
       if (system.message) bodyCp.messages.unshift({[ROLE]: SYSTEM, content: system.message});
     }
     bodyCp.messages.push({tool_calls: tools.tool_calls, [ROLE]: ASSISTANT, content: null});
-    if (!responses.find(({response}) => typeof response !== STRING) && functions.length === responses.length) {
+    if (!responses.find(({response}) => typeof response !== STRING) && functions[LENGTH] === responses[LENGTH]) {
       responses.forEach((resp, index) => {
         const toolCall = tools.tool_calls?.[index];
         bodyCp?.messages.push({
@@ -310,8 +311,8 @@ export class DirectServiceIO extends BaseServiceIO {
 
   protected updateSessionId(sessionId?: string) {
     // user can clear the messages when they make a request, hence checking if messages length > 0
-    if (this.messages && this.messages.messageToElements.length > 0) {
-      this.messages.messageToElements[this.messages.messageToElements.length - 1][0]._sessionId = sessionId;
+    if (this.messages && this.messages.messageToElements[LENGTH] > 0) {
+      this.messages.messageToElements[this.messages.messageToElements[LENGTH] - 1][0]._sessionId = sessionId;
     }
   }
 }
