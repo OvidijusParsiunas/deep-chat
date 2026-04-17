@@ -220,6 +220,8 @@ export class DeepChat extends InternalHTML {
 
   _auxiliaryStyleApplied = false;
 
+  _chatStyleApplied = false;
+
   _activeService?: ServiceIO;
 
   _childElement?: HTMLElement;
@@ -252,14 +254,17 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
-    GoogleFont.attemptAppendStyleSheetToHead(this.style);
+    GoogleFont.attemptAppendStyleSheetToHead(this.style, this.chatStyle?.fontFamily);
     Legacy.processConnect(this);
     if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
       WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
       this._auxiliaryStyleApplied = true;
     }
-    WebComponentStyleUtils.applyDefaultStyleToComponent(this.style, this.chatStyle);
+    if (this.chatStyle && !this._chatStyleApplied) {
+      WebComponentStyleUtils.applyChatStyle(this.chatStyle, this.shadowRoot);
+      this._chatStyleApplied = true;
+    }
     Legacy.checkForContainerStyles(this, this._elementRef);
     if (this._activeService.key && this._activeService.validateKeyProperty) {
       ValidateKeyPropertyView.render(this._elementRef, this.changeToChatView.bind(this), this._activeService);

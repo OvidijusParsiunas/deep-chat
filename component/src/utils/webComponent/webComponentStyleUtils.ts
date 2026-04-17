@@ -1,26 +1,7 @@
 import {CREATE_ELEMENT} from '../consts/htmlConstants';
-import {StyleUtils} from '../element/styleUtils';
 import {CustomStyle} from '../../types/styles';
-import {GoogleFont} from './googleFont';
 
 export class WebComponentStyleUtils {
-  private static readonly DEFAULT_COMPONENT_STYLE: Partial<CSSStyleDeclaration> = {
-    height: '350px',
-    width: '320px',
-    borderTop: '1px solid #cacaca',
-    borderRight: '1px solid #cacaca',
-    borderLeft: '1px solid #cacaca',
-    borderBottom: '1px solid #cacaca',
-    fontFamily: GoogleFont.DEFAULT_FONT_FAMILY,
-    fontSize: '0.9rem',
-    backgroundColor: 'white',
-    position: 'relative',
-    // this is used to prevent inputAreaStyle background color from going beyond the container's rounded border
-    // it will cause issues if there are elements that are meant to be outside of the chat component and in
-    // that instance they should overwrite this
-    overflow: 'hidden',
-  };
-
   public static apply(style: string, shadowRoot: ShadowRoot | null) {
     if (!shadowRoot) return;
     try {
@@ -43,8 +24,18 @@ export class WebComponentStyleUtils {
     shadowRoot.appendChild(stylesDocument);
   }
 
-  public static applyDefaultStyleToComponent(style: CSSStyleDeclaration, chatStyle?: CustomStyle) {
-    if (chatStyle) StyleUtils.applyToStyleIfNotDefined(style, chatStyle);
-    StyleUtils.applyToStyleIfNotDefined(style, WebComponentStyleUtils.DEFAULT_COMPONENT_STYLE);
+  private static camelToKebab(str: string): string {
+    return str.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+  }
+
+  public static applyChatStyle(chatStyle: CustomStyle | undefined, shadowRoot: ShadowRoot | null) {
+    if (!chatStyle || !shadowRoot) return;
+    const declarations = Object.entries(chatStyle)
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${WebComponentStyleUtils.camelToKebab(key)}: ${value};`)
+      .join(' ');
+    if (declarations) {
+      WebComponentStyleUtils.apply(`:host { ${declarations} }`, shadowRoot);
+    }
   }
 }

@@ -12,6 +12,18 @@
   /* keeps child absolute elements in place and wraps component dimensions on it */
   /* inline css causes padding at the bottom of component, see in the website */
   display: table-cell;
+  height: 350px;
+  width: 320px;
+  border: 1px solid #cacaca;
+  font-family: 'Inter', sans-serif, Avenir, Helvetica, Arial;
+  font-size: 0.9rem;
+  background-color: white;
+  position: relative;
+  /* this is used to prevent inputAreaStyle background color from going beyond the container's rounded border
+     it will cause issues if there are elements that are meant to be outside of the chat component and in
+     that instance they should overwrite this
+     this is also causing the chat to squeeze when there is no space */
+  overflow: hidden;
 }
 
 #container {
