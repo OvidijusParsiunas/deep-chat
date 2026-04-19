@@ -77,22 +77,19 @@ export class History {
   }
 
   public async loadHistoryOnScroll(loadHistory: LoadHistory) {
-    this._messages.elementRef.onscroll = async () => {
-      if (!this._isLoading && !this._isPaginationComplete && this._messages.elementRef.scrollTop === 0) {
-        this._isLoading = true;
-        const loadingElements = LoadingHistory.addMessage(this._messages, false);
-        try {
-          const messages = await loadHistory(this._index++);
-          this.populateMessages(loadingElements, messages);
-          this._isLoading = false;
-        } catch (e) {
-          this._messages.removeMessage(loadingElements);
-          this._isPaginationComplete = true;
-          this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
-          console[ERROR](e);
-        }
-      }
-    };
+    if (this._isLoading || this._isPaginationComplete || this._messages.elementRef.scrollTop !== 0) return;
+    this._isLoading = true;
+    const loadingElements = LoadingHistory.addMessage(this._messages, false);
+    try {
+      const messages = await loadHistory(this._index++);
+      this.populateMessages(loadingElements, messages);
+      this._isLoading = false;
+    } catch (e) {
+      this._messages.removeMessage(loadingElements);
+      this._isPaginationComplete = true;
+      this._messages.addNewErrorMessage(SERVICE, History.FAILED_ERROR_MESSAGE, true);
+      console[ERROR](e);
+    }
   }
 
   private populateInitialHistory(history: MessageContent[]) {
