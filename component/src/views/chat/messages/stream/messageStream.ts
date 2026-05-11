@@ -176,12 +176,14 @@ export class MessageStream {
     }
   }
 
-  public finaliseStreamedMessage(hasStreamEnded = true) {
+  // asyncCallInProgress introduced specifically a case when stream closed (e.g. tool call) and making another call
+  // hence don't throw NO_VALID_STREAM_EVENTS_SENT when no response elements yet
+  public finaliseStreamedMessage(hasStreamEnded = true, asyncCallInProgress = false) {
     if (this._endStreamAfterOperation) return;
     if (this._fileAdded && !this._elements) return;
-    if (!this._elements) throw Error(NO_VALID_STREAM_EVENTS_SENT);
+    if (!this._elements && !asyncCallInProgress) throw Error(NO_VALID_STREAM_EVENTS_SENT);
     if (!this._message) return;
-    if (!this._elements.bubbleElement?.[CLASS_LIST].contains(MessageStream.MESSAGE_CLASS)) return;
+    if (!this._elements?.bubbleElement?.[CLASS_LIST].contains(MessageStream.MESSAGE_CLASS)) return;
     if (this._streamType === TEXT) {
       if (this._messages.textToSpeech) TextToSpeech.speak(this._message[TEXT] || '', this._messages.textToSpeech);
     } else if (this._streamType === HTML) {

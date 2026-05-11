@@ -146,7 +146,7 @@ export class Stream {
 
   private static handleClose(io: ServiceIO, stream: MessageStream, onClose: () => void, canBeEmpty: boolean) {
     if (io.asyncCallInProgress) {
-      stream.finaliseStreamedMessage(false);
+      stream.finaliseStreamedMessage(false, true);
       io.asyncCallInProgress = false;
       return;
     }
