@@ -3,12 +3,12 @@ import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from 
 import {CLAUDE_BUILD_HEADERS, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS} from './utils/claudeUtils';
 import {ClaudeContent, ClaudeMessage, ClaudeRequestBody} from '../../types/claudeInternal';
 import {ClaudeResult, ClaudeTextContent, ClaudeToolUse} from '../../types/claudeResult';
+import {Claude, ClaudeChat, ClaudeSystemBlock} from '../../types/claude';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {Claude, ClaudeChat} from '../../types/claude';
 import {MessageFile} from '../../types/messageFile';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
@@ -34,6 +34,7 @@ export class ClaudeIO extends DirectServiceIO {
   url = `${ClaudeIO.CLAUDE_BASE_URL}messages`;
   permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
   private _streamToolCalls: ClaudeToolUse = {[TYPE]: 'tool_use', id: '', name: '', input: ''};
+  private _systemBlocks?: ClaudeSystemBlock[];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
@@ -41,8 +42,10 @@ export class ClaudeIO extends DirectServiceIO {
     super(deepChat, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS(), CLAUDE_BUILD_HEADERS, config);
     this.url = ClaudeIO.buildUrl(config);
     if (typeof config === OBJECT) {
-      this.cleanConfig(config as ClaudeChat);
-      this.completeConfig(config, (deepChat.directConnection?.claude as ClaudeChat)?.function_handler);
+      const configObj = config as ClaudeChat & APIKey & {system_prompt?: string};
+      this.extractSystemBlocks(configObj);
+      this.cleanConfig(configObj);
+      this.completeConfig(configObj, (deepChat.directConnection?.claude as ClaudeChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'claude-sonnet-4-5-20250929';
@@ -52,6 +55,13 @@ export class ClaudeIO extends DirectServiceIO {
   private static buildUrl(config: Claude & APIKey) {
     const baseUrl = (typeof config === 'object' && config?.custom_base_url) || ClaudeIO.CLAUDE_BASE_URL;
     return `${baseUrl}messages`;
+  }
+
+  private extractSystemBlocks(config: ClaudeChat) {
+    if (Array.isArray(config.system_prompt)) {
+      this._systemBlocks = config.system_prompt;
+      delete config.system_prompt;
+    }
   }
 
   private cleanConfig(config: ClaudeChat) {
@@ -78,7 +88,9 @@ export class ClaudeIO extends DirectServiceIO {
     });
 
     bodyCopy.messages = processedMessages;
-    if (this.systemMessage) {
+    if (this._systemBlocks) {
+      bodyCopy.system = this._systemBlocks;
+    } else if (this.systemMessage) {
       bodyCopy.system = this.systemMessage;
     }
     return bodyCopy;
