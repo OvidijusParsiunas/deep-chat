@@ -30,7 +30,8 @@ import {
 export class ClaudeIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Claude');
   override keyHelpUrl = 'https://console.anthropic.com/settings/keys';
-  url = 'https://api.anthropic.com/v1/messages';
+  private static readonly CLAUDE_BASE_URL = 'https://api.anthropic.com/v1/';
+  url = `${ClaudeIO.CLAUDE_BASE_URL}messages`;
   permittedErrorPrefixes = [AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX];
   private _streamToolCalls: ClaudeToolUse = {[TYPE]: 'tool_use', id: '', name: '', input: ''};
 
@@ -38,12 +39,23 @@ export class ClaudeIO extends DirectServiceIO {
     const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
     const config = directConnectionCopy.claude as Claude & APIKey;
     super(deepChat, CLAUDE_BUILD_KEY_VERIFICATION_DETAILS(), CLAUDE_BUILD_HEADERS, config);
+    this.url = ClaudeIO.buildUrl(config);
     if (typeof config === OBJECT) {
+      this.cleanConfig(config as ClaudeChat);
       this.completeConfig(config, (deepChat.directConnection?.claude as ClaudeChat)?.function_handler);
     }
     this.maxMessages ??= -1;
     this.rawBody.model ??= 'claude-sonnet-4-5-20250929';
     this.rawBody.max_tokens ??= 4096;
+  }
+
+  private static buildUrl(config: Claude & APIKey) {
+    const baseUrl = (typeof config === 'object' && config?.custom_base_url) || ClaudeIO.CLAUDE_BASE_URL;
+    return `${baseUrl}messages`;
+  }
+
+  private cleanConfig(config: ClaudeChat) {
+    delete config.custom_base_url;
   }
   private static getFileContent(files: MessageFile[]): ClaudeContent[] {
     return files.map((file) => {

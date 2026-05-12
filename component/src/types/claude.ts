@@ -36,6 +36,7 @@ export interface ClaudeChat {
   tool_choice?: 'auto' | 'any' | {type: 'tool'; name: string} | {type: 'function'; name: string};
   function_handler?: ChatFunctionHandler;
   mcp_servers?: ClaudeMCPServer[];
+  custom_base_url?: string;
 }
 
 export type Claude = true | ClaudeChat;
