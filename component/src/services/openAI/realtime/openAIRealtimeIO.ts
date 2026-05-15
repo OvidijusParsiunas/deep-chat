@@ -99,8 +99,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       this._events = config.events;
       realtime.methods = this.generateMethods();
       this.setInputAudioTranscribe(deepChat, realtime.config?.input_audio_transcription);
+      delete this.rawBody.input_audio_transcription;
     }
-    this.rawBody.model ??= 'gpt-4o-realtime-preview-2025-06-03';
+    this.rawBody.model ??= 'gpt-realtime-2';
     this._avatarConfig = OpenAIRealtimeIO.buildAvatarConfig(config);
     this._buttonsConfig = OpenAIRealtimeIO.buildButtonsConfig(config);
     this._avatarEl = OpenAIRealtimeIO.createAvatar(this._avatarConfig);
@@ -122,17 +123,18 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   private setInputAudioTranscribe(deepChat: DeepChat, transcription?: true | OpenAIRealtimeInputAudioTranscription) {
     if (transcription) {
       const defaultModel = 'whisper-1';
-      if (typeof transcription === 'object') {
-        this.rawBody.input_audio_transcription = {
-          model: transcription.model || defaultModel,
-          language: transcription.language,
-          prompt: transcription.prompt,
-        };
-      } else {
-        this.rawBody.input_audio_transcription = {
-          model: defaultModel,
-        };
-      }
+      this.rawBody.audio = {
+        input: {
+          transcription:
+            typeof transcription === 'object'
+              ? {
+                  model: transcription.model || defaultModel,
+                  language: transcription.language,
+                  prompt: transcription.prompt,
+                }
+              : {model: defaultModel},
+        },
+      };
     } else if (deepChat.onMessage) {
       console.warn('To get user audio transcription, set `input_audio_transcription` in the `realtime` config.');
       console.warn(`See: ${DOCS_BASE_URL}directConnection/OpenAI/OpenAIRealtime#OpenAIRealtimeConfig`);
@@ -200,24 +202,24 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
   }
 
   private async getEphemeralKey(key: string) {
-    // https://platform.openai.com/docs/api-reference/realtime-sessions/create
-    const result = await fetch(`${OPEN_AI_BASE_URL}realtime/sessions`, {
+    // https://platform.openai.com/docs/api-reference/realtime-sessions/create-realtime-client-secret
+    const result = await fetch(`${OPEN_AI_BASE_URL}realtime/client_secrets`, {
       method: POST,
-      body: STRINGIFY(this.rawBody),
+      body: STRINGIFY({session: {[TYPE]: 'realtime', ...this.rawBody}}),
       headers: {
         [CONTENT_TYPE_H_KEY]: APPLICATION_JSON,
         [AUTHORIZATION_H]: `${BEARER_PREFIX}${key}`,
       },
     });
     const data = await result.json();
-    return data.client_secret.value;
+    return data.value;
   }
 
   private generateMethods(): OpenAIRealtimeMethods {
     return {
       updateConfig: (config: OpenAIRealtimeConfig) => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/session
-        this._dc?.send(STRINGIFY({[TYPE]: 'session.update', session: config}));
+        this._dc?.send(STRINGIFY({[TYPE]: 'session.update', session: {[TYPE]: 'realtime', ...config}}));
       },
       sendMessage: (text: string, role?: 'user' | 'assistant' | 'system') => {
         // https://platform.openai.com/docs/api-reference/realtime-client-events/conversation/item/create
@@ -443,9 +445,9 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
         // https://platform.openai.com/docs/guides/realtime-model-capabilities#error-handling
       } else if (response[TYPE] === INVALID_REQUEST_ERROR_PREFIX) {
         this.stopOnError(response.message);
-      } else if (response[TYPE] === 'response.audio_transcript.delta') {
+      } else if (response[TYPE] === 'response.output_audio_transcript.delta') {
         // console.log(response.delta);
-      } else if (response[TYPE] === 'response.audio_transcript.done') {
+      } else if (response[TYPE] === 'response.output_audio_transcript.done') {
         if (response.transcript) {
           FireEvents.onMessage(this._deepChat, {[ROLE]: AI, [TEXT]: response.transcript}, false);
         }
@@ -462,7 +464,7 @@ export class OpenAIRealtimeIO extends DirectServiceIO {
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
       await this._pc.setLocalDescription(offer);
       if (peerConnection !== this._pc) return; // prevent using stale pc when user spams toggle button
-      const sdpResponse = await fetch(`${OPEN_AI_BASE_URL}realtime`, {
+      const sdpResponse = await fetch(`${OPEN_AI_BASE_URL}realtime/calls?model=${this.rawBody.model}`, {
         method: POST,
         body: offer.sdp,
         headers: {
