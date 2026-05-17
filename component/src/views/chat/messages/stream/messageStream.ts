@@ -110,7 +110,7 @@ export class MessageStream {
   private updateText(text: string, bubbleElement: HTMLElement, overwrite: boolean) {
     if (!this._message) return;
     this._message[TEXT] = overwrite ? text : this._message[TEXT] + text;
-    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, overwrite)) {
+    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, overwrite, text)) {
       this.partialRenderNewParagraph(bubbleElement);
     }
     if (this._partialBubble) {
@@ -128,11 +128,24 @@ export class MessageStream {
     return !textAfterMark.startsWith('---');
   }
 
-  private isNewPartialRenderParagraph(bubbleElement: HTMLElement, isOverwrite: boolean) {
+  // checking state BEFORE the current chunk was appended ensures the chunk that closes a code block
+  // (transitioning fence count from odd to even) stays in the current bubble alongside its opening fence
+  // https://github.com/OvidijusParsiunas/deep-chat/issues/500#issuecomment-4281293147
+  private isInsideOpenCodeBlock(chunk?: string) {
+    if (this._streamType !== TEXT) return false;
+    const content = this._message?.[TEXT];
+    if (!content) return false;
+    const priorContent = chunk ? content.slice(0, content.length - chunk.length) : content;
+    const fenceMatches = priorContent.match(/```/g);
+    return !!fenceMatches && fenceMatches.length % 2 === 1;
+  }
+
+  private isNewPartialRenderParagraph(bubbleElement: HTMLElement, isOverwrite: boolean, chunk?: string) {
     if (isOverwrite) {
       bubbleElement.innerHTML = '';
       return true;
     }
+    if (this.isInsideOpenCodeBlock(chunk)) return false;
     const key = this._streamType as 'text' | 'html';
     if (!this._partialBubble) {
       const content = this._message?.[key];
