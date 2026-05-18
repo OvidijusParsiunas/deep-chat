@@ -31,7 +31,7 @@ export abstract class OpenAIBaseIO extends DirectServiceIO {
       this.processConfig(config, deepChat);
     }
     this.maxMessages ??= -1;
-    this.rawBody.model ??= 'gpt-4o';
+    this.rawBody.model ??= 'gpt-5.4';
   }
 
   protected processConfig(config: OpenAIChat, deepChat: DeepChat) {
