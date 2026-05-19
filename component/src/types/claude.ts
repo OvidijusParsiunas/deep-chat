@@ -15,6 +15,8 @@ export interface ClaudeTool {
     properties: object;
     required?: string[];
   };
+  // https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/define-tools#providing-tool-use-examples
+  input_examples?: Array<Record<string, unknown>>;
   // https://www.anthropic.com/engineering/advanced-tool-use
   defer_loading?: boolean;
   type?: string;
@@ -37,6 +39,30 @@ export interface ClaudeMCPServer {
   authorization_token?: string;
 }
 
+// https://docs.anthropic.com/en/api/messages#body-tool-choice
+export type ClaudeToolChoice =
+  | {type: 'auto'; disable_parallel_tool_use?: boolean}
+  | {type: 'any'; disable_parallel_tool_use?: boolean}
+  | {type: 'tool'; name: string; disable_parallel_tool_use?: boolean}
+  | {type: 'none'};
+
+// https://docs.anthropic.com/en/api/messages#body-metadata
+export interface ClaudeMetadata {
+  user_id?: string;
+}
+
+// https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking
+export type ClaudeThinking =
+  | {type: 'enabled'; budget_tokens: number; display?: 'summarized' | 'omitted'}
+  | {type: 'disabled'}
+  | {type: 'adaptive'; display?: 'summarized' | 'omitted'};
+
+// https://docs.anthropic.com/en/api/messages#body-output-config
+export interface ClaudeOutputConfig {
+  format: {type: 'json_schema'; schema: object};
+  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
+}
+
 // https://docs.anthropic.com/en/api/messages
 export interface ClaudeChat {
   model?: string;
@@ -47,9 +73,15 @@ export interface ClaudeChat {
   stop_sequences?: string[];
   system_prompt?: string | ClaudeSystemBlock[];
   tools?: ClaudeTool[];
-  tool_choice?: 'auto' | 'any' | {type: 'tool'; name: string} | {type: 'function'; name: string};
+  tool_choice?: ClaudeToolChoice;
   function_handler?: ChatFunctionHandler;
   mcp_servers?: ClaudeMCPServer[];
+  metadata?: ClaudeMetadata;
+  thinking?: ClaudeThinking;
+  service_tier?: 'auto' | 'standard_only';
+  container?: string;
+  output_config?: ClaudeOutputConfig;
+  inference_geo?: string;
   custom_base_url?: string;
   cache_control?: ClaudeCacheControl;
 }

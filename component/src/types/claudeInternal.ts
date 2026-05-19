@@ -1,5 +1,14 @@
-import {ClaudeTool, ClaudeMCPServer, ClaudeSystemBlock, ClaudeCacheControl} from './claude';
 import {ClaudeTextContent} from './claudeResult';
+import {
+  ClaudeCacheControl,
+  ClaudeOutputConfig,
+  ClaudeSystemBlock,
+  ClaudeToolChoice,
+  ClaudeMCPServer,
+  ClaudeMetadata,
+  ClaudeThinking,
+  ClaudeTool,
+} from './claude';
 
 type ClaudeImageContent = {
   type: 'image';
@@ -24,7 +33,13 @@ export type ClaudeRequestBody = {
   system?: string | ClaudeSystemBlock[];
   stream?: boolean;
   tools?: ClaudeTool[];
-  tool_choice?: 'auto' | 'any' | {type: 'tool'; name: string} | {type: 'function'; name: string};
+  tool_choice?: ClaudeToolChoice;
   mcp_servers?: ClaudeMCPServer[];
+  metadata?: ClaudeMetadata;
+  thinking?: ClaudeThinking;
+  service_tier?: 'auto' | 'standard_only';
+  container?: string;
+  output_config?: ClaudeOutputConfig;
+  inference_geo?: string;
   cache_control?: ClaudeCacheControl;
 };
