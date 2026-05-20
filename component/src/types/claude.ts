@@ -57,19 +57,10 @@ export type ClaudeThinking =
   | {type: 'disabled'}
   | {type: 'adaptive'; display?: 'summarized' | 'omitted'};
 
-// https://docs.anthropic.com/en/api/messages#body-output-config
-export interface ClaudeOutputConfig {
-  format: {type: 'json_schema'; schema: object};
-  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
-}
-
 // https://docs.anthropic.com/en/api/messages
 export interface ClaudeChat {
   model?: string;
   max_tokens?: number;
-  temperature?: number;
-  top_p?: number;
-  top_k?: number;
   stop_sequences?: string[];
   system_prompt?: string | ClaudeSystemBlock[];
   tools?: ClaudeTool[];
@@ -79,8 +70,6 @@ export interface ClaudeChat {
   metadata?: ClaudeMetadata;
   thinking?: ClaudeThinking;
   service_tier?: 'auto' | 'standard_only';
-  container?: string;
-  output_config?: ClaudeOutputConfig;
   inference_geo?: string;
   custom_base_url?: string;
   cache_control?: ClaudeCacheControl;

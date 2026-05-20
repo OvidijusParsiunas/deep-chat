@@ -1,7 +1,6 @@
 import {ClaudeTextContent} from './claudeResult';
 import {
   ClaudeCacheControl,
-  ClaudeOutputConfig,
   ClaudeSystemBlock,
   ClaudeToolChoice,
   ClaudeMCPServer,
@@ -38,8 +37,6 @@ export type ClaudeRequestBody = {
   metadata?: ClaudeMetadata;
   thinking?: ClaudeThinking;
   service_tier?: 'auto' | 'standard_only';
-  container?: string;
-  output_config?: ClaudeOutputConfig;
   inference_geo?: string;
   cache_control?: ClaudeCacheControl;
 };
