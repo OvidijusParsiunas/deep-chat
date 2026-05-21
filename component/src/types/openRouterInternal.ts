@@ -1,4 +1,4 @@
-import {OpenRouterTool} from './openRouter';
+import {OpenRouterReasoning, OpenRouterResponseFormat, OpenRouterTool, OpenRouterToolChoice} from './openRouter';
 
 export type OpenRouterToolCall = {
   id: string;
@@ -31,12 +31,15 @@ export type OpenRouterMessage = {
 
 export type OpenRouterRequestBody = {
   model: string;
+  models?: string[];
   messages: OpenRouterMessage[];
   tools?: OpenRouterTool[];
+  tool_choice?: OpenRouterToolChoice;
+  parallel_tool_calls?: boolean;
+  response_format?: OpenRouterResponseFormat;
+  reasoning?: OpenRouterReasoning;
   stream?: boolean;
   max_tokens?: number;
-  temperature?: number;
-  top_p?: number;
-  frequency_penalty?: number;
-  presence_penalty?: number;
+  max_completion_tokens?: number;
+  stop?: string | string[];
 };

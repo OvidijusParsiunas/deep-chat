@@ -25,7 +25,7 @@ import {
   SYSTEM,
 } from '../utils/serviceConstants';
 
-// https://openrouter.ai/docs/api-reference/overview
+// https://openrouter.ai/docs/api/api-reference
 export class OpenRouterIO extends DirectServiceIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('OpenRouter');
   override keyHelpUrl = 'https://openrouter.ai/keys';
@@ -128,7 +128,7 @@ export class OpenRouterIO extends DirectServiceIO {
       const choice = result.choices?.[0];
       if (choice?.message) {
         if (choice.message.tool_calls) {
-          // https://openrouter.ai/docs/features/tool-calling
+          // https://openrouter.ai/docs/guides/features/tool-calling
           return this.handleToolsGeneric(
             {tool_calls: choice.message.tool_calls},
             this.functionHandler,
