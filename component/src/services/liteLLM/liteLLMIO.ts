@@ -30,6 +30,7 @@ export class LiteLLMIO extends DirectServiceIO {
     if (typeof config === OBJECT) {
       if ((config as LiteLLM & {url?: string}).url) {
         this.url = (config as LiteLLM & {url?: string}).url!;
+        delete (config as LiteLLM & {url?: string}).url;
       }
       this.completeConfig(config);
     }
