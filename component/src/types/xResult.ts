@@ -9,24 +9,25 @@ export type XImageResult = {
   };
 };
 
+export type XOutputTextContent = {
+  type: 'output_text';
+  text: string;
+  annotations?: unknown[];
+};
+
+export type XOutputMessage = {
+  type: 'message';
+  role: 'assistant';
+  content: XOutputTextContent[];
+};
+
 export type XNormalResult = {
   id: string;
-  object: 'chat.completion';
-  created: number;
+  object: 'response';
+  created_at: number;
   model: string;
-  choices: Array<{
-    index: number;
-    message: {
-      role: 'assistant';
-      content: string;
-    };
-    finish_reason: string;
-  }>;
-  usage?: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
+  status: 'completed' | 'in_progress' | 'incomplete';
+  output: Array<XOutputMessage | {type: string}>;
   error?: {
     message: string;
     type: string;
@@ -34,18 +35,12 @@ export type XNormalResult = {
 };
 
 export type XStreamEvent = {
-  id: string;
-  object: 'chat.completion.chunk';
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    delta: {
-      role?: 'assistant';
-      content?: string;
-    };
-    finish_reason?: string;
-  }>;
+  type: string;
+  delta?: string;
+  item_id?: string;
+  output_index?: number;
+  content_index?: number;
+  sequence_number?: number;
   error?: {
     message: string;
     type: string;

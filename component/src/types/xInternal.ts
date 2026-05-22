@@ -5,8 +5,9 @@ export type XMessage = {
 
 export type XRequestBody = {
   model: string;
-  messages: XMessage[];
-  max_tokens?: number;
+  input: XMessage[];
+  instructions?: string;
+  max_output_tokens?: number;
   temperature?: number;
   stream?: boolean;
 };

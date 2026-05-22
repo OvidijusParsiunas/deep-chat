@@ -25,7 +25,7 @@ export class XImagesIO extends DirectServiceIO {
     super(deepChat, X_BUILD_KEY_VERIFICATION_DETAILS(), X_BUILD_HEADERS, apiKey);
     const config = directConnection?.x?.[IMAGES] as NonNullable<XImages>;
     if (typeof config === OBJECT) Object.assign(this.rawBody, config);
-    this.rawBody.model ??= 'grok-2-image';
+    this.rawBody.model ??= 'grok-imagine-image-quality';
   }
 
   private preprocessBody(body: XImages, messages: MessageContentI[]) {
