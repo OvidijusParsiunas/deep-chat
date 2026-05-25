@@ -52,6 +52,7 @@ import {QwenIO} from './qwen/qwenIO';
 import {KimiIO} from './kimi/kimiIO';
 import {DeepChat} from '../deepChat';
 import {XChatIO} from './x/xChatIO';
+import {LiteLLMIO} from './liteLLM/liteLLMIO';
 import {DifyIO} from './dify/difyIO';
 
 // exercise caution when defining default returns for directConnection as their configs can be undefined
@@ -216,6 +217,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.dify) {
         return new DifyIO(deepChat);
+      }
+      if (directConnection.liteLLM) {
+        return new LiteLLMIO(deepChat);
       }
     }
     if (connect && Object.keys(connect).length > 0 && !demo) {

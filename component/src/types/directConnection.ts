@@ -20,7 +20,8 @@ import {Groq} from './groq';
 import {Kimi} from './kimi';
 import {Qwen} from './qwen';
 import {X} from './x';
-import { Dify } from './dify';
+import {LiteLLM} from './liteLLM';
+import {Dify} from './dify';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -45,4 +46,5 @@ export interface DirectConnection {
   ollama?: Ollama;
   openWebUI?: OpenWebUI & APIKey;
   dify?: Dify & APIKey;
+  liteLLM?: LiteLLM & APIKey;
 }
