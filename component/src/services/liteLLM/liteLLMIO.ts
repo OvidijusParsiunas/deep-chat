@@ -1,36 +1,32 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {LITELLM_BUILD_HEADERS, LITELLM_BUILD_KEY_VERIFICATION_DETAILS} from './utils/liteLLMUtils';
-import {LiteLLMRequestBody, LiteLLMMessage} from '../../types/liteLLMInternal';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
+import {LiteLLMRequestBody, LiteLLMMessage} from '../../types/liteLLMInternal';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {LiteLLMResult} from '../../types/liteLLMResult';
 import {DirectServiceIO} from '../utils/directServiceIO';
-import {LiteLLM} from '../../types/liteLLM';
-import {APIKey} from '../../types/APIKey';
+import {LiteLLMResult} from '../../types/liteLLMResult';
+import {LiteLLMChat} from '../../types/liteLLM';
 import {DeepChat} from '../../deepChat';
 
 // https://docs.litellm.ai/docs/
 export class LiteLLMIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = this.genereteAPIKeyName('LiteLLM');
-  override keyHelpUrl = 'https://docs.litellm.ai/docs/simple_proxy#quick-start';
+  override insertKeyPlaceholderText = '';
+  override keyHelpUrl = '';
+  override validateKeyProperty = false;
   url = 'http://localhost:4000/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
-    const config = directConnectionCopy.liteLLM as LiteLLM & APIKey;
-    const configUrl =
-      typeof config === OBJECT && (config as LiteLLM & {url?: string}).url
-        ? (config as LiteLLM & {url?: string}).url!
-        : 'http://localhost:4000/v1/chat/completions';
-    super(deepChat, LITELLM_BUILD_KEY_VERIFICATION_DETAILS(configUrl), LITELLM_BUILD_HEADERS, config);
+    super(deepChat, LITELLM_BUILD_KEY_VERIFICATION_DETAILS(), LITELLM_BUILD_HEADERS, {key: 'placeholder'});
+    const config = directConnectionCopy.liteLLM as LiteLLMChat;
     if (typeof config === OBJECT) {
-      if ((config as LiteLLM & {url?: string}).url) {
-        this.url = (config as LiteLLM & {url?: string}).url!;
-        delete (config as LiteLLM & {url?: string}).url;
+      if (config.url) {
+        this.url = config.url;
+        delete config.url;
       }
       this.completeConfig(config);
     }

@@ -9,6 +9,7 @@ import {Together} from './together';
 import {BigModel} from './bigModel';
 import {Mistral} from './mistral';
 import {MiniMax} from './miniMax';
+import {LiteLLM} from './liteLLM';
 import {APIKey} from './APIKey';
 import {Cohere} from './cohere';
 import {Gemini} from './gemini';
@@ -19,9 +20,8 @@ import {Azure} from './azure';
 import {Groq} from './groq';
 import {Kimi} from './kimi';
 import {Qwen} from './qwen';
-import {X} from './x';
-import {LiteLLM} from './liteLLM';
 import {Dify} from './dify';
+import {X} from './x';
 
 export interface DirectConnection {
   openAI?: OpenAI & APIKey;
@@ -46,5 +46,5 @@ export interface DirectConnection {
   ollama?: Ollama;
   openWebUI?: OpenWebUI & APIKey;
   dify?: Dify & APIKey;
-  liteLLM?: LiteLLM & APIKey;
+  liteLLM?: LiteLLM;
 }
