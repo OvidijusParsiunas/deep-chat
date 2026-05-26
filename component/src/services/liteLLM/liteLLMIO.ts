@@ -24,10 +24,6 @@ export class LiteLLMIO extends DirectServiceIO {
     super(deepChat, LITELLM_BUILD_KEY_VERIFICATION_DETAILS(), LITELLM_BUILD_HEADERS, {key: 'placeholder'});
     const config = directConnectionCopy.liteLLM as LiteLLMChat;
     if (typeof config === OBJECT) {
-      if (config.url) {
-        this.url = config.url;
-        delete config.url;
-      }
       this.completeConfig(config);
     }
     this.maxMessages ??= -1;
