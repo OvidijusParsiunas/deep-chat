@@ -46,5 +46,5 @@ export interface DirectConnection {
   ollama?: Ollama;
   openWebUI?: OpenWebUI & APIKey;
   dify?: Dify & APIKey;
-  liteLLM?: LiteLLM;
+  liteLLM?: LiteLLM & APIKey;
 }

@@ -1,5 +1,4 @@
 import {LITELLM_BUILD_HEADERS, LITELLM_BUILD_KEY_VERIFICATION_DETAILS} from './utils/liteLLMUtils';
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
 import {LiteLLMRequestBody, LiteLLMMessage} from '../../types/liteLLMInternal';
 import {DirectConnection} from '../../types/directConnection';
@@ -9,20 +8,25 @@ import {Response as ResponseI} from '../../types/response';
 import {DirectServiceIO} from '../utils/directServiceIO';
 import {LiteLLMResult} from '../../types/liteLLMResult';
 import {LiteLLMChat} from '../../types/liteLLM';
+import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
+import {
+  INVALID_REQUEST_ERROR_PREFIX,
+  AUTHENTICATION_ERROR_PREFIX,
+  PLACEHOLDER_KEY,
+  OBJECT,
+} from '../utils/serviceConstants';
 
 // https://docs.litellm.ai/docs/
 export class LiteLLMIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = '';
-  override keyHelpUrl = '';
-  override validateKeyProperty = false;
   url = 'http://localhost:4000/v1/chat/completions';
   permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
-    super(deepChat, LITELLM_BUILD_KEY_VERIFICATION_DETAILS(), LITELLM_BUILD_HEADERS, {key: 'placeholder'});
-    const config = directConnectionCopy.liteLLM as LiteLLMChat;
+    const config = directConnectionCopy.liteLLM as LiteLLMChat & APIKey;
+    const key = typeof config === OBJECT ? (config.key ?? PLACEHOLDER_KEY) : PLACEHOLDER_KEY;
+    super(deepChat, LITELLM_BUILD_KEY_VERIFICATION_DETAILS(), LITELLM_BUILD_HEADERS, {key});
     if (typeof config === OBJECT) {
       this.completeConfig(config);
     }

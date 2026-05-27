@@ -41,3 +41,5 @@ export const INPUT_AUDIO = 'input_audio';
 export const IMAGE_URL = 'image_url';
 
 export const SYSTEM = 'system';
+
+export const PLACEHOLDER_KEY = 'placeholder';
