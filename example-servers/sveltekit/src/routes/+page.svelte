@@ -83,14 +83,14 @@
       <deep-chat
         style="border-radius: 10px"
         introMessage={{text: "Send a chat message through an example server to OpenAI."}}
-        connect={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-4o'}}}
+        connect={{url: '/api/openai/chat', additionalBodyProps: {model: 'gpt-5.4'}}}
         requestBodyLimits={{maxMessages: -1}}
         errorMessages={{displayServiceErrorMessages: true}}
       />
       <deep-chat
         style="border-radius: 10px"
         introMessage={{text: "Send a streamed chat message through an example server to OpenAI."}}
-        connect={{url: '/api/openai/chat-stream', stream: true, additionalBodyProps: {model: 'gpt-4o'}}}
+        connect={{url: '/api/openai/chat-stream', stream: true, additionalBodyProps: {model: 'gpt-5.4'}}}
         requestBodyLimits={{maxMessages: -1}}
         errorMessages={{displayServiceErrorMessages: true}}
       />
