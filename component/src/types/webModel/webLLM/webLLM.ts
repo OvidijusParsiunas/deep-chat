@@ -1,3 +1,3 @@
-export {ChatWorkerClient} from './webLLMClient';
-export {ChatModule} from './webLLMChatModule';
+export {WebWorkerMLCEngine} from './webLLMClient';
+export {MLCEngine} from './webLLMChatModule';
 export * from './webLLMShared';

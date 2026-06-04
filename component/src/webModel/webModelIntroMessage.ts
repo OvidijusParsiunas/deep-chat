@@ -2,6 +2,7 @@ import {CLICK, DISABLED} from '../utils/consts/inputConstants';
 import {CREATE_ELEMENT} from '../utils/consts/htmlConstants';
 import {WebModelIntro} from '../types/webModel/webModel';
 import {FILES} from '../utils/consts/messageConstants';
+import {WebModelFiles} from './webModelFiles';
 import {WebModel} from './webModel';
 
 export class WebModelIntroMessage {
@@ -70,11 +71,14 @@ export class WebModelIntroMessage {
   }
 
   // prettier-ignore
-  public static setUpAfterLoad(files: File[], introMessage?: WebModelIntro, chatEl?: HTMLElement, isWorker?: boolean) {
+  public static setUpAfterLoad(introMessage?: WebModelIntro, chatEl?: HTMLElement, isWorker?: boolean) {
     const exportClass = introMessage?.exportFilesClass || WebModelIntroMessage.EXPORT_BUTTON_CLASS;
     setTimeout(() => {
       const exportButton = chatEl?.getElementsByClassName(exportClass)[0] as HTMLButtonElement;
-      if (exportButton) exportButton.onclick = () => WebModelIntroMessage.exportFile(files);
+      // files are read from the browser cache lazily (on click) to avoid loading the whole model into memory
+      if (exportButton) {
+        exportButton.onclick = async () => WebModelIntroMessage.exportFile(await WebModelFiles.exportFromCache());
+      }
     });
     return (
       introMessage?.afterLoadHtml ||

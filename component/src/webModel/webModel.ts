@@ -1,11 +1,10 @@
 import {AI, DEEP_COPY, DOCS_BASE_URL, ERROR, ROLE, SERVICE, STRING, TEXT, USER} from '../utils/consts/messageConstants';
+import {AppConfig, ChatCompletionMessageParam, MLCEngineConfig, ModelRecord} from '../types/webModel/webLLM/webLLM';
 import {MessageStream} from '../views/chat/messages/stream/messageStream';
-import {AppConfig, ChatOptions} from '../types/webModel/webLLM/webLLM';
 import {IntroMessage, MessageContent} from '../types/messages';
 import {BaseServiceIO} from '../services/utils/baseServiceIO';
 import {WebModelIntroMessage} from './webModelIntroMessage';
 import {ElementUtils} from '../utils/element/elementUtils';
-import {SYSTEM} from '../services/utils/serviceConstants';
 import * as WebLLM from '../types/webModel/webLLM/webLLM';
 import {WebModelConfig} from '../types/webModel/webModel';
 import {MessageContentI} from '../types/messagesInternal';
@@ -13,6 +12,7 @@ import {Messages} from '../views/chat/messages/messages';
 import {RequestUtils} from '../utils/HTTP/requestUtils';
 import {ResponseI} from '../types/responseInternal';
 // import * as WebLLM2 from 'deep-chat-web-llm';
+import {WebModelFiles} from './webModelFiles';
 import config from './webModelConfig';
 import {DeepChat} from '../deepChat';
 import {
@@ -28,20 +28,21 @@ declare global {
 }
 
 export class WebModel extends BaseServiceIO {
-  public static chat?: WebLLM.ChatInterface;
+  public static chat?: WebLLM.MLCEngineInterface;
   private static readonly GENERIC_ERROR =
     'Error, please check the ' +
     `[troubleshooting](${DOCS_BASE_URL}webModel#troubleshooting) section of documentation for help.`;
   private static readonly MULTIPLE_MODELS_ERROR = 'Cannot run multiple web models';
   private static readonly WEB_LLM_NOT_FOUND_ERROR = 'WebLLM module not found';
-  private static readonly DEFAULT_MODEL = 'Llama-2-7b-chat-hf-q4f32_1';
+  private static readonly DEFAULT_MODEL = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
   public static readonly MODULE_SEARCH_LIMIT_S = 5;
   private _isModelLoaded = false;
   private _isModelLoading = false;
   private _loadOnFirstMessage = false;
   private readonly _webModel: WebModelConfig = {};
   permittedErrorPrefixes = [WebModel.MULTIPLE_MODELS_ERROR, WebModel.WEB_LLM_NOT_FOUND_ERROR, WebModel.GENERIC_ERROR];
-  private readonly _conversationHistory: Array<[string, string]> = [];
+  // OpenAI-style chat history (prior user/assistant turns); the system instruction is prepended per request
+  private readonly _conversationHistory: ChatCompletionMessageParam[] = [];
   private readonly _chatEl?: HTMLElement;
   private _removeIntro?: () => void;
   private _messages?: Messages;
@@ -66,12 +67,13 @@ export class WebModel extends BaseServiceIO {
     };
   }
 
-  private static setUpHistory(conversationHistory: Array<[string, string]>, history: MessageContent[]) {
+  private static setUpHistory(conversationHistory: ChatCompletionMessageParam[], history: MessageContent[]) {
     history.forEach((message, index) => {
       if (message[ROLE] === USER && message[TEXT]) {
         const nextMessage = history[index + 1];
         if (nextMessage?.[TEXT] && nextMessage[ROLE] !== USER) {
-          conversationHistory.push([message[TEXT], nextMessage[TEXT]]); // [userText, aiText]
+          conversationHistory.push({role: 'user', content: message[TEXT]});
+          conversationHistory.push({role: 'assistant', content: nextMessage[TEXT]});
         }
       }
     });
@@ -140,29 +142,46 @@ export class WebModel extends BaseServiceIO {
     }
     if (this._isModelLoaded || this._isModelLoading) return;
     const {worker} = this._webModel;
-    return config.use_web_worker && worker ? new window.webLLM.ChatWorkerClient(worker) : new window.webLLM.ChatModule();
+    const engineConfig: MLCEngineConfig = {};
+    return config.use_web_worker && worker
+      ? new window.webLLM.WebWorkerMLCEngine(worker, engineConfig)
+      : new window.webLLM.MLCEngine(engineConfig);
   }
 
   private getConfig() {
     let model = WebModel.DEFAULT_MODEL;
     if (this._webModel.model) model = this._webModel.model;
-    const appConfig = DEEP_COPY(config) as AppConfig;
+    // prefer the package's prebuilt model list (auto-updates with deep-chat-web-llm); fall back to
+    // the local curated list (webModelConfig.ts) when prebuiltAppConfig is unavailable
+    const prebuilt = window.webLLM?.prebuiltAppConfig?.model_list;
+    const model_list = DEEP_COPY(prebuilt && prebuilt.length > 0 ? prebuilt : config.model_list) as ModelRecord[];
+    // default Cache API backend is required for the export/import feature (see webModelFiles.ts)
+    const appConfig: AppConfig = {model_list, cacheBackend: 'cache'};
     if (this._webModel.urls) {
-      const modelConfig = appConfig.model_list.find((modelConfig) => (modelConfig.local_id = model));
-      if (modelConfig) {
-        if (this._webModel.urls.model) modelConfig.model_url = this._webModel.urls.model;
-        if (this._webModel.urls.wasm) modelConfig.model_lib_url = this._webModel.urls.wasm;
+      let modelRecord = model_list.find((record) => record.model_id === model);
+      if (!modelRecord) {
+        modelRecord = {model: '', model_id: model, model_lib: ''};
+        model_list.push(modelRecord);
       }
+      if (this._webModel.urls.model) modelRecord.model = this._webModel.urls.model;
+      if (this._webModel.urls.wasm) modelRecord.model_lib = this._webModel.urls.wasm;
     }
-    if (this._webModel.load?.skipCache) appConfig.use_cache = false;
     return {model, appConfig};
   }
 
+  // system instruction + prior turns + the new user message, in OpenAI message format
+  private buildMessages(text: string): ChatCompletionMessageParam[] {
+    const messages: ChatCompletionMessageParam[] = [];
+    if (this._webModel.instruction) messages.push({role: 'system', content: this._webModel.instruction});
+    messages.push(...this._conversationHistory);
+    messages.push({role: 'user', content: text});
+    return messages;
+  }
+
   // prettier-ignore
-  private async loadModel(chat: WebLLM.ChatInterface, files?: FileList) {
+  private async loadModel(chat: WebLLM.MLCEngineInterface, files?: FileList) {
     this.scrollToTop();
     WebModel.chat = chat;
-    // await window.webLLM.hasModelInCache(this.selectedModel, config); can potentially reuse this in the future
     this._isModelLoading = true;
     let isNewMessage = this._webModel.introMessage?.displayed === false;
     const initProgressCallback = (report: WebLLM.InitProgressReport) => {
@@ -172,23 +191,24 @@ export class WebModel extends BaseServiceIO {
         isNewMessage = false;
       }
     };
-    WebModel.chat.setInitProgressCallback(initProgressCallback);
-    let loadedFiles: File[];
+    chat.setInitProgressCallback(initProgressCallback);
     try {
       const {model, appConfig} = this.getConfig();
-      const chatOpts: ChatOptions = {};
-      if (this._webModel.instruction) chatOpts.conv_config = {[SYSTEM]: this._webModel.instruction};
-      if (this._conversationHistory.length > 0) chatOpts.conversation_history = this._conversationHistory;
-      // considered creating funcitonality to stop/pause loading, but there is
+      chat.setAppConfig(appConfig);
+      if (this._webModel.load?.skipCache) await window.webLLM.deleteModelAllInfoInCache(model, appConfig);
+      // seed the cache from previously-exported model files (import), so reload resolves offline
+      if (files && files.length > 0) await WebModelFiles.importToCache(files);
+      // the system instruction is sent per-request via the OpenAI-style messages array (buildMessages)
+      // considered creating functionality to stop/pause loading, but there is
       // no real way to stop a fetch request in the same session
-      loadedFiles = (await WebModel.chat.reload(model, chatOpts, appConfig, files)) as File[];
+      await chat.reload(model);
     } catch (err) {
       return this.unloadChat(err as string);
     }
     this.deepChat._validationHandler?.();
     if (!this._webModel.introMessage?.removeAfterLoad) {
       const html = WebModelIntroMessage.setUpAfterLoad(
-        loadedFiles, this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
+        this._webModel.introMessage, this._chatEl, !!this._webModel.worker);
       this._messages?.addNewMessage({html, overwrite: true, sendUpdate: false});
     } else if (this._webModel.introMessage.displayed === false) {
       this._messages?.removeLastMessage();
@@ -209,28 +229,42 @@ export class WebModel extends BaseServiceIO {
     WebModel.chat = undefined;
   }
 
-  private async immediateResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
-    const output = {[TEXT]: await chat.generate(text, undefined, 0)}; // anything but 1 will not stream
+  private async immediateResp(messages: Messages, text: string, chat: WebLLM.MLCEngineInterface) {
+    const result = await chat.chat.completions.create({messages: this.buildMessages(text), stream: false});
+    const replyText = result.choices[0]?.message?.content || '';
+    this._conversationHistory.push({role: 'user', content: text}, {role: 'assistant', content: replyText});
+    const output = {[TEXT]: replyText};
     const response = await WebModel.processResponse(this.deepChat, messages, output);
     if (response) response.forEach((data) => messages.addNewMessage(data));
     this.completionsHandlers.onFinish();
   }
 
-  private async streamResp(messages: Messages, text: string, chat: WebLLM.ChatInterface) {
+  private async streamResp(messages: Messages, text: string, chat: WebLLM.MLCEngineInterface) {
     this.streamHandlers.onAbort = () => {
       chat.interruptGenerate();
     };
     this.streamHandlers.onOpen();
     const stream = new MessageStream(messages);
-    await chat.generate(text, async (_: number, message: string) => {
-      const response = await WebModel.processResponse(this.deepChat, messages, {[TEXT]: message});
-      if (response) stream.upsertStreamedMessage({[TEXT]: response[0][TEXT], overwrite: true});
+    const chunks = await chat.chat.completions.create({
+      messages: this.buildMessages(text),
+      stream: true,
+      stream_options: {include_usage: false},
     });
+    let aggregated = '';
+    // note: new web-llm chunks carry deltas (not the cumulative message) - we accumulate them
+    for await (const chunk of chunks) {
+      const delta = chunk.choices[0]?.delta?.content || '';
+      if (!delta) continue;
+      aggregated += delta;
+      const response = await WebModel.processResponse(this.deepChat, messages, {[TEXT]: aggregated});
+      if (response) stream.upsertStreamedMessage({[TEXT]: response[0][TEXT], overwrite: true});
+    }
+    this._conversationHistory.push({role: 'user', content: text}, {role: 'assistant', content: aggregated});
     stream.finaliseStreamedMessage();
     this.streamHandlers.onClose();
   }
 
-  private async generateRespByType(ms: Messages, text: string, stream: boolean, chat: WebLLM.ChatInterface) {
+  private async generateRespByType(ms: Messages, text: string, stream: boolean, chat: WebLLM.MLCEngineInterface) {
     try {
       // need await to catch the error
       if (stream) {
@@ -244,7 +278,7 @@ export class WebModel extends BaseServiceIO {
     }
   }
 
-  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.ChatInterface) {
+  private async generateResp(messages: Messages, pMessages: MessageContentI[], chat: WebLLM.MLCEngineInterface) {
     const lastText = pMessages[pMessages.length - 1][TEXT] as string;
     const {body, error} = await RequestUtils.processRequestInterceptor(this.deepChat, {body: {[TEXT]: lastText}});
     const stream = !!this.stream;
@@ -314,12 +348,9 @@ export class WebModel extends BaseServiceIO {
   }
 
   private static clearAllCache() {
-    // IMPORTANT - 'webllm/model' and 'webllm/wasm' need to match the scope in 'deep-chat-web-llm':
-    // chat_module file's fetchNDArrayCache call's scope:
-    // const resultFiles = await tvm.fetchNDArrayCache(modelUrl, tvm.webgpu(), "webllm/model"...
-    // and chat_module file's: const wasmCache = new tvmjs.ArtifactCache("webllm/wasm");
-    WebModel.clearCache('webllm/model');
-    WebModel.clearCache('webllm/wasm');
+    // IMPORTANT - the scopes need to match those used by deep-chat-web-llm (@mlc-ai/web-llm)
+    // ArtifactCache: 'webllm/model', 'webllm/wasm' and 'webllm/config'.
+    WebModelFiles.CACHE_SCOPES.forEach((scope) => WebModel.clearCache(scope));
   }
 
   private static clearCache(scope: string) {

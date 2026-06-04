@@ -1,25 +1,27 @@
+// Commonly-used models from @mlc-ai/web-llm's prebuiltAppConfig (model_id values). Any model_id
+// present in window.webLLM.prebuiltAppConfig is also valid - this union just powers autocomplete.
 export type WebModelName =
-  // Llama-2
-  | 'Llama-2-7b-chat-hf-q4f32_1'
-  | 'Llama-2-7b-chat-hf-q4f16_1'
-  | 'Llama-2-7b-chat-hf-q4f16_1-1k'
-  | 'Llama-2-13b-chat-hf-q4f16_1'
-  | 'Llama-2-70b-chat-hf-q4f16_1'
-  // RedPajama
-  | 'RedPajama-INCITE-Chat-3B-v1-q4f16_1'
-  | 'RedPajama-INCITE-Chat-3B-v1-q4f32_1'
-  | 'RedPajama-INCITE-Chat-3B-v1-q4f16_1-1k'
-  | 'RedPajama-INCITE-Chat-3B-v1-q4f32_1-1k'
-  // Mistral variants
-  | 'WizardMath-7B-V1.1-q4f16_1'
-  | 'Mistral-7B-Instruct-v0.2-q4f16_1'
-  | 'OpenHermes-2.5-Mistral-7B-q4f16_1'
-  | 'NeuralHermes-2.5-Mistral-7B-q4f16_1'
-  // TinyLlama
-  | 'TinyLlama-1.1B-Chat-v0.4-q0f16'
-  | 'TinyLlama-1.1B-Chat-v0.4-q0f32'
-  | 'TinyLlama-1.1B-Chat-v0.4-q4f16_1-1k'
-  | 'TinyLlama-1.1B-Chat-v0.4-q4f32_1-1k';
+  // Llama 3.x
+  | 'Llama-3.2-1B-Instruct-q4f16_1-MLC'
+  | 'Llama-3.2-1B-Instruct-q4f32_1-MLC'
+  | 'Llama-3.2-3B-Instruct-q4f16_1-MLC'
+  | 'Llama-3.1-8B-Instruct-q4f16_1-MLC'
+  // Phi
+  | 'Phi-3.5-mini-instruct-q4f16_1-MLC'
+  | 'Phi-3.5-mini-instruct-q4f16_1-MLC-1k'
+  // Qwen
+  | 'Qwen2.5-0.5B-Instruct-q4f16_1-MLC'
+  | 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC'
+  // Gemma
+  | 'gemma-2-2b-it-q4f16_1-MLC'
+  // Mistral
+  | 'Mistral-7B-Instruct-v0.3-q4f16_1-MLC'
+  // TinyLlama / SmolLM
+  | 'TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC'
+  | 'SmolLM2-1.7B-Instruct-q4f16_1-MLC'
+  // any other model_id available in window.webLLM.prebuiltAppConfig (string & {} keeps the
+  // literal suggestions above while still permitting any model_id string)
+  | (string & {});
 
 export interface WebModelIntro {
   displayed?: boolean;
