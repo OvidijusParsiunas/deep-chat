@@ -28,7 +28,7 @@ export class SetupMessages {
       }
     } else if (deepChat.connect) {
       // don't forget that when Demo mode is enabled - url is set to 'deep-chat-demo'
-      if (!deepChat.connect.url && !deepChat.connect.handler) {
+      if (!deepChat.connect.url && !deepChat.connect.handler && !deepChat.webModel) {
         return (
           'Please define a `url` or a `handler` property inside ' +
           `the [connect](${DOCS_BASE_URL}connect#connect-1) object.`
