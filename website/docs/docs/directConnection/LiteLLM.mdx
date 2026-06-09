@@ -1,0 +1,187 @@
+---
+sidebar_position: 13
+---
+
+# LiteLLM
+
+# <span style={{float: 'left', marginRight: '10px', marginTop: '10px', fontSize: '38px', lineHeight: 1}}>🚅</span><span className="direct-service-title">LiteLLM</span>
+
+Properties used to connect to a [LiteLLM](https://www.litellm.ai/) proxy server.
+
+### `liteLLM` {#liteLLM}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `key?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]` <br />
+  \}
+- Default: _\{model: "gpt-4o-mini", temperature: 1, max_tokens: 4096\}_
+
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to a [LiteLLM](https://www.litellm.ai/) proxy server that acts as a unified gateway to many AI providers. <br />
+`key` is an optional API key used to authenticate against the proxy. <br />
+`model` is the name of the model to route the request to, as configured in your LiteLLM proxy. See the [provider list](https://docs.litellm.ai/docs/providers). <br />
+`system_prompt` provides system instructions for the model's behavior. <br />
+`temperature` controls randomness in the response (range depends on the underlying provider). <br />
+`max_tokens` is the maximum number of tokens to generate in the response. <br />
+`top_p` is the nucleus sampling parameter. <br />
+`frequency_penalty` penalizes repeated tokens based on their frequency. <br />
+`presence_penalty` penalizes repeated tokens based on whether they have appeared. <br />
+`stop` is a sequence (or array of sequences) at which the model will stop generating. <br />
+
+:::info
+LiteLLM does not require an API key by default as it is typically self-hosted. If your proxy is configured with a master key or [virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys), set the `key` property to authenticate.
+:::
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        liteLLM: {
+          model: 'gpt-4o-mini',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        liteLLM: {
+          model: 'gpt-4o-mini',
+          system_prompt: 'You are a helpful assistant.',
+          temperature: 0.7,
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "liteLLM": {
+      "model": "gpt-4o-mini",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "liteLLM": {
+      "model": "gpt-4o-mini",
+      "system_prompt": "You are a helpful assistant.",
+      "temperature": 0.7
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Custom URL Example
+
+By default, LiteLLM connects to `http://localhost:4000/v1/chat/completions`. You can specify a custom URL using the [`connect`](/docs/connect) property:
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        liteLLM: true,
+      }}
+      connect={{
+        url: 'https://your-litellm-proxy.com/v1/chat/completions',
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        liteLLM: true,
+      }}
+      connect={{
+        url: 'https://your-litellm-proxy.com/v1/chat/completions',
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{"liteLLM": {"key": "placeholder key"}}'
+  connect='{"url": "https://your-litellm-proxy.com/v1/chat/completions"}'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{"liteLLM": {"key": "placeholder key"}}'
+  connect='{"url": "https://your-litellm-proxy.com/v1/chat/completions"}'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Prerequisites
+
+To use LiteLLM with Deep Chat, you need to:
+
+1. **Install LiteLLM**: Follow the [quick start guide](https://docs.litellm.ai/docs/simple_proxy#quick-start)
+2. **Configure your providers**: Add your provider credentials (OpenAI, Anthropic, etc.) to the proxy `config.yaml` or as environment variables
+3. **Start the proxy**: Run `litellm --config config.yaml` — the proxy will listen on `http://localhost:4000` by default
