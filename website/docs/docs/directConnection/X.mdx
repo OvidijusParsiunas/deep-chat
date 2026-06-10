@@ -1,5 +1,5 @@
 ---
-sidebar_position: 22
+sidebar_position: 23
 ---
 
 # X
@@ -34,15 +34,15 @@ import Tabs from '@theme/Tabs';
 
 - Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_output_tokens?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string` <br />
   \}
-- Default: _\{model: "grok-3-latest"\}_
+- Default: _\{model: "grok-4.3"\}_
 
-Connect to X's [Chat API](https://docs.x.ai/docs/guides/chat). You can set this property to _true_ or configure it using an object: <br />
+Connect to X's [Responses API](https://docs.x.ai/developers/model-capabilities/text/generate-text). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the X model to be used by the API. <br />
-`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`max_output_tokens` limits the maximum number of tokens in the generated response. <br />
 `temperature` controls the randomness of responses. Higher values produce more creative outputs. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 
@@ -116,12 +116,13 @@ Use [`stream`](/docs/connect#Stream) to stream the AI responses.
 
 ### `Images` {#Images}
 
-- Type: `true` | \{`model?: string`,`n?: number`}
-- Default: _\{model: "grok-2-image"\}_
+- Type: `true` | \{`model?: string`,`n?: number`,`size?: string`}
+- Default: _\{model: "grok-imagine-image-quality"\}_
 
-Connect to X's [Images Generation API](https://docs.x.ai/docs/guides/image-generations). You can set this property to _true_ or configure it using an object: <br />
+Connect to X's [Images Generation API](https://docs.x.ai/developers/model-capabilities/imagine). You can set this property to _true_ or configure it using an object: <br />
 `model` is the name of the image generation model. <br />
 `n` is the number of images to generate. <br />
+`size` is the image dimensions or aspect ratio. <br />
 
 #### Example
 
