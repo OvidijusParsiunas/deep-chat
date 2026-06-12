@@ -1,5 +1,5 @@
 ---
-sidebar_position: 16
+sidebar_position: 17
 ---
 
 # OpenRouter
@@ -14,13 +14,16 @@ Properties used to connect to [OpenRouter](https://openrouter.ai/).
 
 - Type: `true` | \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `models?: string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `temperature?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `top_p?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `frequency_penalty?: number`, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `presence_penalty?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_completion_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `stop?: string | string[]`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: OpenRouterTool[]`](#OpenRouterTool), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tool_choice?: OpenRouterToolChoice`](#OpenRouterToolChoice), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `parallel_tool_calls?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`response_format?: OpenRouterResponseFormat`](#OpenRouterResponseFormat), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`reasoning?: OpenRouterReasoning`](#OpenRouterReasoning), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler) <br />
   \}
 - Default: _\{model: "openai/gpt-4o"\}_
@@ -36,15 +39,18 @@ import Tabs from '@theme/Tabs';
 
 <BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
 
-Connect to OpenRouter's [Chat Completion API](https://openrouter.ai/docs/api-reference/chat-completion). You can set this property to _true_ or configure it using an object:<br />
+Connect to OpenRouter's [Chat Completion API](https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request). You can set this property to _true_ or configure it using an object:<br />
 `model` is the name of the model to be used by the API (e.g., "openai/gpt-3.5-turbo"). <br />
+`models` is an optional list of fallback model identifiers used in order if the primary `model` is unavailable. <br />
 `max_tokens` limits the maximum number of tokens in the generated response (1 to model's context length). <br />
-`temperature` controls the randomness of responses (0.0-2.0). Higher values produce more creative outputs. <br />
-`top_p` controls diversity through nucleus sampling (0.0-1.0). <br />
-`frequency_penalty` reduces repetition by penalizing frequently used tokens (-2.0 to 2.0). <br />
-`presence_penalty` encourages topic diversity by penalizing tokens that have appeared (-2.0 to 2.0). <br />
+`max_completion_tokens` is the newer alternative to `max_tokens` for capping the response length. <br />
+`stop` is a string or array of strings at which the model will stop generating further tokens. <br />
 `system_prompt` provides behavioral context and instructions to the model. <br />
 [`tools`](#OpenRouterTool) defines available function declarations for the model to call. <br />
+[`tool_choice`](#OpenRouterToolChoice) controls whether and which tool the model should call. <br />
+`parallel_tool_calls` toggles whether the model may request multiple tool calls in parallel (defaults to _true_). <br />
+[`response_format`](#OpenRouterResponseFormat) constrains the model output (e.g. JSON or a specific JSON schema). <br />
+[`reasoning`](#OpenRouterReasoning) configures reasoning behavior for models that expose a thinking step. <br />
 [`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
 
 #### Example
@@ -211,7 +217,7 @@ Upload audio files alongside your text prompts for speech understanding. You mus
       directConnection={{
         openRouter: {
           key: 'placeholder key',
-          model: 'openai/gpt-4o-audio-preview',
+          model: 'openai/gpt-4oo-audio-preview',
         },
       }}
       audio={true}
@@ -222,7 +228,7 @@ Upload audio files alongside your text prompts for speech understanding. You mus
       style={{borderRadius: '8px'}}
       directConnection={{
         openRouter: {
-          model: 'openai/gpt-4o-audio-preview',
+          model: 'openai/gpt-4oo-audio-preview',
         },
       }}
       audio={true}
@@ -238,7 +244,7 @@ Upload audio files alongside your text prompts for speech understanding. You mus
   directConnection='{
     "openRouter": {
       "key": "placeholder key",
-      "model": "openai/gpt-4o-audio-preview"
+      "model": "openai/gpt-4oo-audio-preview"
     }
   }'
   audio="true"
@@ -255,7 +261,7 @@ Upload audio files alongside your text prompts for speech understanding. You mus
   directConnection='{
     "openRouter": {
       "key": "placeholder key",
-      "model": "openai/gpt-4o-audio-preview"
+      "model": "openai/gpt-4oo-audio-preview"
     }
   }'
   audio="true"
@@ -270,7 +276,7 @@ Upload audio files alongside your text prompts for speech understanding. You mus
 
 ## Tool Calling
 
-OpenRouter supports [function calling](https://openrouter.ai/docs/features/tool-calling) functionality:
+OpenRouter supports [function calling](https://openrouter.ai/docs/guides/features/tool-calling) functionality:
 
 ### `OpenRouterTool` {#OpenRouterTool}
 
@@ -287,6 +293,50 @@ Array describing tools that the model may call. <br />
 `name` is the name of the tool function. <br />
 `description` explains what the tool does and when it should be used. <br />
 `parameters` defines the parameters the tool accepts in JSON Schema format. <br />
+
+### `OpenRouterToolChoice` {#OpenRouterToolChoice}
+
+- Type: `"auto"` | `"none"` | `"required"` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "function"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `function: {name: string}` <br />
+  \}
+
+Controls how the model selects tools. <br />
+`"auto"` lets the model decide when to call a tool. <br />
+`"none"` prevents the model from calling any tool. <br />
+`"required"` forces the model to call at least one tool. <br />
+An object form forces the model to call the named function.
+
+### `OpenRouterResponseFormat` {#OpenRouterResponseFormat}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `type: "text" | "json_object" | "json_schema"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `json_schema?:` \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `name: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `description?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `schema: object`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `strict?: boolean` <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; \} <br />
+  \}
+
+Constrains the model's response shape. <br />
+`type` selects the format: plain text, an arbitrary JSON object, or a value matching a JSON Schema. <br />
+`json_schema` is required when `type` is `"json_schema"` and describes the desired shape.
+
+### `OpenRouterReasoning` {#OpenRouterReasoning}
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `effort?: "low" | "medium" | "high"`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `exclude?: boolean`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `enabled?: boolean` <br />
+  \}
+
+Configures reasoning behavior for models that support a separate thinking step. <br />
+`effort` is a high-level knob for how much reasoning to perform. <br />
+`max_tokens` caps the token budget allocated to reasoning. <br />
+`exclude` hides the reasoning tokens from the returned response. <br />
+`enabled` toggles reasoning on or off when the model supports it.
 
 ### `FunctionHandler` {#FunctionHandler}
 
