@@ -26,7 +26,7 @@ Then proceed with using the [`webModel`](#webModel) property:
   &nbsp;&nbsp;&nbsp;&nbsp; [`introMessage?: WebModelIntro`](#WebModelIntro), <br />
   &nbsp;&nbsp;&nbsp;&nbsp; [`worker?: Worker`](#Worker) <br />
   \}
-- Default: _\{model: "Llama-2-7b-chat-hf-q4f32_1"\}_
+- Default: _\{model: "Llama-3.2-1B-Instruct-q4f16_1-MLC"\}_
 
 Set this to _true_ or define an object with any of the following properties: <br />
 `model` is the name of the model to be used. See [full list](https://github.com/OvidijusParsiunas/deep-chat/blob/10db3f4931d7fefff81e1c93d38a9a9809701113/component/src/types/webModel/webModel.ts#L1). <br />
@@ -320,10 +320,9 @@ To define its property value, please use the following: <br />
 Create a [`worker.js`](https://github.com/OvidijusParsiunas/deep-chat/blob/f0c0c5b1ae8d44a3eb51ab1d46345e338e4a23b4/website/docs/docs/worker.js) (or `worker.ts`) file in the same folder - which contains the following code:
 
 ```
-import {ChatWorkerHandler, ChatModule} from 'deep-chat-web-llm';
+import {WebWorkerMLCEngineHandler} from 'deep-chat-web-llm';
 
-const chat = new ChatModule();
-const handler = new ChatWorkerHandler(chat);
+const handler = new WebWorkerMLCEngineHandler();
 self.onmessage = (msg) => {
   handler.onmessage(msg);
 };
@@ -356,10 +355,9 @@ chatElementRef.webModel = {
 
 ```javascript
 // worker.js file
-import {ChatWorkerHandler, ChatModule} from 'deep-chat-web-llm';
+import {WebWorkerMLCEngineHandler} from 'deep-chat-web-llm';
 
-const chat = new ChatModule();
-const handler = new ChatWorkerHandler(chat);
+const handler = new WebWorkerMLCEngineHandler();
 self.onmessage = (msg) => {
   handler.onmessage(msg);
 };
