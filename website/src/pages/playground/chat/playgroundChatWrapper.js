@@ -202,6 +202,7 @@ const SERVICE_TO_NAME = {
     imageClassification: 'Hugging Face: Image Classification',
   },
   kimi: 'Kimi',
+  liteLLM: 'LiteLLM',
   miniMax: 'MiniMax',
   mistral: 'Mistral',
   ollama: 'Ollama',

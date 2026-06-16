@@ -95,6 +95,13 @@ function Icon({connect}) {
         />
       );
     }
+    if (connect.liteLLM) {
+      return (
+        <span style={{paddingTop: '5.5px', marginRight: '8px', fontSize: '15px', lineHeight: 1, display: 'inline-block'}}>
+          🚅
+        </span>
+      );
+    }
     if (connect.miniMax) {
       return <img src={minimaxLogo} width="17" style={{paddingTop: '5.5px', marginRight: '6px'}} />;
     }

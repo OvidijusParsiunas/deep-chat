@@ -70,7 +70,8 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
       service === 'dify' ||
       service === 'miniMax' ||
       service === 'perplexity' ||
-      service === 'ollama'
+      service === 'ollama' ||
+      service === 'liteLLM'
     );
   };
 
@@ -198,7 +199,8 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
           {activeService !== 'demo' &&
             activeService !== 'custom' &&
             activeService !== 'webModel' &&
-            activeService !== 'ollama' && (
+            activeService !== 'ollama' &&
+            activeService !== 'liteLLM' && (
               <Required
                 ref={requiredValueRef}
                 requiredValue={requiredValue}
@@ -483,11 +485,11 @@ const SERVICE_MODAL_FORM_CONFIG = {
   claude: {
     model: 'string',
     max_tokens: 'number',
-    temperature: 'number',
-    top_p: 'number',
-    top_k: 'number',
     stop_sequences: 'constructable object',
     system_prompt: 'string',
+    thinking: 'constructable object',
+    service_tier: ['auto', 'standard_only'],
+    inference_geo: 'string',
     allowImages: ['true', 'false'],
     allowCamera: ['true', 'false'],
   },
@@ -618,6 +620,15 @@ const SERVICE_MODAL_FORM_CONFIG = {
     allowImages: ['true', 'false'],
     allowCamera: ['true', 'false'],
   },
+  liteLLM: {
+    model: 'string',
+    system_prompt: 'string',
+    max_tokens: 'number',
+    temperature: 'number',
+    top_p: 'number',
+    frequency_penalty: 'number',
+    presence_penalty: 'number',
+  },
   miniMax: {
     model: 'string',
     system_prompt: 'string',
@@ -709,10 +720,7 @@ const SERVICE_MODAL_FORM_CONFIG = {
   openRouter: {
     model: 'string',
     max_tokens: 'number',
-    temperature: 'number',
-    top_p: 'number',
-    frequency_penalty: 'number',
-    presence_penalty: 'number',
+    max_completion_tokens: 'number',
     system_prompt: 'string',
     allowImages: ['true', 'false'],
     allowCamera: ['true', 'false'],
@@ -822,13 +830,14 @@ const SERVICE_MODAL_FORM_CONFIG = {
   x: {
     chat: {
       model: 'string',
-      max_tokens: 'number',
+      max_output_tokens: 'number',
       temperature: 'number',
       system_prompt: 'string',
     },
     images: {
       model: 'string',
       n: 'number',
+      size: 'string',
     },
   },
 };
@@ -849,6 +858,7 @@ const SERVICE_TYPE_TO_API_KEY_LINK = {
   groq: 'https://console.groq.com/keys',
   huggingFace: 'https://huggingface.co/settings/tokens',
   kimi: 'https://platform.moonshot.ai/',
+  liteLLM: '',
   miniMax: 'https://www.minimax.io/',
   mistral: 'https://console.mistral.ai/',
   ollama: '',
@@ -929,11 +939,11 @@ const OPTIONAL_PARAM_TO_LINK = {
   claude: {
     model: 'https://docs.anthropic.com/en/docs/about-claude/models',
     max_tokens: 'https://docs.anthropic.com/en/api/messages',
-    temperature: 'https://docs.anthropic.com/en/api/messages',
-    top_p: 'https://docs.anthropic.com/en/api/messages',
-    top_k: 'https://docs.anthropic.com/en/api/messages',
     stop_sequences: 'https://docs.anthropic.com/en/api/messages',
     system_prompt: 'https://docs.anthropic.com/en/api/messages',
+    thinking: 'https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking',
+    service_tier: 'https://docs.anthropic.com/en/api/service-tiers',
+    inference_geo: 'https://docs.anthropic.com/en/api/messages',
     allowImages: 'https://deepchat.dev/docs/files#images',
     allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
@@ -1070,6 +1080,15 @@ const OPTIONAL_PARAM_TO_LINK = {
     allowImages: 'https://deepchat.dev/docs/files#images',
     allowCamera: 'https://deepchat.dev/docs/files#camera',
   },
+  liteLLM: {
+    model: 'https://docs.litellm.ai/docs/providers',
+    system_prompt: 'https://docs.litellm.ai/docs/completion/input',
+    max_tokens: 'https://docs.litellm.ai/docs/completion/input',
+    temperature: 'https://docs.litellm.ai/docs/completion/input',
+    top_p: 'https://docs.litellm.ai/docs/completion/input',
+    frequency_penalty: 'https://docs.litellm.ai/docs/completion/input',
+    presence_penalty: 'https://docs.litellm.ai/docs/completion/input',
+  },
   miniMax: {
     model: 'https://www.minimax.io/platform/document/ChatCompletion%20v2?key=66701d281d57f38758d581d0#model',
     system_prompt:
@@ -1167,13 +1186,10 @@ const OPTIONAL_PARAM_TO_LINK = {
     },
   },
   openRouter: {
-    model: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    max_tokens: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    temperature: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    top_p: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    frequency_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    presence_penalty: 'https://openrouter.ai/docs/api-reference/chat-completion',
-    system_prompt: 'https://openrouter.ai/docs/api-reference/chat-completion',
+    model: 'https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request',
+    max_tokens: 'https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request',
+    max_completion_tokens: 'https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request',
+    system_prompt: 'https://openrouter.ai/docs/api/api-reference/chat/send-chat-completion-request',
     allowImages: 'https://deepchat.dev/docs/files#images',
     allowCamera: 'https://deepchat.dev/docs/files#camera',
     allowAudio: 'https://deepchat.dev/docs/files#audio',
@@ -1281,14 +1297,15 @@ const OPTIONAL_PARAM_TO_LINK = {
   },
   x: {
     chat: {
-      model: 'https://docs.x.ai/docs/api-reference#chat-completions',
-      max_tokens: 'https://docs.x.ai/docs/api-reference#chat-completions',
-      temperature: 'https://docs.x.ai/docs/api-reference#chat-completions',
-      system_prompt: 'https://docs.x.ai/docs/api-reference#chat-completions',
+      model: 'https://docs.x.ai/docs/api-reference#responses',
+      max_output_tokens: 'https://docs.x.ai/docs/api-reference#responses',
+      temperature: 'https://docs.x.ai/docs/api-reference#responses',
+      system_prompt: 'https://docs.x.ai/docs/api-reference#responses',
     },
     images: {
       model: 'https://docs.x.ai/docs/api-reference#image-generations',
       n: 'https://docs.x.ai/docs/api-reference#image-generations',
+      size: 'https://docs.x.ai/docs/api-reference#image-generations',
     },
   },
 };

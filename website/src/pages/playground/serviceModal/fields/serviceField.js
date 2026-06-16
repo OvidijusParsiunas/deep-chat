@@ -199,6 +199,18 @@ const services = {
       />
     ),
   },
+  liteLLM: {
+    value: 'liteLLM',
+    text: 'LiteLLM',
+    icon: (
+      <span
+        className="playground-service-modal-service-icon"
+        style={{fontSize: '11px', marginTop: '-2px', marginLeft: '0px', marginRight: '4px'}}
+      >
+        🚅
+      </span>
+    ),
+  },
   miniMax: {
     value: 'miniMax',
     text: 'MiniMax',
@@ -337,6 +349,7 @@ const SERVICE_TO_LINK = {
   groq: 'https://groq.com/',
   huggingFace: 'https://huggingface.co/docs/api-inference/index',
   kimi: 'https://platform.moonshot.ai/',
+  liteLLM: 'https://www.litellm.ai/',
   miniMax: 'https://www.minimax.io/',
   mistral: 'https://mistral.ai/',
   ollama: 'https://ollama.com/',
