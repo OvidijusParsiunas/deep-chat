@@ -59,6 +59,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   // https://platform.openai.com/docs/api-reference/responses
   url = `${OPEN_AI_BASE_URL}responses`;
   private _functionStreamInProgress = false;
+  private _streamedResponseFunctionCalls: ResponsesFunctionCall[] = [];
   private static readonly IMAGE_BASE64_PREFIX = 'data:image/png;base64,';
   private _conversationId?: string;
   private readonly _useConversation: boolean = false;
@@ -198,6 +199,7 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   }
 
   override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
+    this._streamedResponseFunctionCalls = [];
     this.messages ??= messages;
     if (this._useConversation && !this._conversationId) {
       this._conversationId = await this.createConversation();
@@ -227,8 +229,13 @@ export class OpenAIChatIO extends OpenAIBaseIO {
       }
       return {[TEXT]: ''};
     }
+    if (result[TYPE] === `${RESPONSE}.completed` && this._streamedResponseFunctionCalls[LENGTH] > 0) {
+      const functionCalls = this._streamedResponseFunctionCalls;
+      this._streamedResponseFunctionCalls = [];
+      return this.handleResponsesFunctionCalls(functionCalls, prevBody) as Promise<ResponseI>;
+    }
     if (result.item?.[TYPE] === FUNCTION_CALL && result[TYPE]) {
-      return this.handleStreamedResponsesFunctionCall(result, prevBody);
+      return this.handleStreamedResponsesFunctionCall(result);
     }
     if (result[TYPE] === `${RESPONSE}.${IMAGE_GENERATION_CALL}.partial_image` && result.partial_image_b64) {
       return {[FILES]: [{[SRC]: `${OpenAIChatIO.IMAGE_BASE64_PREFIX}${result.partial_image_b64}`, [TYPE]: IMAGE}]};
@@ -239,11 +246,11 @@ export class OpenAIChatIO extends OpenAIBaseIO {
     return {[TEXT]: ''};
   }
 
-  private async handleStreamedResponsesFunctionCall(result: OpenAIResult, prevBody?: OpenAIChat): Promise<ResponseI> {
+  private async handleStreamedResponsesFunctionCall(result: OpenAIResult): Promise<ResponseI> {
     if (result[TYPE] === `${RESPONSE}.output_item.done`) {
       this._functionStreamInProgress = false;
       if (result.item?.[TYPE] === FUNCTION_CALL) {
-        return this.handleResponsesFunctionCalls([result.item], prevBody) as ResponseI;
+        this._streamedResponseFunctionCalls.push(result.item);
       }
     } else if (result[TYPE] === `${RESPONSE}.output_item.added`) {
       this._functionStreamInProgress = true;
