@@ -59,6 +59,8 @@ export class OpenAIChatIO extends OpenAIBaseIO {
   // https://platform.openai.com/docs/api-reference/responses
   url = `${OPEN_AI_BASE_URL}responses`;
   private _functionStreamInProgress = false;
+  // prevents issue where using multiple tools - sends multiple calls back to OpenAI resulting in multiple response bubbles
+  // https://github.com/OvidijusParsiunas/deep-chat/issues/509
   private _streamedResponseFunctionCalls: ResponsesFunctionCall[] = [];
   private static readonly IMAGE_BASE64_PREFIX = 'data:image/png;base64,';
   private _conversationId?: string;
