@@ -6,6 +6,7 @@ import {HuggingFaceIO} from './huggingFaceIO';
 import {Response} from '../../types/response';
 import {DeepChat} from '../../deepChat';
 
+// https://huggingface.co/docs/api-inference/detailed_parameters?code=js#conversational-task
 export class HuggingFaceConversationIO extends HuggingFaceIO {
   constructor(deepChat: DeepChat) {
     // config can be undefined as this is the default method
