@@ -2,6 +2,7 @@ import {HuggingFace} from './huggingFace';
 import {StabilityAI} from './stabilityAI';
 import {AssemblyAI} from './assemblyAI';
 import {OpenRouter} from './openRouter';
+import {Requesty} from './requesty';
 import {Perplexity} from './perplexity';
 import {OpenWebUI} from './openWebUI';
 import {DeepSeek} from './deepSeek';
@@ -37,6 +38,7 @@ export interface DirectConnection {
   kimi?: Kimi & APIKey;
   miniMax?: MiniMax & APIKey;
   openRouter?: OpenRouter & APIKey;
+  requesty?: Requesty & APIKey;
   x?: X & APIKey;
   qwen?: Qwen & APIKey;
   together?: Together & APIKey;

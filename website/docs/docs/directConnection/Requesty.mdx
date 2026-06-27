@@ -1,0 +1,204 @@
+---
+sidebar_position: 23
+---
+
+# Requesty
+
+# <span className="direct-service-title">Requesty</span>
+
+Properties used to connect to [Requesty](https://requesty.ai/).
+
+### `requesty` {#requesty}
+
+- Type: `true` | \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `model?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `max_tokens?: number`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `system_prompt?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`tools?: RequestyTool[]`](#RequestyTool), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`function_handler?: FunctionHandler`](#FunctionHandler) <br />
+  \}
+- Default: _\{model: "openai/gpt-4o"\}_
+
+import ContainersKeyToggleChatFunction from '@site/src/components/table/containersKeyToggleChatFunction';
+import ContainersKeyToggle from '@site/src/components/table/containersKeyToggle';
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+Connect to Requesty's [Chat Completion API](https://docs.requesty.ai/). Requesty is an OpenAI-compatible LLM gateway, so models are
+referenced using the `provider/model` naming convention. You can set this property to _true_ or configure it using an object:<br />
+`model` is the name of the model to be used by the API (e.g., "openai/gpt-4o-mini"). <br />
+`max_tokens` limits the maximum number of tokens in the generated response. <br />
+`system_prompt` provides behavioral context and instructions to the model. <br />
+[`tools`](#RequestyTool) defines available function declarations for the model to call. <br />
+[`function_handler`](#FunctionHandler) enables function calling capabilities for tool use. <br />
+
+#### Example
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        requesty: {
+          key: 'placeholder key',
+          model: 'openai/gpt-4o-mini',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        requesty: {
+          model: 'openai/gpt-4o-mini',
+        },
+      }}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "requesty": {
+      "key": "placeholder key",
+      "model": "openai/gpt-4o-mini"
+    }
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "requesty": {
+      "key": "placeholder key",
+      "model": "openai/gpt-4o-mini"
+    }
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::info
+Use [`stream`](/docs/connect#Stream) to stream the AI responses.
+:::
+
+<LineBreak></LineBreak>
+
+#### Vision Example
+
+Upload images alongside your text prompts for visual understanding. You must use a model with vision capabilities.
+
+<ContainersKeyToggle>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        requesty: {
+          key: 'placeholder key',
+          model: 'openai/gpt-4o',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+  <ComponentContainer>
+    <DeepChatBrowser
+      style={{borderRadius: '8px'}}
+      directConnection={{
+        requesty: {
+          model: 'openai/gpt-4o',
+        },
+      }}
+      images={true}
+      camera={true}
+      textInput={{styles: {container: {width: '77%'}}}}
+    ></DeepChatBrowser>
+  </ComponentContainer>
+</ContainersKeyToggle>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  directConnection='{
+    "requesty": {
+      "key": "placeholder key",
+      "model": "openai/gpt-4o"
+    }
+  }'
+  images="true"
+  camera="true"
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  directConnection='{
+    "requesty": {
+      "key": "placeholder key",
+      "model": "openai/gpt-4o"
+    }
+  }'
+  images="true"
+  camera="true"
+  style="border-radius: 8px"
+  textInput='{"styles": {"container": {"width": "77%"}}}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+When sending images we advise you to set [`maxMessages`](/docs/connect#requestBodyLimits) to 1 to send less data and reduce costs.
+:::
+
+<LineBreak></LineBreak>
+
+## Types
+
+Objects used for the `requesty` property:
+
+#### `RequestyTool` {#RequestyTool}
+
+- Type: \{`type: 'function'`, `function: {name: string, description: string, parameters: object}`\}
+
+Defines a function that the model is able to call. See the [Function calling](#FunctionHandler) section for more.
+
+#### `FunctionHandler` {#FunctionHandler}
+
+- Type: (`functionsDetails: FunctionsDetails`) => `{response: string}[]` | `{text: string}`
+
+The function used to handle the tool calls requested by the model. See [`tools`](#RequestyTool) for the related configuration.

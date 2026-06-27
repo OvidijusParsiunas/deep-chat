@@ -33,6 +33,7 @@ import {TogetherChatIO} from './together/togetherChatIO';
 import {IMAGES} from '../utils/consts/messageConstants';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
+import {RequestyIO} from './requesty/requestyIO';
 import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenWebUIIO} from './openWebUI/openWebUIIO';
@@ -169,6 +170,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
+      }
+      if (directConnection.requesty) {
+        return new RequestyIO(deepChat);
       }
       if (directConnection.kimi) {
         return new KimiIO(deepChat);
