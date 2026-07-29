@@ -110,48 +110,48 @@ export class MessageStream {
   private updateText(text: string, bubbleElement: HTMLElement, overwrite: boolean) {
     if (!this._message) return;
     this._message[TEXT] = overwrite ? text : this._message[TEXT] + text;
-    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, overwrite, text)) {
-      this.partialRenderNewParagraph(bubbleElement);
-    }
-    if (this._partialBubble) {
-      this.updatePartialRenderBubble(text);
+    if (this._partialRender) {
+      this.updatePartialSegments(text, bubbleElement, overwrite);
     } else {
       this._messages.renderText(bubbleElement, this._message[TEXT]!);
     }
   }
 
-  private containsPartialRenderMark(content: string): boolean {
-    const markIndex = content.indexOf(MessageStream.PARTIAL_RENDER_MARK);
-    if (markIndex === -1) return false;
-    // Check if this is part of a markdown horizontal rule pattern - "a \n\n---\n\n a"
-    const textAfterMark = content.substring(markIndex + MessageStream.PARTIAL_RENDER_MARK.length);
-    return !textAfterMark.startsWith('---');
-  }
-
-  // checking state BEFORE the current chunk was appended ensures the chunk that closes a code block
-  // (transitioning fence count from odd to even) stays in the current bubble alongside its opening fence
+  // finds the paragraph mark that a new partial bubble should be created at, ignoring marks that are
+  // inside an unclosed code block or part of a markdown horizontal rule pattern - "a \n\n---\n\n a"
+  // (when the mark is at the segment end - waits for more content to arrive to know it is not a rule)
   // https://github.com/OvidijusParsiunas/deep-chat/issues/500#issuecomment-4281293147
-  private isInsideOpenCodeBlock(chunk?: string) {
-    if (this._streamType !== TEXT) return false;
-    const content = this._message?.[TEXT];
-    if (!content) return false;
-    const priorContent = chunk ? content.slice(0, content.length - chunk.length) : content;
-    const fenceMatches = priorContent.match(/```/g);
-    return !!fenceMatches && fenceMatches.length % 2 === 1;
+  private getPartialSplitIndex(segment: string) {
+    let markIndex = segment.indexOf(MessageStream.PARTIAL_RENDER_MARK);
+    while (markIndex !== -1) {
+      const fences = this._streamType === TEXT ? segment.substring(0, markIndex).match(/```/g) : null;
+      const isInsideCodeBlock = !!fences && fences.length % 2 === 1;
+      const textAfterMark = segment.substring(markIndex + MessageStream.PARTIAL_RENDER_MARK.length);
+      const isHorizontalRule = textAfterMark.startsWith('---') || '---'.startsWith(textAfterMark);
+      if (!isInsideCodeBlock && !isHorizontalRule) return markIndex;
+      markIndex = segment.indexOf(MessageStream.PARTIAL_RENDER_MARK, markIndex + 1);
+    }
+    return -1;
   }
 
-  private isNewPartialRenderParagraph(bubbleElement: HTMLElement, isOverwrite: boolean, chunk?: string) {
-    if (isOverwrite) {
+  // the chunk must already be appended to this._message - renders the accumulated content of the current
+  // segment (paragraph) and creates a new partial bubble at every paragraph mark, so content that arrives
+  // in the same chunk as the mark is placed on the correct side of the split
+  private updatePartialSegments(chunk: string, bubbleElement: HTMLElement, overwrite: boolean) {
+    if (overwrite) {
       bubbleElement.innerHTML = '';
-      return true;
+      this._partialBubble = undefined;
     }
-    if (this.isInsideOpenCodeBlock(chunk)) return false;
     const key = this._streamType as 'text' | 'html';
-    if (!this._partialBubble) {
-      const content = this._message?.[key];
-      return !!content && this.containsPartialRenderMark(content);
+    let segment = this._partialBubble ? this._partialContent + chunk : this._message?.[key] || '';
+    let splitIndex = this.getPartialSplitIndex(segment);
+    while (splitIndex !== -1) {
+      this.renderPartialSegment(segment.substring(0, splitIndex), bubbleElement);
+      this.partialRenderNewParagraph(bubbleElement);
+      segment = segment.substring(splitIndex + MessageStream.PARTIAL_RENDER_MARK.length);
+      splitIndex = this.getPartialSplitIndex(segment);
     }
-    return !!this._partialContent && this.containsPartialRenderMark(this._partialContent);
+    this.renderPartialSegment(segment, bubbleElement);
   }
 
   private partialRenderNewParagraph(bubbleElement: HTMLElement) {
@@ -161,31 +161,27 @@ export class MessageStream {
     bubbleElement.appendChild(this._partialBubble);
   }
 
-  private updatePartialRenderBubble(content: string) {
-    this._partialContent += content;
+  private renderPartialSegment(content: string, bubbleElement: HTMLElement) {
+    const targetElement = this._partialBubble || bubbleElement;
+    if (this._partialBubble) this._partialContent = content;
     if (this._streamType === TEXT) {
-      this._messages.renderText(this._partialBubble as HTMLDivElement, this._partialContent);
+      this._messages.renderText(targetElement, content);
     } else {
-      (this._partialBubble as HTMLDivElement).innerHTML = this._partialContent;
+      targetElement.innerHTML = content;
     }
   }
 
   private updateHTML(html: string, bubbleElement: HTMLElement, isOverwrite: boolean) {
     if (!this._message) return;
     this._message[HTML] = isOverwrite ? html : (this._message[HTML] || '') + html;
-    if (this._partialRender && this.isNewPartialRenderParagraph(bubbleElement, isOverwrite)) {
-      this.partialRenderNewParagraph(bubbleElement);
-    }
-    if (this._partialBubble) {
-      this.updatePartialRenderBubble(html);
+    if (this._partialRender) {
+      this.updatePartialSegments(html, bubbleElement, isOverwrite);
+    } else if (isOverwrite) {
+      bubbleElement.innerHTML = html;
     } else {
-      if (isOverwrite) {
-        bubbleElement.innerHTML = html;
-      } else {
-        const wrapper = CREATE_ELEMENT('span');
-        wrapper.innerHTML = html;
-        bubbleElement.appendChild(wrapper);
-      }
+      const wrapper = CREATE_ELEMENT('span');
+      wrapper.innerHTML = html;
+      bubbleElement.appendChild(wrapper);
     }
   }
 
