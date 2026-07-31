@@ -12,7 +12,7 @@
     "build:watch": "vite build --watch",
     "build:bundle": "npm run lint && tsc && vite build && npm run analyze && rollup -c && npm run build:babel",
     "analyze": "cem analyze --globs \"src/**/*.ts\"",
-    "lint": "eslint --parser-options '{'project':'./tsconfig.json'}' 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.ts'",
     "build:babel": "npm run build:temp && npm run transpile && rimraf dist/deepChatTemp.js",
     "build:temp": "cp dist/deepChat.js dist/deepChatTemp.js && rimraf dist/deepChat.js",
     "transpile": "babel dist/deepChatTemp.js --out-file dist/deepChat.js"
@@ -44,10 +44,11 @@
     "component"
   ],
   "devDependencies": {
-    "@babel/cli": "^8.0.4",
+    "@babel/cli": "^7.24.0",
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
     "@custom-elements-manifest/analyzer": "^0.9.3",
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^1.0.0",
