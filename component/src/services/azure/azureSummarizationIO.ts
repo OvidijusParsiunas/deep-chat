@@ -15,9 +15,9 @@ import {DeepChat} from '../../deepChat';
 type RawBody = Required<Pick<AzureSummarizationConfig, 'language'>>;
 
 export class AzureSummarizationIO extends AzureLanguageIO {
-  private static readonly ENDPOINT_ERROR_MESSAGE =
-    // eslint-disable-next-line max-len
-    `Please define the azure endpoint. [More Information](${DOCS_BASE_URL}directConnection/Azure#Summarization)`;
+  // prettier-ignore
+  private static readonly ENDPOINT_ERROR_MESSAGE
+    = `Please define the azure endpoint. [More Information](${DOCS_BASE_URL}directConnection/Azure#Summarization)`;
   override permittedErrorPrefixes: string[] = [AzureSummarizationIO.ENDPOINT_ERROR_MESSAGE];
   url = '';
   textInputPlaceholderText = 'Insert text to summarize';
