@@ -51,50 +51,6 @@ export interface OpenAIImagesDalle3 {
 
 export type FunctionsDetails = {name: string; arguments: string}[];
 
-export type AssistantFunctionHandlerResponse =
-  | string[]
-  | Promise<string>[]
-  | Promise<string[]>
-  | Promise<Promise<string>[]>;
-
-export type AssistantFunctionHandler = (functionsDetails: FunctionsDetails) => AssistantFunctionHandlerResponse;
-
-// https://platform.openai.com/docs/api-reference/assistants/createAssistant
-export interface OpenAINewAssistant {
-  model?: string;
-  name?: string;
-  description?: string;
-  instructions?: string;
-  tools?: {
-    type: 'code_interpreter' | 'file_search' | 'function';
-    function?: {name: string; description?: string; parameters?: object};
-  }[];
-  tool_resources?: {
-    code_interpreter?: {
-      file_ids: string[];
-    };
-    file_search?: {
-      vector_store_ids?: string[];
-      vector_stores: {file_ids: string[]};
-    };
-  };
-}
-
-export type FileToolType = 'code_interpreter' | 'file_search' | 'images';
-
-// https://platform.openai.com/docs/api-reference/assistants
-export interface OpenAIAssistant {
-  assistant_id?: string;
-  thread_id?: string;
-  load_thread_history?: boolean;
-  new_assistant?: OpenAINewAssistant;
-  // if image is uploaded and this is undefined, it will default to images
-  // images can be used without a file tool type
-  files_tool_type?: FileToolType | ((fileNames: string[]) => FileToolType);
-  function_handler?: AssistantFunctionHandler;
-  custom_base_url?: string;
-}
-
 export type ChatFunctionHandlerResponse = {response: string}[] | {text: string};
 
 export type ChatFunctionHandler = (
@@ -134,7 +90,6 @@ export type OpenAIChat = {
 
 export interface OpenAI {
   chat?: true | OpenAIChat;
-  assistant?: true | OpenAIAssistant;
   realtime?: true | OpenAIRealtime;
   completions?: true | OpenAICompletions;
   images?: true | OpenAIImagesDalle2 | OpenAIImagesDalle3;

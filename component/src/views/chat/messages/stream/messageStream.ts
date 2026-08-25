@@ -1,16 +1,15 @@
-import {AI, ERROR, FILES, HTML, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
+import {AI, ERROR, HTML, ROLE, TEXT} from '../../../../utils/consts/messageConstants';
 import {CLASS_LIST, CREATE_ELEMENT} from '../../../../utils/consts/htmlConstants';
 import {ElementUtils} from '../../../../utils/element/elementUtils';
 import {MessageContentI} from '../../../../types/messagesInternal';
 import {DEFAULT} from '../../../../utils/consts/inputConstants';
 import {TextToSpeech} from '../textToSpeech/textToSpeech';
-import {MessageFile} from '../../../../types/messageFile';
-import {MessageElements, Messages} from '../messages';
 import {Response} from '../../../../types/response';
 import {MessageUtils} from '../utils/messageUtils';
 import {HTMLMessages} from '../html/htmlMessages';
 import {Stream} from '../../../../types/stream';
 import {MessagesBase} from '../messagesBase';
+import {MessageElements} from '../messages';
 import {HTMLUtils} from '../html/htmlUtils';
 import {
   NO_VALID_STREAM_EVENTS_SENT,
@@ -29,7 +28,6 @@ export class MessageStream {
   private _hasStreamEnded = false;
   private _activeMessageRole?: string;
   private _message?: MessageContentI;
-  private _endStreamAfterOperation?: boolean;
   private _partialContent: string = '';
   private _partialBubble?: HTMLDivElement;
   private _targetWrapper?: HTMLElement;
@@ -188,7 +186,6 @@ export class MessageStream {
   // asyncCallInProgress introduced specifically a case when stream closed (e.g. tool call) and making another call
   // hence don't throw NO_VALID_STREAM_EVENTS_SENT when no response elements yet
   public finaliseStreamedMessage(hasStreamEnded = true, asyncCallInProgress = false) {
-    if (this._endStreamAfterOperation) return;
     if (this._fileAdded && !this._elements) return;
     if (!this._elements && !asyncCallInProgress) throw Error(NO_VALID_STREAM_EVENTS_SENT);
     if (!this._message) return;
@@ -209,16 +206,5 @@ export class MessageStream {
 
   public markFileAdded() {
     this._fileAdded = true;
-  }
-
-  // prettier-ignore
-  public async endStreamAfterFileDownloaded(
-      messages: Messages, downloadCb: () => Promise<{files?: MessageFile[]; text?: string}>) {
-    this._endStreamAfterOperation = true;
-    const {text, files} = await downloadCb();
-    if (text) this.updateBasedOnType(text, TEXT, true);
-    this._endStreamAfterOperation = false;
-    this.finaliseStreamedMessage();
-    if (files) messages.addNewMessage({[FILES]: files}); // adding later to trigger event later
   }
 }

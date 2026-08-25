@@ -11,7 +11,9 @@ import {MessageFile} from '../../types/messageFile';
 import {FocusMode} from '../../types/focusMode';
 import {CustomStyle} from '../../types/styles';
 import {CohereChat} from '../../types/cohere';
+import {AzureOpenAI} from '../../types/azure';
 import {Connect} from '../../types/connect';
+import {OpenAI} from '../../types/openAI';
 import {DeepChat} from '../../deepChat';
 import {Demo} from '../../types/demo';
 
@@ -217,6 +219,17 @@ export class Legacy {
   public static processBrowserStorage(browserStorage: BrowserStorage) {
     const item = browserStorage.get();
     if (item && Array.isArray(item)) browserStorage.addMessages(item);
+  }
+
+  public static processOpenAIAssistant(openAI: OpenAI | AzureOpenAI) {
+    const openAIObj = openAI as unknown as {assistant?: object; chat?: true | object};
+    if (openAIObj.assistant) {
+      console[ERROR](`The OpenAI Assistants API${NOT_SUPPORTED_SINCE}2.6.0 as it has been discontinued by OpenAI.`);
+      console[ERROR](`Falling back to the chat service which uses the Responses API.`);
+      console[ERROR](`${SEE}official documentation: ${DOCS_BASE_URL}directConnection/OpenAI`);
+      delete openAIObj.assistant;
+      openAIObj.chat ??= true;
+    }
   }
 }
 

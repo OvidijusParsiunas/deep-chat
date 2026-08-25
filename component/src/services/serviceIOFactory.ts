@@ -13,8 +13,6 @@ import {StabilityAITextToImageIO} from './stabilityAI/stabilityAITextToImageIO';
 import {HuggingFaceFillMaskIO} from './huggingFace/huggingFaceFillMaskIO';
 import {BigModelTextToSpeechIO} from './bigModel/bigModelTextToSpeechIO';
 import {TogetherTextToSpeechIO} from './together/togetherTextToSpeechIO';
-import {OpenAIAssistantIO} from './openAI/assistant/openAIAssistantIO';
-import {AzureOpenAIAssistantIO} from './azure/azureOpenAIAssistantIO';
 import {OpenAIRealtimeIO} from './openAI/realtime/openAIRealtimeIO';
 import {OpenAITextToSpeechIO} from './openAI/openAITextToSpeechIO';
 import {OpenAISpeechToTextIO} from './openAI/openAISpeechToTextIO';
@@ -38,6 +36,7 @@ import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenWebUIIO} from './openWebUI/openWebUIIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
+import {Legacy} from '../utils/legacy/legacy';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralIO';
@@ -65,6 +64,7 @@ export class ServiceIOFactory {
     }
     if (directConnection) {
       if (directConnection.openAI) {
+        Legacy.processOpenAIAssistant(directConnection.openAI);
         if (directConnection.openAI[IMAGES]) {
           return new OpenAIImagesIO(deepChat);
         }
@@ -73,9 +73,6 @@ export class ServiceIOFactory {
         }
         if (directConnection.openAI.textToSpeech) {
           return new OpenAITextToSpeechIO(deepChat);
-        }
-        if (directConnection.openAI.assistant) {
-          return new OpenAIAssistantIO(deepChat);
         }
         if (directConnection.openAI.realtime) {
           return new OpenAIRealtimeIO(deepChat);
@@ -120,11 +117,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.azure) {
         if (directConnection.azure.openAI) {
+          Legacy.processOpenAIAssistant(directConnection.azure.openAI);
           if (directConnection.azure.openAI.chat) {
             return new AzureOpenAIChatIO(deepChat);
-          }
-          if (directConnection.azure.openAI.assistant) {
-            return new AzureOpenAIAssistantIO(deepChat);
           }
         }
         if (directConnection.azure.speechToText) {

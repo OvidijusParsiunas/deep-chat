@@ -1,4 +1,4 @@
-import {OpenAIAssistant, OpenAIChat} from './openAI';
+import {OpenAIChat} from './openAI';
 
 // https://learn.microsoft.com/en-gb/azure/cognitive-services/translator/reference/v3-0-reference
 export interface AzureTranslationConfig {
@@ -50,7 +50,6 @@ type URLDetails = {
 export interface AzureOpenAI {
   urlDetails: URLDetails;
   chat?: true | AzureOpenAIChat;
-  assistant?: true | OpenAIAssistant;
 }
 
 export interface Azure {
