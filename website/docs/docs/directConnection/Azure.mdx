@@ -322,8 +322,7 @@ Connect to Azure's [Translation API](https://learn.microsoft.com/en-gb/azure/cog
 
 - Type: \{<br />
   &nbsp;&nbsp;&nbsp;&nbsp; `urlDetails:` \{`endpoint: string`, `version: string`, `deploymentId: string`\}, <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; `chat?:` [`OpenAIChat`](/docs/directConnection/OpenAI/#Chat) & [`AzureDataSources`](#AzureDataSources), <br />
-  &nbsp;&nbsp;&nbsp;&nbsp; [`assistant?: OpenAIAssistant`](/docs/directConnection/OpenAI/#Assistant) <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `chat?:` [`OpenAIChat`](/docs/directConnection/OpenAI/#Chat) & [`AzureDataSources`](#AzureDataSources) <br />
   \}
 
 Connect to the [Azure OpenAI's API](https://platform.openai.com/docs/api-reference/chat): <br />
@@ -331,8 +330,6 @@ Connect to the [Azure OpenAI's API](https://platform.openai.com/docs/api-referen
 `endpoint` is a _url_ string for your OpenAI resource, `version` is the API version to be used and `deploymentId` is the deployment id of the model. <br />
 `chat` defines whether to connect to the [Chat Completions](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/chatgpt) API.
 It uses [OpenAI Chat](/docs/directConnection/OpenAI/#Chat) and [AzureDataSources](#AzureDataSources) types. <br />
-`assistant` defines whether to connect to the [Assistant](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/assistant) API.
-It uses the same type as the [OpenAI Assistant](/docs/directConnection/OpenAI/#Assistant) property. <br />
 
 #### Example
 

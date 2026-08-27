@@ -36,7 +36,6 @@ const TYPE_TO_LINK = {
   webModel: 'https://deepchat.dev/docs/webModel',
   openAI: {
     chat: 'https://platform.openai.com/docs/api-reference/chat',
-    assistant: 'https://platform.openai.com/docs/api-reference/assistants',
     images: 'https://platform.openai.com/docs/api-reference/images',
     textToSpeech: 'https://platform.openai.com/docs/api-reference/audio/createSpeech',
     speechToText: 'https://platform.openai.com/docs/api-reference/audio/createTranscription',

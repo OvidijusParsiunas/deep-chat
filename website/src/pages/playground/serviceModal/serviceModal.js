@@ -125,7 +125,6 @@ export default function ServiceModal({chatComponent, collapseStates, setEditingC
     const service = serviceArg || activeService;
     const type = newTypeArg || activeType;
     // timeout for optional parameters to be populated up in time
-    // test by creating OpenAI Assistant, set load_thread_history to true, submit, then open modal again to see if code section is correct
     setTimeout(() => {
       const connect = constructConnect(optionalParamsRef.current, service, type);
       if (service === 'custom') {
@@ -683,13 +682,6 @@ const SERVICE_MODAL_FORM_CONFIG = {
       allowImages: ['true', 'false'],
       allowCamera: ['true', 'false'],
     },
-    assistant: {
-      assistant_id: 'string',
-      thread_id: 'string',
-      load_thread_history: ['true', 'false'],
-      custom_base_url: 'string',
-      allowMixedFiles: ['true', 'false'],
-    },
     realtime: {
       config: {
         model: 'string',
@@ -1156,13 +1148,6 @@ const OPTIONAL_PARAM_TO_LINK = {
       top_p: 'https://platform.openai.com/docs/api-reference/chat/create#chat-create-top_p',
       allowImages: 'https://deepchat.dev/docs/files#images',
       allowCamera: 'https://deepchat.dev/docs/files#camera',
-    },
-    assistant: {
-      assistant_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
-      thread_id: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
-      load_thread_history: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
-      custom_base_url: 'https://deepchat.dev/docs/directConnection/OpenAI#Assistant',
-      allowMixedFiles: 'https://deepchat.dev/docs/files/#mixedFiles',
     },
     realtime: {
       config: {

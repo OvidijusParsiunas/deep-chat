@@ -14,7 +14,6 @@ export default function ChatComponent({config}) {
   function onMessage({isHistory}) {
     if (!isHistory) {
       const deepChatComponent = componentRef.current.children[0];
-      if (config.connect?.openAI?.assistant) assignOpenAIAssistantId(deepChatComponent, config);
       const {messages} = config;
       messages.splice(0, messages.length);
       messages.push(...deepChatComponent.getMessages());
@@ -253,13 +252,3 @@ const lightContainerStyle = {
   marginRight: '10px',
   width: '302px',
 };
-
-function assignOpenAIAssistantId(deepChatComponent, config) {
-  if (deepChatComponent._activeService.rawBody.assistant_id) {
-    if (typeof config.connect.openAI.assistant === 'boolean') {
-      config.connect.openAI.assistant = {assistant_id: deepChatComponent._activeService.rawBody.assistant_id};
-    } else if (!config.connect.openAI.assistant.assistant_id) {
-      config.connect.openAI.assistant.assistant_id = deepChatComponent._activeService.rawBody.assistant_id;
-    }
-  }
-}
