@@ -11,7 +11,7 @@ export default function ContainersKeyToggle({children}) {
           className={'documentation-button component-key-toggle-button'}
           onClick={() => setDisplayFirst(!displayFirst)}
         >
-          {displayFirst && 'Insert test key'}
+          {displayFirst && 'Insert key'}
           {!displayFirst && 'Use placeholder key'}
         </button>
       </div>
