@@ -36,6 +36,7 @@ export type CustomButtonDropupStyles = Pick<CustomDropupItemStyles, 'default' | 
 export class CustomButton extends InputButton<Styles> {
   public static readonly INDICATOR_PREFIX = 'custom';
   public static readonly BUTTON_CLASS = 'custom-button';
+  // WORK - to consts
   public static readonly DISABLED_CONTAINER_CLASS = 'custom-button-container-disabled';
   private static readonly DEFAULT_CONTAINER_CLASS = 'custom-button-container-default';
   private static readonly ACTIVE_CONTAINER_CLASS = 'custom-button-container-active';
