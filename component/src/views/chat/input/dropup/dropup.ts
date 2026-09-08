@@ -15,6 +15,7 @@ import {DropupMenu} from './dropupMenu';
 
 type Styles = DefinedButtonStateStyles<GenericInputButtonStyles>;
 
+// WORK - after tab should focus on the first element on the left
 export class Dropup extends InputButton<Styles> {
   private readonly _menu: DropupMenu;
   public static BUTTON_ICON_CLASS = 'dropup-button';
