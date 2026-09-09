@@ -49,6 +49,9 @@ import {
   AI,
 } from '../../utils/consts/messageConstants';
 
+// WORK - wait for audio to work
+// https://platform.openai.com/docs/guides/migrate-to-responses
+
 interface URLSegments {
   responsesUrl: string;
   conversationsUrl: string;
