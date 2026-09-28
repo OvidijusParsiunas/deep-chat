@@ -31,6 +31,7 @@ import {TogetherChatIO} from './together/togetherChatIO';
 import {IMAGES} from '../utils/consts/messageConstants';
 import {OpenAIImagesIO} from './openAI/openAIImagesIO';
 import {OpenRouterIO} from './openRouter/openRouterIO';
+import {AtlasCloudIO} from './atlasCloud/atlasCloudIO';
 import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenWebUIIO} from './openWebUI/openWebUIIO';
@@ -164,6 +165,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
+      }
+      if (directConnection.atlasCloud) {
+        return new AtlasCloudIO(deepChat);
       }
       if (directConnection.kimi) {
         return new KimiIO(deepChat);

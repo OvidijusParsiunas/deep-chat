@@ -5,6 +5,7 @@ import {OpenRouter} from './openRouter';
 import {Perplexity} from './perplexity';
 import {OpenWebUI} from './openWebUI';
 import {Requesty} from './requesty';
+import {AtlasCloud} from './atlasCloud';
 import {DeepSeek} from './deepSeek';
 import {Together} from './together';
 import {BigModel} from './bigModel';
@@ -49,4 +50,5 @@ export interface DirectConnection {
   dify?: Dify & APIKey;
   liteLLM?: LiteLLM & APIKey;
   requesty?: Requesty & APIKey;
+  atlasCloud?: AtlasCloud & APIKey;
 }
