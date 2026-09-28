@@ -15,7 +15,7 @@ The component has been set up to recognise them by using the `window` object:
 
 | Functionality                                                                                    | Module                                                                                                                                                                                                          | Window                      |
 | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| Higlighting [code](/docs/messages#code-messages)                                                 | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`               |
+| Highlighting [code](/docs/messages#code-messages)                                                | <img src={hljsLogo} width="20" style={{float: 'left', marginRight: '8px', marginTop: '4px'}} /> [highlight.js](https://www.npmjs.com/package/highlight.js?activeTab=readme)                                     | `window.hljs`               |
 | [Remarkable plugins](https://github.com/jonschlinkert/remarkable/blob/master/docs/plugins.md)    | <Link width="16" style={{float: 'left', marginRight: '7px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[Custom plugins](https://github.com/jonschlinkert/remarkable?tab=readme-ov-file#plugins)     | `window.remarkable_plugins` |
 | [Remarkable](https://github.com/jonschlinkert/remarkable) [math](https://katex.org/docs/options) | <Math width="18" style={{float: 'left', marginRight: '5px', marginTop: '4.5px'}} className="adaptive-logo-filter"/>[KaTeX](https://katex.org/docs/options)                                                      | `window.katex`              |
 | [Speech to text](/docs/speech#speechToText) with [Azure](/docs/speech#AzureOptions)              | <img src={azureLogo} width="20" style={{float: 'left', marginRight: '7px', marginTop: '5px'}} /> [microsoft-cognitiveservices-speech-sdk](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk) | `window.SpeechSDK`          |
@@ -25,8 +25,8 @@ The component has been set up to recognise them by using the `window` object:
 
 Here are some simple approaches you can use to add these modules to your project:
 
-- <b>Import from a dependancy</b> <br />
-  If you are using a dependancy manager such as npm, you can import the modules and assign them to window:
+- <b>Import from a dependency</b> <br />
+  If you are using a dependency manager such as npm, you can import the modules and assign them to window:
 
   | Module                                                                                   | URL                                                                                                     |
   | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -36,8 +36,8 @@ Here are some simple approaches you can use to add these modules to your project
   | [speech](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)           | import \* as sdk from 'microsoft-cognitiveservices-speech-sdk'; <br /> window.SpeechSDK = sdk;          |
   | [web model](https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk)        | import \* as webLLM from 'deep-chat-web-llm' <br /> window.webLLM = webLLM;                             |
 
-- <b>Dynamic import from a dependancy (recommended for SSR)</b> <br />
-  If you are using a dependancy manager such as npm, you can dynamically import the modules and assign them to the window
+- <b>Dynamic import from a dependency (recommended for SSR)</b> <br />
+  If you are using a dependency manager such as npm, you can dynamically import the modules and assign them to the window
   object. The highlightjs module can load after messages are generated, use the refreshMessages method to apply it:
 
   | Module                                                                   | URL                                                                                                                                                                                                                              |
@@ -98,18 +98,18 @@ VanillaJS approach with no bundler (this can also be used as fallback if above d
 
 ## Explanation
 
-The decision to have developers download external dependancies was not easily made and there were multiple reasons that
+The decision to have developers download external dependencies was not easily made and there were multiple reasons that
 lead us down this path. <br />
 First, the post-compression size of the above modules is orders of magnitude bigger than Deep Chat. This
 ruled out the idea of pre-bundling them into the component. <br />
 We then spent some time experimenting with [dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) which
-seemed promising, but unfortunatelly we hit a roadblock that had no simple way of overcoming; Deep Chat itself is an injectable component that
+seemed promising, but unfortunately we hit a roadblock that had no simple way of overcoming; Deep Chat itself is an injectable component that
 exists as part of a parent project which can use any type of a bundler to compile it. This is where
 [dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) become
 problematic as they are not supported by all bundlers and in many cases need extra configuration to work. <br />
 Therefore, to make the lives of our developers as simple as possible; for use cases that do not need the extra functionality - Deep Chat can
 be installed without any extra work, for use cases that do - we leave the decision of how to implement the modules
-in their hands to alllow them to tailor the approach for their project.
+in their hands to allow them to tailor the approach for their project.
 
 ## Troubleshooting
 
