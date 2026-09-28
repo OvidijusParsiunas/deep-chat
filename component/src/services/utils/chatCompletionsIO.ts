@@ -1,46 +1,38 @@
-import {RequestyRequestBody, RequestyToolCall, RequestyMessage, RequestyContent} from '../../types/requestyInternal';
+import {ChatCompletionsAPIResult, ChatCompletionsStreamChoice} from '../../types/chatCompletionsResult';
 import {AUDIO, DEEP_COPY, ERROR, FILES, IMAGES, ROLE, SRC, TEXT, TYPE} from '../../utils/consts/messageConstants';
-import {REQUESTY_BUILD_KEY_VERIFICATION_DETAILS, REQUESTY_BUILD_HEADERS} from './utils/requestyUtils';
-import {RequestyAPIResult, RequestyStreamEvent} from '../../types/requestyResult';
-import {DirectConnection} from '../../types/directConnection';
+import {KeyVerificationDetails} from '../../types/keyVerificationDetails';
+import {ChatCompletionsChat} from '../../types/chatCompletions';
 import {MessageContentI} from '../../types/messagesInternal';
-import {Requesty, RequestyChat} from '../../types/requesty';
 import {Messages} from '../../views/chat/messages/messages';
 import {Response as ResponseI} from '../../types/response';
-import {DirectServiceIO} from '../utils/directServiceIO';
+import {INPUT_AUDIO, IMAGE_URL, OBJECT} from './serviceConstants';
+import {ChatFunctionHandler} from '../../types/openAI';
+import {BuildHeadersFunc} from '../../types/headers';
 import {MessageFile} from '../../types/messageFile';
+import {DirectServiceIO} from './directServiceIO';
 import {APIKey} from '../../types/APIKey';
 import {DeepChat} from '../../deepChat';
 import {
-  INVALID_REQUEST_ERROR_PREFIX,
-  AUTHENTICATION_ERROR_PREFIX,
-  INPUT_AUDIO,
-  IMAGE_URL,
-  OBJECT,
-  SYSTEM,
-} from '../utils/serviceConstants';
+  ChatCompletionsRequestBody,
+  ChatCompletionsToolCall,
+  ChatCompletionsMessage,
+  ChatCompletionsContent,
+} from '../../types/chatCompletionsInternal';
 
-// https://docs.requesty.ai/
-export class RequestyIO extends DirectServiceIO {
-  override insertKeyPlaceholderText = this.genereteAPIKeyName('Requesty');
-  override keyHelpUrl = 'https://app.requesty.ai/api-keys';
-  url = 'https://router.requesty.ai/v1/chat/completions';
-  permittedErrorPrefixes = [INVALID_REQUEST_ERROR_PREFIX, AUTHENTICATION_ERROR_PREFIX];
-  readonly _streamToolCalls?: RequestyToolCall[];
+// Base for providers that expose an OpenAI-compatible Chat Completions API
+// https://platform.openai.com/docs/api-reference/chat/create
+export class ChatCompletionsIO extends DirectServiceIO {
+  readonly _streamToolCalls?: ChatCompletionsToolCall[];
 
-  constructor(deepChat: DeepChat) {
-    const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
-    const config = directConnectionCopy.requesty as Requesty & APIKey;
-    super(deepChat, REQUESTY_BUILD_KEY_VERIFICATION_DETAILS(), REQUESTY_BUILD_HEADERS, config);
-    if (typeof config === OBJECT) {
-      this.completeConfig(config, (deepChat.directConnection?.requesty as RequestyChat)?.function_handler);
-    }
+  // prettier-ignore
+  constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc,
+      config?: (true | ChatCompletionsChat) & APIKey, functionHandler?: ChatFunctionHandler) {
+    super(deepChat, keyVerificationDetails, buildHeadersFunc, config);
+    if (typeof config === OBJECT) this.completeConfig(config as ChatCompletionsChat & APIKey, functionHandler);
     this.maxMessages ??= -1;
-    this.rawBody.model ??= 'openai/gpt-4o';
-    this.rawBody.max_tokens ??= 1000;
   }
 
-  private static getAudioContent(files: MessageFile[]): RequestyContent[] {
+  private static getAudioContent(files: MessageFile[]): ChatCompletionsContent[] {
     return files
       .filter((file) => file[TYPE] === AUDIO)
       .map((file) => {
@@ -57,11 +49,11 @@ export class RequestyIO extends DirectServiceIO {
       .filter((content) => content[INPUT_AUDIO].data.length > 0);
   }
 
-  private static getContent(message: MessageContentI): string | RequestyContent[] {
+  protected getContent(message: MessageContentI): string | ChatCompletionsContent[] {
     if (message[FILES] && message[FILES].length > 0) {
-      const content: RequestyContent[] = [
-        ...RequestyIO.getImageContent(message[FILES]),
-        ...RequestyIO.getAudioContent(message[FILES]),
+      const content: ChatCompletionsContent[] = [
+        ...ChatCompletionsIO.getImageContent(message[FILES]),
+        ...ChatCompletionsIO.getAudioContent(message[FILES]),
       ];
       if (message[TEXT] && message[TEXT].trim().length > 0) {
         content.unshift({[TYPE]: TEXT, [TEXT]: message[TEXT]});
@@ -71,20 +63,16 @@ export class RequestyIO extends DirectServiceIO {
     return message[TEXT] || '';
   }
 
-  private preprocessBody(body: RequestyRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = DEEP_COPY(body) as RequestyRequestBody;
+  private preprocessBody(body: ChatCompletionsRequestBody, pMessages: MessageContentI[]) {
+    const bodyCopy = DEEP_COPY(body) as ChatCompletionsRequestBody;
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
-        content: RequestyIO.getContent(message),
+        content: this.getContent(message),
         [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
-      } as RequestyMessage;
+      } as ChatCompletionsMessage;
     });
-
-    const messages: RequestyMessage[] = [];
-    if (this.systemMessage) messages.push({[ROLE]: SYSTEM, content: this.systemMessage});
-    messages.push(...processedMessages);
-
-    bodyCopy.messages = messages;
+    this.addSystemMessage(processedMessages);
+    bodyCopy.messages = processedMessages;
     return bodyCopy;
   }
 
@@ -93,8 +81,17 @@ export class RequestyIO extends DirectServiceIO {
     this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
   }
 
-  override async extractResultData(result: RequestyAPIResult, prevBody?: Requesty): Promise<ResponseI> {
+  // override for providers that do not use the {error: {message}} shape
+  protected throwIfError(result: ChatCompletionsAPIResult) {
     if (result[ERROR]) throw result[ERROR].message;
+  }
+
+  private static getImageFiles(images: {[IMAGE_URL]: {url: string}}[]) {
+    return images.map((image) => ({[SRC]: image[IMAGE_URL].url}));
+  }
+
+  override async extractResultData(result: ChatCompletionsAPIResult, prevBody?: ChatCompletionsChat): Promise<ResponseI> {
+    this.throwIfError(result);
 
     // Handle streaming events
     if (result.object === 'chat.completion.chunk') {
@@ -105,13 +102,9 @@ export class RequestyIO extends DirectServiceIO {
 
       // Handle streaming response with images
       if (result.message?.[IMAGES]) {
-        const files = result.message[IMAGES].map((image) => ({
-          [SRC]: image[IMAGE_URL].url,
-        }));
-
         return {
           [TEXT]: result.message.content || '',
-          [FILES]: files,
+          [FILES]: ChatCompletionsIO.getImageFiles(result.message[IMAGES]),
         };
       }
 
@@ -131,14 +124,9 @@ export class RequestyIO extends DirectServiceIO {
           );
         }
 
-        const files =
-          choice.message[IMAGES]?.map((image) => ({
-            [SRC]: image[IMAGE_URL].url,
-          })) || [];
-
         return {
           [TEXT]: choice.message.content || '',
-          files,
+          [FILES]: ChatCompletionsIO.getImageFiles(choice.message[IMAGES] || []),
         };
       }
     }
@@ -146,17 +134,13 @@ export class RequestyIO extends DirectServiceIO {
     return {[TEXT]: ''};
   }
 
-  private async extractStreamResult(choice: RequestyStreamEvent['choices'][0], prevBody?: Requesty) {
+  private async extractStreamResult(choice: ChatCompletionsStreamChoice, prevBody?: ChatCompletionsChat) {
     const {delta} = choice;
     // Handle streaming response with images
     if (delta?.[IMAGES]) {
-      const files = delta[IMAGES].map((image) => ({
-        [SRC]: image[IMAGE_URL].url,
-      }));
-
       return {
         [TEXT]: delta.content || '',
-        [FILES]: files,
+        [FILES]: ChatCompletionsIO.getImageFiles(delta[IMAGES]),
       };
     }
     return this.extractStreamResultWToolsGeneric(this, choice, this.functionHandler, prevBody);
