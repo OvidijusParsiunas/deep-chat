@@ -19,24 +19,25 @@ export const CHAT_COMPLETIONS_BUILD_HEADERS = (key: string) => {
   };
 };
 
-const handleVerificationResult = (
-  result: object,
-  key: string,
-  onSuccess: (key: string) => void,
-  onFail: (message: string) => void
-) => {
-  const chatCompletionsResult = result as ChatCompletionsError;
-  if (chatCompletionsResult[ERROR]) {
-    if (chatCompletionsResult[ERROR][TYPE] === AUTHENTICATION_ERROR_PREFIX) {
-      onFail(INVALID_KEY);
+// invalidKeyErrorType is the error.type the provider returns for a wrong key
+const buildHandleVerificationResult = (invalidKeyErrorType: string) => {
+  return (result: object, key: string, onSuccess: (key: string) => void, onFail: (message: string) => void) => {
+    const chatCompletionsResult = result as ChatCompletionsError;
+    if (chatCompletionsResult[ERROR]) {
+      if (chatCompletionsResult[ERROR][TYPE] === invalidKeyErrorType) {
+        onFail(INVALID_KEY);
+      } else {
+        onFail(CONNECTION_FAILED);
+      }
     } else {
-      onFail(CONNECTION_FAILED);
+      onSuccess(key);
     }
-  } else {
-    onSuccess(key);
-  }
+  };
 };
 
-export const CHAT_COMPLETIONS_BUILD_KEY_VERIFICATION_DETAILS = (url: string): KeyVerificationDetails => {
-  return BUILD_KEY_VERIFICATION_DETAILS(url, GET, handleVerificationResult);
+export const CHAT_COMPLETIONS_BUILD_KEY_VERIFICATION_DETAILS = (
+  url: string,
+  invalidKeyErrorType = AUTHENTICATION_ERROR_PREFIX
+): KeyVerificationDetails => {
+  return BUILD_KEY_VERIFICATION_DETAILS(url, GET, buildHandleVerificationResult(invalidKeyErrorType));
 };

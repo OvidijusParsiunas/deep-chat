@@ -1,19 +1,13 @@
-import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX, OBJECT} from '../utils/serviceConstants';
 import {TOGETHER_BUILD_HEADERS, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS} from './utils/togetherUtils';
-import {TogetherResult, TogetherNormalResult, TogetherStreamEvent} from '../../types/togetherResult';
-import {AI, ASSISTANT, DEEP_COPY, ERROR, ROLE, TEXT} from '../../utils/consts/messageConstants';
-import {TogetherMessage, TogetherRequestBody} from '../../types/togetherInternal';
+import {AUTHENTICATION_ERROR_PREFIX, INVALID_REQUEST_ERROR_PREFIX} from '../utils/serviceConstants';
+import {AI, ASSISTANT, DEEP_COPY, TEXT} from '../../utils/consts/messageConstants';
 import {DirectConnection} from '../../types/directConnection';
 import {MessageContentI} from '../../types/messagesInternal';
-import {Messages} from '../../views/chat/messages/messages';
-import {Response as ResponseI} from '../../types/response';
-import {DirectServiceIO} from '../utils/directServiceIO';
-import {TogetherChat} from '../../types/together';
-import {APIKey} from '../../types/APIKey';
+import {ChatCompletionsIO} from '../utils/chatCompletionsIO';
 import {DeepChat} from '../../deepChat';
 
 // https://docs.together.ai/reference/chat-completions-1
-export class TogetherChatIO extends DirectServiceIO {
+export class TogetherChatIO extends ChatCompletionsIO {
   override insertKeyPlaceholderText = this.genereteAPIKeyName('Together AI');
   override keyHelpUrl = 'https://api.together.xyz/settings/api-keys';
   url = 'https://api.together.xyz/v1/chat/completions';
@@ -21,41 +15,22 @@ export class TogetherChatIO extends DirectServiceIO {
 
   constructor(deepChat: DeepChat) {
     const directConnectionCopy = DEEP_COPY(deepChat.directConnection) as DirectConnection;
-    const apiKey = directConnectionCopy.together;
-    super(deepChat, TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(), TOGETHER_BUILD_HEADERS, apiKey);
-    const config = directConnectionCopy.together?.chat as TogetherChat & APIKey;
-    if (typeof config === OBJECT) this.completeConfig(config);
-    this.maxMessages ??= -1;
+    const config = directConnectionCopy.together?.chat;
+    super(
+      deepChat,
+      TOGETHER_BUILD_KEY_VERIFICATION_DETAILS(),
+      TOGETHER_BUILD_HEADERS,
+      directConnectionCopy.together,
+      config
+    );
     this.rawBody.model ??= 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo';
   }
 
-  private preprocessBody(body: TogetherRequestBody, pMessages: MessageContentI[]) {
-    const bodyCopy = DEEP_COPY(body) as TogetherRequestBody;
-    const processedMessages: TogetherMessage[] = this.processMessages(pMessages).map((message) => {
-      return {
-        content: message[TEXT] || '',
-        [ROLE]: message[ROLE] === AI ? ASSISTANT : (message[ROLE] as 'user'),
-      };
-    });
-    this.addSystemMessage(processedMessages);
-    bodyCopy.messages = processedMessages;
-    return bodyCopy;
+  protected override getRole(role: string) {
+    return role === AI ? ASSISTANT : role;
   }
 
-  override async callServiceAPI(messages: Messages, pMessages: MessageContentI[]) {
-    this.callDirectServiceServiceAPI(messages, pMessages, this.preprocessBody.bind(this), {});
-  }
-
-  override async extractResultData(result: TogetherResult): Promise<ResponseI> {
-    if (result[ERROR]) throw result[ERROR].message;
-    if (result.choices.length > 0) {
-      if ((result.choices[0] as TogetherNormalResult).message !== undefined) {
-        return {[TEXT]: (result.choices[0] as TogetherNormalResult).message.content};
-      }
-      if ((result.choices[0] as TogetherStreamEvent).delta !== undefined) {
-        return {[TEXT]: (result.choices[0] as TogetherStreamEvent).delta.content};
-      }
-    }
-    return {[TEXT]: ''};
+  protected override getContent(message: MessageContentI) {
+    return message[TEXT] || '';
   }
 }

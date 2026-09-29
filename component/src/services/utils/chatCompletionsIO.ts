@@ -24,11 +24,12 @@ import {
 export class ChatCompletionsIO extends DirectServiceIO {
   readonly _streamToolCalls?: ChatCompletionsToolCall[];
 
+  // apiKey and config are separate as some providers nest the chat config (e.g. directConnection.groq.chat)
   // prettier-ignore
   constructor(deepChat: DeepChat, keyVerificationDetails: KeyVerificationDetails, buildHeadersFunc: BuildHeadersFunc,
-      config?: (true | ChatCompletionsChat) & APIKey, functionHandler?: ChatFunctionHandler) {
-    super(deepChat, keyVerificationDetails, buildHeadersFunc, config);
-    if (typeof config === OBJECT) this.completeConfig(config as ChatCompletionsChat & APIKey, functionHandler);
+      apiKey?: APIKey, config?: true | {system_prompt?: string}, functionHandler?: ChatFunctionHandler) {
+    super(deepChat, keyVerificationDetails, buildHeadersFunc, apiKey);
+    if (typeof config === OBJECT) this.completeConfig(config as {system_prompt?: string}, functionHandler);
     this.maxMessages ??= -1;
   }
 
@@ -47,6 +48,10 @@ export class ChatCompletionsIO extends DirectServiceIO {
         };
       })
       .filter((content) => content[INPUT_AUDIO].data.length > 0);
+  }
+
+  protected getRole(role: string): string {
+    return DirectServiceIO.getRoleViaUser(role);
   }
 
   protected getContent(message: MessageContentI): string | ChatCompletionsContent[] {
@@ -68,7 +73,7 @@ export class ChatCompletionsIO extends DirectServiceIO {
     const processedMessages = this.processMessages(pMessages).map((message) => {
       return {
         content: this.getContent(message),
-        [ROLE]: DirectServiceIO.getRoleViaUser(message[ROLE]),
+        [ROLE]: this.getRole(message[ROLE]),
       } as ChatCompletionsMessage;
     });
     this.addSystemMessage(processedMessages);
@@ -86,49 +91,39 @@ export class ChatCompletionsIO extends DirectServiceIO {
     if (result[ERROR]) throw result[ERROR].message;
   }
 
+  protected handleTools(tools: {tool_calls?: ChatCompletionsToolCall[]}, prevBody?: ChatCompletionsChat) {
+    return this.handleToolsGeneric(tools, this.functionHandler, this.messages, prevBody);
+  }
+
   private static getImageFiles(images: {[IMAGE_URL]: {url: string}}[]) {
     return images.map((image) => ({[SRC]: image[IMAGE_URL].url}));
   }
 
   override async extractResultData(result: ChatCompletionsAPIResult, prevBody?: ChatCompletionsChat): Promise<ResponseI> {
     this.throwIfError(result);
+    const choice = result.choices?.[0];
 
-    // Handle streaming events
-    if (result.object === 'chat.completion.chunk') {
-      const choice = result.choices?.[0];
-      if (choice?.delta) {
-        return this.extractStreamResult(choice, prevBody);
-      }
-
-      // Handle streaming response with images
-      if (result.message?.[IMAGES]) {
-        return {
-          [TEXT]: result.message.content || '',
-          [FILES]: ChatCompletionsIO.getImageFiles(result.message[IMAGES]),
-        };
-      }
-
-      return {[TEXT]: ''};
+    // Handle streaming response
+    if (choice && 'delta' in choice && choice.delta) {
+      return this.extractStreamResult(choice, prevBody);
     }
 
     // Handle non-streaming response
-    if (result.object === 'chat.completion') {
-      const choice = result.choices?.[0];
-      if (choice?.message) {
-        if (choice.message.tool_calls) {
-          return this.handleToolsGeneric(
-            {tool_calls: choice.message.tool_calls},
-            this.functionHandler,
-            this.messages,
-            prevBody
-          );
-        }
-
-        return {
-          [TEXT]: choice.message.content || '',
-          [FILES]: ChatCompletionsIO.getImageFiles(choice.message[IMAGES] || []),
-        };
+    if (choice && 'message' in choice && choice.message) {
+      if (choice.message.tool_calls) {
+        return this.handleTools({tool_calls: choice.message.tool_calls}, prevBody);
       }
+      const response: ResponseI = {[TEXT]: choice.message.content || ''};
+      if (choice.message[IMAGES]) response[FILES] = ChatCompletionsIO.getImageFiles(choice.message[IMAGES]);
+      return response;
+    }
+
+    // Handle streaming response with images (OpenRouter)
+    if ('message' in result && result.message?.[IMAGES]) {
+      return {
+        [TEXT]: result.message.content || '',
+        [FILES]: ChatCompletionsIO.getImageFiles(result.message[IMAGES]),
+      };
     }
 
     return {[TEXT]: ''};

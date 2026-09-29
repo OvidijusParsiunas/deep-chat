@@ -7,7 +7,7 @@ export interface ChatCompletionsTool {
   type: 'function';
   function: {
     name: string;
-    description: string;
+    description?: string;
     parameters: object;
   };
 }
