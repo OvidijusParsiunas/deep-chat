@@ -119,3 +119,30 @@ Use [`stream`](/docs/connect#Stream) to stream the AI responses.
 :::
 
 <LineBreak></LineBreak>
+
+### `textToSpeech` {#textToSpeech}
+
+Set `miniMax.textToSpeech` to `true` or an options object to synthesize the latest message with the
+[MiniMax speech API](https://platform.minimax.io/docs/api-reference/speech-t2a-http). This uses synchronous HTTP output and displays the returned audio URL.
+
+```html
+<deep-chat
+  directConnection='{
+    "miniMax": {
+      "key": "placeholder key",
+      "textToSpeech": {
+        "model": "speech-2.8-hd",
+        "voice_setting": {"voice_id": "English_expressive_narrator"}
+      }
+    }
+  }'
+></deep-chat>
+```
+
+The defaults are `speech-2.8-hd`, the `English_expressive_narrator` voice, and MP3 audio.
+Options include `model`, `voice_setting`, `audio_setting`, `language_boost`,
+`pronunciation_dict`, `voice_modify`, and `subtitle_enable`.
+The adapter sets `stream: false` and `output_format: "url"`; returned audio URLs expire after 24 hours.
+
+Requests use `https://api.minimax.io/v1/t2a_v2` by default. For the China endpoint, set
+[`connect.url`](/docs/connect#connect) to `https://api.minimaxi.com/v1/t2a_v2`.
