@@ -35,6 +35,7 @@ import {PerplexityIO} from './perplexity/perplexityIO';
 import {BaseServiceIO} from './utils/baseServiceIO';
 import {OpenWebUIIO} from './openWebUI/openWebUIIO';
 import {OpenAIChatIO} from './openAI/openAIChatIO';
+import {RequestyIO} from './requesty/requestyIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {Legacy} from '../utils/legacy/legacy';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
@@ -164,6 +165,9 @@ export class ServiceIOFactory {
       }
       if (directConnection.openRouter) {
         return new OpenRouterIO(deepChat);
+      }
+      if (directConnection.requesty) {
+        return new RequestyIO(deepChat);
       }
       if (directConnection.kimi) {
         return new KimiIO(deepChat);
