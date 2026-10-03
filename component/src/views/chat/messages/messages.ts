@@ -420,7 +420,8 @@ export class Messages extends MessagesBase {
     return Promise.all<MessageFile>(
       (filesData || []).map((fileData) => {
         return new Promise((resolve) => {
-          if (!fileData[TYPE] || fileData[TYPE] === ANY) {
+          const isVideo = fileData[FILE].type.startsWith('video/');
+          if ((!fileData[TYPE] || fileData[TYPE] === ANY) && !isVideo) {
             const name = fileData[FILE].name || FILE;
             resolve({name, [TYPE]: ANY, ref: fileData[FILE]});
           } else {
