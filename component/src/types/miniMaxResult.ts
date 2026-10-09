@@ -33,3 +33,14 @@ export interface MiniMaxResult {
     code?: string;
   };
 }
+
+export interface MiniMaxTextToSpeechResult {
+  data?: {
+    audio?: string;
+    status?: number;
+  } | null;
+  base_resp?: {
+    status_code: number;
+    status_msg?: string;
+  };
+}
