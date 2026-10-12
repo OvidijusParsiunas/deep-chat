@@ -1,8 +1,9 @@
 import React from 'react';
+import Tabs from '@theme/Tabs';
 import './codeToggle.css';
 
 function Code({isDisplayed, children}) {
-  return isDisplayed ? <div>{children}</div> : <div></div>;
+  return isDisplayed ? <Tabs>{children}</Tabs> : <div></div>;
 }
 
 export default function CodeToggle({children}) {
