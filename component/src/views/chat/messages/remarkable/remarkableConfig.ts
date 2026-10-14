@@ -80,7 +80,11 @@ export class RemarkableConfig {
 
   // blocks script-executing protocols while still allowing data:image links (e.g. base64 files)
   private static validateLink(url: string) {
-    const str = RemarkableConfig.decodeEntities(url).replace(/[\s\u0000-\u001F]/g, '').toLowerCase();
+    // removes whitespace and control characters that browsers ignore in protocols (e.g. "java\tscript:")
+    const str = Array.from(RemarkableConfig.decodeEntities(url))
+      .filter((char) => char.charCodeAt(0) > 32)
+      .join('')
+      .toLowerCase();
     const protocol = str.match(/^([a-z][a-z0-9+.-]*):/)?.[1];
     if (!protocol) return true;
     if (protocol === 'data') return str.startsWith('data:image/') && !str.startsWith('data:image/svg');
