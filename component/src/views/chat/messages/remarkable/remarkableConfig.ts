@@ -74,8 +74,23 @@ export class RemarkableConfig {
   public static createNew(customConfig?: RemarkableOptions) {
     const remarkable = RemarkableConfig.instantiate(customConfig);
     RemarkableConfig.addPlugins(remarkable, customConfig);
-    remarkable.inline.validateLink = () => true;
+    remarkable.inline.validateLink = RemarkableConfig.validateLink;
     return remarkable;
+  }
+
+  // blocks script-executing protocols while still allowing data:image links (e.g. base64 files)
+  private static validateLink(url: string) {
+    const str = RemarkableConfig.decodeEntities(url).replace(/[\s\u0000-\u001F]/g, '').toLowerCase();
+    const protocol = str.match(/^([a-z][a-z0-9+.-]*):/)?.[1];
+    if (!protocol) return true;
+    if (protocol === 'data') return str.startsWith('data:image/') && !str.startsWith('data:image/svg');
+    return !['javascript', 'vbscript', 'file'].includes(protocol);
+  }
+
+  private static decodeEntities(url: string) {
+    return url.replace(/&#(x[0-9a-f]+|\d+);?/gi, (_, code: string) =>
+      String.fromCodePoint(code[0].toLowerCase() === 'x' ? parseInt(code.slice(1), 16) : parseInt(code, 10))
+    );
   }
 }
 
