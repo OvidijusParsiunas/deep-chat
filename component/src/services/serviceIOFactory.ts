@@ -39,6 +39,7 @@ import {RequestyIO} from './requesty/requestyIO';
 import {DeepSeekIO} from './deepSeek/deepSeekIO';
 import {Legacy} from '../utils/legacy/legacy';
 import {MiniMaxIO} from './miniMax/miniMaxIO';
+import {MiniMaxTextToSpeechIO} from './miniMax/miniMaxTextToSpeechIO';
 import {WebModel} from '../webModel/webModel';
 import {MistralIO} from './mistral/mistralIO';
 import {GroqChatIO} from './groq/groqChatIO';
@@ -161,6 +162,9 @@ export class ServiceIOFactory {
         return new DeepSeekIO(deepChat);
       }
       if (directConnection.miniMax) {
+        if (typeof directConnection.miniMax === 'object' && directConnection.miniMax.textToSpeech) {
+          return new MiniMaxTextToSpeechIO(deepChat);
+        }
         return new MiniMaxIO(deepChat);
       }
       if (directConnection.openRouter) {
