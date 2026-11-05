@@ -4,7 +4,11 @@ export class GoogleFont {
   private static readonly FONT_URL = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap';
   public static readonly DEFAULT_FONT_FAMILY = `'Inter', sans-serif, Avenir, Helvetica, Arial`;
 
-  public static attemptAppendStyleSheetToHead(cssStyle: CSSStyleDeclaration, chatStyleFontFamily?: string) {
+  public static attemptAppendStyleSheetToHead(
+    cssStyle: CSSStyleDeclaration,
+    chatStyleFontFamily?: string,
+    nonce?: string
+  ) {
     const fontFamily = cssStyle.fontFamily || chatStyleFontFamily;
     if (fontFamily && fontFamily !== GoogleFont.DEFAULT_FONT_FAMILY) return;
     const head = document.getElementsByTagName('head')[0];
@@ -15,6 +19,7 @@ export class GoogleFont {
       const link = CREATE_ELEMENT('link') as HTMLLinkElement;
       link.rel = 'stylesheet';
       link.href = GoogleFont.FONT_URL;
+      if (nonce) link.nonce = nonce;
       head.appendChild(link);
     }
   }
