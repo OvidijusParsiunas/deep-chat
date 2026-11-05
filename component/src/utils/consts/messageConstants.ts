@@ -20,6 +20,8 @@ export const OUTER_CONTAINER_CLASS_ROLE_PREFIX = 'deep-chat-outer-container-role
 
 export const EMPTY_MESSAGE_CLASS = 'empty-message';
 
+export const EMPTY_MESSAGE_PLACEHOLDER_CLASS = 'empty-message-placeholder';
+
 export const POSITION_TOP_MESSAGE_CLASS = 'deep-chat-top-message';
 
 export const POSITION_MIDDLE_MESSAGE_CLASS = 'deep-chat-middle-message';
