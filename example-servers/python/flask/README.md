@@ -14,10 +14,15 @@ If you are downloading the project via `git clone` - we advise you to use shallo
 git clone --depth 1 https://github.com/OvidijusParsiunas/deep-chat.git
 ```
 
-Navigate to the `src` directory and run the following command to install the required packages:
+Navigate to the `src` directory and run the following command to initialize and activate a python virtual environment
 
 ```
-pip install flask flask-cors load_dotenv
+python -m venv .venv && source .venv/bin/activate
+```
+Install the required python packages:
+
+```
+pip install flask flask-cors load_dotenv requests
 ```
 
 Run the project:
