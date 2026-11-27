@@ -435,6 +435,27 @@ object which typically comes from a [file input](https://developer.mozilla.org/e
 
 <LineBreak></LineBreak>
 
+### `styleNonce` {#styleNonce}
+
+- Type: `string`
+
+[Nonce](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) that Deep Chat sets on the `<style>` and `<link>` elements it creates. <br />
+Use it when your page has a strict [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+that allows inline styles only with a nonce (e.g. `style-src 'nonce-abc123'`). <br />
+Deep Chat applies its styling with constructable stylesheets (`adoptedStyleSheets`) where supported and falls back to `<style>` elements otherwise;
+the nonce is used for that fallback, for the loading button style, and for the Google Font `<link>` that Deep Chat adds to the document head.
+The font `<link>` also requires `https://fonts.googleapis.com` and `https://fonts.gstatic.com` to be allowed
+by your policy (`style-src-elem` and `font-src`), or you can set a custom `font-family` in [`style`](/docs/styles#style) to stop Deep Chat from adding it. <br />
+Set this property before the component renders.
+
+#### Example
+
+```html
+<deep-chat styleNonce="abc123"></deep-chat>
+```
+
+<LineBreak></LineBreak>
+
 ### `auxiliaryStyle` {#auxiliaryStyle}
 
 - Type: `string`

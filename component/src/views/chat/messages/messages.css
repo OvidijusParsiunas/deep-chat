@@ -200,3 +200,7 @@ pre {
 .role-hidden {
   display: none;
 }
+
+.empty-message-placeholder {
+  color: #00000000;
+}

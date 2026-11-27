@@ -125,7 +125,8 @@ export class SubmitButton extends InputButton<Styles> {
         || this.customStyles?.loading?.[SVG]?.content || this.customStyles?.loading?.[TEXT]?.content) return;
     if (deepChat.displayLoadingBubble === undefined || deepChat.displayLoadingBubble === true) {
       // this gets triggered when alwaysEnabled is set to true
-      const styleElement = CREATE_ELEMENT('style');
+      const styleElement = CREATE_ELEMENT('style') as HTMLStyleElement;
+      if (deepChat.styleNonce) styleElement.nonce = deepChat.styleNonce;
       styleElement.textContent = `
         .loading-button > * {
           filter: brightness(0) saturate(100%) invert(72%) sepia(0%) saturate(3044%) hue-rotate(322deg) brightness(100%)

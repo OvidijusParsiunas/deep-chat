@@ -101,6 +101,10 @@ export class DeepChat extends InternalHTML {
   @Property('string')
   auxiliaryStyle?: string;
 
+  // nonce for the <style> and <link> elements the component creates (for a strict Content-Security-Policy)
+  @Property('string')
+  styleNonce?: string;
+
   @Property('array')
   history?: MessageContent[];
 
@@ -220,6 +224,9 @@ export class DeepChat extends InternalHTML {
 
   _auxiliaryStyleApplied = false;
 
+  // false when the <style> fallback was needed but the nonce was not yet known
+  _baseStyleApplied = true;
+
   _chatStyleApplied = false;
 
   _activeService?: ServiceIO;
@@ -238,7 +245,7 @@ export class DeepChat extends InternalHTML {
     this._elementRef.id = 'container';
     this.attachShadow({mode: 'open'}).appendChild(this._elementRef);
     this.shadowRoot?.appendChild(TooltipUtils.buildElement());
-    WebComponentStyleUtils.apply(style, this.shadowRoot);
+    this._baseStyleApplied = WebComponentStyleUtils.apply(style, this.shadowRoot, undefined, true);
     setTimeout(() => {
       // if user has not set anything (to cause onRender to execute), force it
       if (!this._hasBeenRendered) this.onRender();
@@ -254,15 +261,18 @@ export class DeepChat extends InternalHTML {
 
   // prettier-ignore
   override onRender() {
-    GoogleFont.attemptAppendStyleSheetToHead(this.style, this.chatStyle?.fontFamily);
+    GoogleFont.attemptAppendStyleSheetToHead(this.style, this.chatStyle?.fontFamily, this.styleNonce);
+    if (!this._baseStyleApplied) {
+      this._baseStyleApplied = WebComponentStyleUtils.apply(style, this.shadowRoot, this.styleNonce);
+    }
     Legacy.processConnect(this);
     if (!this._activeService || this._activeService.demo) this._activeService = ServiceIOFactory.create(this); 
     if (this.auxiliaryStyle && !this._auxiliaryStyleApplied) {
-      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot);
+      WebComponentStyleUtils.apply(this.auxiliaryStyle, this.shadowRoot, this.styleNonce);
       this._auxiliaryStyleApplied = true;
     }
     if (this.chatStyle && !this._chatStyleApplied) {
-      WebComponentStyleUtils.applyChatStyle(this.chatStyle, this.shadowRoot);
+      WebComponentStyleUtils.applyChatStyle(this.chatStyle, this.shadowRoot, this.styleNonce);
       this._chatStyleApplied = true;
     }
     Legacy.checkForContainerStyles(this, this._elementRef);

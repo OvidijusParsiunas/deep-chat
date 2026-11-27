@@ -14,6 +14,7 @@ import {
   POSITION_MIDDLE_MESSAGE_CLASS,
   POSITION_TOP_MESSAGE_CLASS,
   ERROR_MESSAGE_TEXT_CLASS,
+  EMPTY_MESSAGE_PLACEHOLDER_CLASS,
   EMPTY_MESSAGE_CLASS,
   FILE_BUBBLE_CLASS,
   FILES,
@@ -84,7 +85,11 @@ export class MessageUtils {
   public static fillEmptyMessageElement(bubbleElement: HTMLElement, content: string) {
     if (content.trim().length === 0) {
       bubbleElement[CLASS_LIST].add(EMPTY_MESSAGE_CLASS);
-      bubbleElement.innerHTML = '<div style="color:#00000000">.</div>';
+      // a class instead of an inline style so strict CSP (style-src-attr) does not block it
+      const placeholder = document.createElement('div');
+      placeholder[CLASS_LIST].add(EMPTY_MESSAGE_PLACEHOLDER_CLASS);
+      placeholder.textContent = '.';
+      bubbleElement.replaceChildren(placeholder);
     }
   }
 
