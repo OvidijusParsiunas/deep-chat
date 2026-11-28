@@ -10,4 +10,30 @@ export interface MiniMaxChat {
   system_prompt?: string;
 }
 
-export type MiniMax = true | MiniMaxChat;
+export interface MiniMaxTextToSpeech {
+  model?: string;
+  voice_setting?: {
+    voice_id: string;
+    speed?: number;
+    vol?: number;
+    pitch?: number;
+    emotion?: string;
+  };
+  audio_setting?: {
+    sample_rate?: number;
+    bitrate?: number;
+    format?: 'mp3' | 'wav' | 'flac' | 'pcm';
+    channel?: number;
+  };
+  language_boost?: string;
+  pronunciation_dict?: {tone: string[]};
+  voice_modify?: {
+    pitch?: number;
+    intensity?: number;
+    timbre?: number;
+    sound_effects?: string;
+  };
+  subtitle_enable?: boolean;
+}
+
+export type MiniMax = true | (MiniMaxChat & {textToSpeech?: true | MiniMaxTextToSpeech});
