@@ -102,7 +102,7 @@ export class CustomHandler {
 
   private static streamError(errorMessage: string, stream: MessageStream, io: ServiceIO, messages: Messages) {
     console[ERROR](errorMessage);
-    stream.finaliseStreamedMessage();
+    CustomHandler.attemptToFinaliseStream(stream, messages);
     messages.addNewErrorMessage(SERVICE, errorMessage);
     io.streamHandlers.onClose();
   }
